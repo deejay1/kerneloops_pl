@@ -179,7 +179,10 @@ static void extract_oops(char *buffer, int remove_syslog)
 			c3 = linepointer[i][1];
 
 			/* line needs to start with " [" or have "] ["*/
-			if ((c2 != ' ' || c3 != '[') && strstr(linepointer[i],"] [")==NULL && strstr(linepointer[i],"--- Exception")==NULL)
+			if ((c2 != ' ' || c3 != '[') && 
+				strstr(linepointer[i],"] [")==NULL && 
+				strstr(linepointer[i],"--- Exception")==NULL &&
+				strstr(linepointer[i],"    LR =")==NULL)
 				isend = 1;
 				
 			if (strlen(linepointer[i])<8)
@@ -188,6 +191,8 @@ static void extract_oops(char *buffer, int remove_syslog)
 				isend = 1;
 				
 			if (strstr(linepointer[i], "Code:")!=NULL)
+				isend = 1;
+			if (strstr(linepointer[i], "Instruction dump::")!=NULL)
 				isend = 1;
 				
 			if (isend) {

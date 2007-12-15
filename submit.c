@@ -112,7 +112,7 @@ void print_queue(void)
 	while (oops) {
 		struct oops *next;
 
-		printf("Submit text is:\n%s", oops->text);	
+		printf("Submit text is:\n---[start of oops]---\n%s\n---[end of oops]---\n", oops->text);	
 		next = oops->next;
 		free(oops->text);
 		free(oops);
