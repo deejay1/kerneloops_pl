@@ -149,6 +149,11 @@ static void extract_oops(char *buffer, int remove_syslog)
 				oopsstart = i-4;
 			if (strstr(linepointer[i], "Oops:") && i>=3)
 				oopsstart = i-3;
+			if (oopsstart>=0 && testmode) {
+				printf("Found start of oops at line %i\n", oopsstart);
+				printf("    start line is -%s-\n", linepointer[oopsstart]);
+				printf("    trigger line is -%s-\n", linepointer[i]);
+		}
 		}
 
 		/* a calltrace starts with "Call Trace:" or with the " [<.......>] function+0xFF/0xAA" pattern */
