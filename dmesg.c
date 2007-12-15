@@ -129,18 +129,6 @@ static void extract_oops(char *buffer, int remove_syslog)
 				oopsstart = i-3;
 		}
 
-		/* a calltrace starts with "Call Trace:" or with the " [<.......>] function+0xFF/0xAA" pattern */
-		if (oopsstart >=0 && strstr(linepointer[i], "Call Trace:"))
-			inbacktrace = 1;
-
-		if (oopsstart >=0 && inbacktrace == 0 && strlen(linepointer[i])>8) {
-			char *c1, *c2, *c3;
-			c1 = strstr(linepointer[i], ">]");
-			c2 = strstr(linepointer[i], "+0x");
-			c3 = strstr(linepointer[i], "/0x");
-			if (linepointer[i][0] == ' ' && linepointer[i][1]=='[' && linepointer[i][2]=='<' && c1 && c2 && c3)
-				inbacktrace = 1;
-		}
 
 		if (oopsstart>=0 && inbacktrace>0) {
 			char *c1, c2,c3;
@@ -169,6 +157,18 @@ static void extract_oops(char *buffer, int remove_syslog)
 				oopsend=linecount;
 				free(oops);
 			}
+		}
+		/* a calltrace starts with "Call Trace:" or with the " [<.......>] function+0xFF/0xAA" pattern */
+		if (oopsstart >=0 && strstr(linepointer[i], "Call Trace:"))
+			inbacktrace = 1;
+
+		if (oopsstart >=0 && inbacktrace == 0 && strlen(linepointer[i])>8) {
+			char *c1, *c2, *c3;
+			c1 = strstr(linepointer[i], ">]");
+			c2 = strstr(linepointer[i], "+0x");
+			c3 = strstr(linepointer[i], "/0x");
+			if (linepointer[i][0] == ' ' && linepointer[i][1]=='[' && linepointer[i][2]=='<' && c1 && c2 && c3)
+				inbacktrace = 1;
 		}
 		i++;
 	}
