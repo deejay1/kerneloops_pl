@@ -1,0 +1,240 @@
+[    0.000000] Using Efika machine description
+[    0.000000] Linux version 2.6.24-rc3 (dwmw2@pmac.infradead.org) (gcc version 4.1.2 20070925 (Red Hat 4.1.2-33)) #5 Thu Dec 6 15:35:03 GMT 2007
+[    0.000000] Found initrd at 0xc2100000:0xc2554800
+[    0.000000] console [udbg0] enabled
+[    0.000000] Entering add_active_range(0, 0, 32768) 0 entries of 256 used
+[    0.000000] Efika: PCI bus 0 controlled by /pci@80000000
+[    0.000000] 
+[    0.000000] Top of RAM: 0x8000000, Total RAM: 0x8000000
+[    0.000000] Memory hole size: 0MB
+[    0.000000] Zone PFN ranges:
+[    0.000000]   DMA             0 ->    32768
+[    0.000000]   Normal      32768 ->    32768
+[    0.000000]   HighMem     32768 ->    32768
+[    0.000000] Movable zone start PFN for each node
+[    0.000000] early_node_map[1] active PFN ranges
+[    0.000000]     0:        0 ->    32768
+[    0.000000] On node 0 totalpages: 32768
+[    0.000000]   DMA zone: 256 pages used for memmap
+[    0.000000]   DMA zone: 0 pages reserved
+[    0.000000]   DMA zone: 32512 pages, LIFO batch:7
+[    0.000000]   Normal zone: 0 pages used for memmap
+[    0.000000]   HighMem zone: 0 pages used for memmap
+[    0.000000]   Movable zone: 0 pages used for memmap
+[    0.000000] Built 1 zonelists in Zone order, mobility grouping on.  Total pages: 32512
+[    0.000000] Kernel command line: root=/dev/VolGroup00/LogVol00 ro console=ttyPSC0,115200 
+[    0.000000] MPC52xx PIC is up and running!
+[    0.000000] PID hash table entries: 512 (order: 9, 2048 bytes)
+[    0.000000] time_init: decrementer frequency = 33.000000 MHz
+[    0.000000] time_init: processor frequency   = 396.000000 MHz
+[    0.000015] clocksource: timebase mult[79364d9] shift[22] registered
+[    0.000051] clockevent: decrementer mult[872] shift[16] cpu[0]
+[    0.000205] Console: colour dummy device 80x25
+[    0.000403] console handover: boot [udbg0] -> real [ttyPSC0]
+[    0.000909] Dentry cache hash table entries: 16384 (order: 4, 65536 bytes)
+[    0.008761] Inode-cache hash table entries: 8192 (order: 3, 32768 bytes)
+[    0.032699] High memory: 0k
+[    0.032726] Memory: 120332k/131072k available (4224k kernel code, 10592k reserved, 192k data, 367k bss, 228k init)
+[    0.043515] SLUB: Genslabs=11, HWalign=32, Order=0-1, MinObjects=4, CPUs=1, Nodes=1
+[    0.051360] Calibrating delay loop... 65.53 BogoMIPS (lpj=32768)
+[    0.072883] Security Framework initialized
+[    0.077126] SELinux:  Initializing.
+[    0.080868] SELinux:  Starting in permissive mode
+[    0.081015] selinux_register_security:  Registering secondary module capability
+[    0.088517] Capability LSM initialized as secondary
+[    0.093661] Mount-cache hash table entries: 512
+[    0.107961] Initializing cgroup subsys ns
+[    0.116394] khelper used greatest stack depth: 6948 bytes left
+[    0.124146] net_namespace: 64 bytes
+[    0.134630] NET: Registered protocol family 16
+[    0.196466] PCI: Probing PCI hardware
+[    0.207980] khelper used greatest stack depth: 6804 bytes left
+[    0.214272] DMA: MPC52xx BestComm driver
+[    0.218546] DMA: MPC52xx BestComm engine @f0001200 ok !
+[    0.277957] Linux Plug and Play Support v0.97 (c) Adam Belay
+[    0.296671] usbcore: registered new interface driver usbfs
+[    0.303866] usbcore: registered new interface driver hub
+[    0.311248] usbcore: registered new device driver usb
+[    0.331263] NetLabel: Initializing
+[    0.334792] NetLabel:  domain hash size = 128
+[    0.339258] NetLabel:  protocols = UNLABELED CIPSOv4
+[    0.344750] NetLabel:  unlabeled traffic allowed by default
+[    0.351571] Time: timebase clocksource has been installed.
+[    0.357259] Switched to high resolution mode on CPU 0
+[    0.379419] NET: Registered protocol family 2
+[    0.394163] IP route cache hash table entries: 1024 (order: 0, 4096 bytes)
+[    0.403776] TCP established hash table entries: 4096 (order: 3, 32768 bytes)
+[    0.411368] TCP bind hash table entries: 4096 (order: 4, 81920 bytes)
+[    0.418723] TCP: Hash tables configured (established 4096 bind 4096)
+[    0.425260] TCP reno registered
+[    0.438004] checking if image is initramfs... it is
+[    3.608220] Freeing initrd memory: 4434k freed
+[    3.615069] Thermal assist unit not available
+[    3.625240] khelper used greatest stack depth: 6772 bytes left
+[    3.636286] audit: initializing netlink socket (disabled)
+[    3.642268] audit(1197156086.513:1): initialized
+[    3.657936] khelper used greatest stack depth: 6436 bytes left
+[    3.796894] VFS: Disk quotas dquot_6.5.1
+[    3.803081] Dquot-cache hash table entries: 1024 (order 0, 4096 bytes)
+[    3.816851] SELinux:  Registering netfilter hooks
+[    3.822385] Block layer SCSI generic (bsg) driver version 0.4 loaded (major 252)
+[    3.830013] io scheduler noop registered
+[    3.834186] io scheduler anticipatory registered
+[    3.838967] io scheduler deadline registered
+[    3.847124] io scheduler cfq registered (default)
+[    3.860068] matroxfb: Matrox G550 detected
+[    5.549143] PInS data found at offset 31936
+[    5.555772] PInS memtype = 5
+[    5.558946] matroxfb: 640x480x8bpp (virtual: 640x26214)
+[    5.564352] matroxfb: framebuffer at 0x80000000, mapped to 0xc9080000, size 33554432
+[    5.580371] Console: switching to colour frame buffer device 80x30
+[    5.589566] fb0: MATROX frame buffer device
+[    5.596079] matroxfb_crtc2: secondary head of fb0 was registered as fb1
+[    5.730536] Macintosh non-volatile memory driver v1.1
+[    5.737304] Linux agpgart interface v0.102
+[    5.743292] Serial: 8250/16550 driver $Revision: 1.90 $ 4 ports, IRQ sharing enabled
+[    5.764833] Serial: MPC52xx PSC UART driver
+[    5.770998] f0002000.serial: ttyPSC0 at MMIO 0xf0002000 (irq = 129) is a MPC52xx PSC
+[    5.815829] RAMDISK driver initialized: 16 RAM disks of 16384K size 4096 blocksize
+[    5.827213] input: Macintosh mouse button emulation as /class/input/input0
+[    5.834521] apm_emu: PMU APM Emulation initialized.
+[    5.841100] Uniform Multi-Platform E-IDE driver Revision: 7.00alpha2
+[    5.847781] ide: Assuming 33MHz system bus speed for PIO modes; override with idebus=xx
+[    5.873125] mice: PS/2 mouse device common for all mice
+[    5.892865] usbcore: registered new interface driver hiddev
+[    5.900213] usbcore: registered new interface driver usbhid
+[    5.906179] drivers/hid/usbhid/hid-core.c: v2.6:USB HID core driver
+[    5.914906] TCP cubic registered
+[    5.918270] Initializing XFRM netlink socket
+[    5.924728] NET: Registered protocol family 1
+[    5.929456] NET: Registered protocol family 17
+[    5.934447] registered taskstats version 1
+[    5.939967] drivers/rtc/hctosys.c: unable to open rtc device (rtc0)
+[    5.946751] Freeing unused kernel memory: 228k init
+[    6.478520] ohci_hcd: 2006 August 04 USB 1.1 'Open' Host Controller (OHCI) Driver
+[    6.479747] ppc-of-ohci f0001000.usb: OF OHCI
+[    6.485815] ppc-of-ohci f0001000.usb: new USB bus registered, assigned bus number 1
+[    6.493812] ppc-of-ohci f0001000.usb: irq 134, io mem 0xf0001000
+[    6.557313] usb usb1: configuration #1 chosen from 1 choice
+[    6.563734] hub 1-0:1.0: USB hub found
+[    6.567755] hub 1-0:1.0: 2 ports detected
+[    6.675335] insmod used greatest stack depth: 5988 bytes left
+[    6.728761] USB Universal Host Controller Interface driver v3.0
+[    7.021307] usb 1-2: new full speed USB device using ppc-of-ohci and address 2
+[    7.224377] usb 1-2: configuration #1 chosen from 1 choice
+[    7.697791] SCSI subsystem initialized
+[    8.135674] libata version 3.00 loaded.
+[    8.179503] ata: MPC52xx IDE/ATA libata driver
+[    8.190679] scsi0 : mpc52xx_ata
+[    8.194804] ata1: PATA max PIO4 ata_regs 0xf0003a00 irq 135
+[    8.814192] ata1.00: ATA-5: TOSHIBA MK6017MAP, A2.10 A, max UDMA/66
+[    8.820655] ata1.00: 11733120 sectors, multi 16: LBA 
+[    8.829088] ata1.00: configured for PIO4
+[    8.835176] scsi 0:0:0:0: Direct-Access     ATA      TOSHIBA MK6017MA A2.1 PQ: 0 ANSI: 5
+[    8.845371] sd 0:0:0:0: [sda] 11733120 512-byte hardware sectors (6007 MB)
+[    8.852850] sd 0:0:0:0: [sda] Write Protect is off
+[    8.857813] sd 0:0:0:0: [sda] Mode Sense: 00 3a 00 00
+[    8.858492] sd 0:0:0:0: [sda] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+[    8.869085] sd 0:0:0:0: [sda] 11733120 512-byte hardware sectors (6007 MB)
+[    8.876507] sd 0:0:0:0: [sda] Write Protect is off
+[    8.881471] sd 0:0:0:0: [sda] Mode Sense: 00 3a 00 00
+[    8.882186] sd 0:0:0:0: [sda] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+[    8.891518]  sda: sda1 sda2
+[    9.327339] sd 0:0:0:0: [sda] Attached SCSI disk
+[    9.334505] insmod used greatest stack depth: 4772 bytes left
+[   11.963929] device-mapper: uevent: version 1.0.3
+[   11.969177] device-mapper: ioctl: 4.12.0-ioctl (2007-10-02) initialised: dm-devel@redhat.com
+[   14.592267] EXT3-fs: INFO: recovery required on readonly filesystem.
+[   14.598829] EXT3-fs: write access will be enabled during recovery.
+[   32.857697] kjournald starting.  Commit interval 5 seconds
+[   32.863481] EXT3-fs: recovery complete.
+[   32.876542] EXT3-fs: mounted filesystem with ordered data mode.
+[   34.103928] audit(1197156116.975:2): enforcing=1 old_enforcing=0 auid=4294967295
+[   35.692095] SELinux:8192 avtab hash slots allocated.Num of rules:212170
+[   38.167096] SELinux:8192 avtab hash slots allocated.Num of rules:212170
+[   40.420695] security:  8 users, 11 roles, 2356 types, 114 bools, 1 sens, 1024 cats
+[   40.420728] security:  67 classes, 212170 rules
+[   40.520001] SELinux:  Completing initialization.
+[   40.520028] SELinux:  Setting up existing superblocks.
+[   40.530704] SELinux: initialized (dev dm-0, type ext3), uses xattr
+[   40.737057] SELinux: initialized (dev usbfs, type usbfs), uses genfs_contexts
+[   40.737140] SELinux: initialized (dev tmpfs, type tmpfs), uses transition SIDs
+[   40.740097] SELinux: initialized (dev selinuxfs, type selinuxfs), uses genfs_contexts
+[   40.740325] SELinux: initialized (dev mqueue, type mqueue), uses transition SIDs
+[   40.740467] SELinux: initialized (dev devpts, type devpts), uses transition SIDs
+[   40.740711] SELinux: initialized (dev inotifyfs, type inotifyfs), uses genfs_contexts
+[   40.740757] SELinux: initialized (dev tmpfs, type tmpfs), uses transition SIDs
+[   40.740910] SELinux: initialized (dev futexfs, type futexfs), uses genfs_contexts
+[   40.740982] SELinux: initialized (dev anon_inodefs, type anon_inodefs), uses genfs_contexts
+[   40.741022] SELinux: initialized (dev pipefs, type pipefs), uses task SIDs
+[   40.741091] SELinux: initialized (dev debugfs, type debugfs), uses genfs_contexts
+[   40.741224] SELinux: initialized (dev sockfs, type sockfs), uses task SIDs
+[   40.741314] SELinux: initialized (dev proc, type proc), uses genfs_contexts
+[   40.741436] SELinux: initialized (dev bdev, type bdev), uses genfs_contexts
+[   40.741491] SELinux: initialized (dev rootfs, type rootfs), uses genfs_contexts
+[   40.741757] SELinux: initialized (dev sysfs, type sysfs), uses genfs_contexts
+[   40.870985] SELinux: policy loaded with handle_unknown=allow
+[   40.877015] audit(1197156123.748:3): policy loaded auid=4294967295
+[   62.046977] sd 0:0:0:0: Attached scsi generic sg0 type 0
+[   79.144110] ieee80211_crypt: registered algorithm 'NULL'
+[   79.615725] ieee80211: 802.11 data/management/control stack, git-1.1.13
+[   79.615757] ieee80211: Copyright (C) 2004-2005 Intel Corporation <jketreno@linux.intel.com>
+[   79.845040] mpc52xx MII bus: probed
+[   97.534973] device-mapper: multipath: version 1.0.5 loaded
+[   99.754221] loop: module loaded
+[  103.390494] EXT3 FS on dm-0, internal journal
+[  106.379248] kjournald starting.  Commit interval 5 seconds
+[  106.384649] EXT3 FS on sda1, internal journal
+[  106.384705] EXT3-fs: mounted filesystem with ordered data mode.
+[  106.408819] SELinux: initialized (dev sda1, type ext3), uses xattr
+[  106.417924] SELinux: initialized (dev tmpfs, type tmpfs), uses transition SIDs
+[  113.524487] Adding 524280k swap on /dev/mapper/VolGroup00-LogVol01.  Priority:-1 extents:1 across:524280k
+[  113.564414] SELinux: initialized (dev binfmt_misc, type binfmt_misc), uses genfs_contexts
+[  115.073453] warning: process `kudzu' used the deprecated sysctl system call with 1.23.
+[  123.202863] NET: Registered protocol family 10
+[  123.222245] lo: Disabled Privacy Extensions
+[  123.603103] ip6_tables: (C) 2000-2006 Netfilter Core Team
+[  124.428218] ip_tables: (C) 2000-2006 Netfilter Core Team
+[  129.968068] net eth0: attached phy 16 to driver Generic PHY
+[  132.967755] PHY: f0003000:10 - Link is Up - 100/Full
+[  144.051878] audit(1197156226.923:4): audit_pid=1372 old=0 by auid=4294967295 subj=system_u:system_r:auditd_t:s0
+[  152.148005] RPC: Registered udp transport module.
+[  152.148033] RPC: Registered tcp transport module.
+[  152.230776] SELinux: initialized (dev rpc_pipefs, type rpc_pipefs), uses genfs_contexts
+[  166.016959] SELinux: initialized (dev autofs, type autofs), uses genfs_contexts
+[  167.030261] SELinux: initialized (dev autofs, type autofs), uses genfs_contexts
+[  167.188086] SELinux: initialized (dev autofs, type autofs), uses genfs_contexts
+[  169.784395] Bluetooth: Core ver 2.11
+[  169.803287] NET: Registered protocol family 31
+[  169.803330] Bluetooth: HCI device and connection manager initialized
+[  169.803355] Bluetooth: HCI socket layer initialized
+[  171.573895] Bluetooth: L2CAP ver 2.9
+[  171.573939] Bluetooth: L2CAP socket layer initialized
+[  172.279837] Bluetooth: RFCOMM socket layer initialized
+[  172.281138] Bluetooth: RFCOMM TTY layer initialized
+[  172.281186] Bluetooth: RFCOMM ver 1.8
+[  436.964686] foo: module license 'unspecified' taints kernel.
+[  537.397123] Unable to handle kernel paging request for data at address 0x00000000
+[  537.404868] Faulting instruction address: 0xcb14f004
+[  539.411091] Oops: Kernel access of bad area, sig: 11 [#1]
+[  539.416599] Efika
+[  539.418552] Modules linked in: foo(P) rfcomm l2cap bluetooth autofs4 sunrpc iptable_filter ip_tables ip6table_filter ip6_tables x_tables ipv6 loop dm_multipath fec_mpc52xx bestcomm_fec ieee80211 fec_mpc52xx_phy libphy ieee80211_crypt sg dm_snapshot dm_zero dm_mirror dm_mod pata_mpc52xx libata sd_mod scsi_mod ext3 jbd mbcache uhci_hcd ohci_hcd ehci_hcd
+[  539.450407] NIP: cb14f004 LR: c0062550 CTR: cb14f000
+[  539.455469] REGS: c2315df0 TRAP: 0300   Tainted: P         (2.6.24-rc3)
+[  539.462206] MSR: 00009032 <EE,ME,IR,DR>  CR: 24000488  XER: 00000000
+[  539.468711] DAR: 00000000, DSISR: 22000000
+[  539.472881] TASK = c6ef3770[2026] 'insmod' THREAD: c2314000
+[  539.478380] GPR00: cb14f000 c2315ea0 c6ef3770 00000000 00000001 cb14f280 ffffffff 00000000 
+[  539.486918] GPR08: c6ef3770 00000000 000000c2 c6598410 00127309 10019350 cb1b377c 0000001c 
+[  539.495454] GPR16: c5574000 cb1ad5a8 cb1ad580 0000001b cb1ad558 00000000 0000001e 0000001f 
+[  539.503997] GPR24: cb1acfd6 cb19f000 c69dab68 00000001 cb14f280 00000001 c69dab60 c042b658 
+[  539.512719] NIP [cb14f004] foo_init+0x4/0x40 [foo]
+[  539.517613] LR [c0062550] sys_init_module+0x12d4/0x140c
+[  539.522962] Call Trace:
+[  539.525449] [c2315ea0] [c006253c] sys_init_module+0x12c0/0x140c (unreliable)
+[  539.532652] [c2315f40] [c0013d00] ret_from_syscall+0x0/0x38
+[  539.538356] --- Exception: c00 at 0xff13a24
+[  539.542632]     LR = 0x10000a3c
+[  539.545826] Instruction dump:
+[  539.548855] XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX 
+[  539.556798] XXXXXXXX XXXXXXXX XXXXXXXX 39200000 <91290000> 0fe00000 48000000 00000000 
