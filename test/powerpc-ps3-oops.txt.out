@@ -1,0 +1,31 @@
+Starting kerneloops in debug mode
+Scanning test/powerpc-ps3-oops.txt
+Found start of oops at line 613
+    start line is -Unable to handle kernel paging request for data at address 0x00000000-
+Submit text is:
+---[start of oops]---
+Unable to handle kernel paging request for data at address 0x00000000
+Faulting instruction address: 0xd0000000000b5004
+Oops: Kernel access of bad area, sig: 11 [#1]
+SMP NR_CPUS=128 NUMA PS3
+Modules linked in: foo(P)(U) tun nfs lockd nfs_acl rfcomm l2cap autofs4 sunrpc sit tunnel4 ipv6 spufs dm_multipath snd_ps3 snd_seq_dummy sr_mod cdrom snd_seq_oss snd_seq_midi_event snd_seq snd_seq_device snd_pcm_oss snd_mixer_oss hci_usb bluetooth ps3_gelic snd_pcm ps3rom snd_page_alloc ps3flash snd_timer snd soundcore joydev sg usb_storage sd_mod scsi_mod dm_snapshot dm_zero dm_mirror dm_mod ps3disk ps3stor_lib ext3 jbd mbcache uhci_hcd ohci_hcd ehci_hcd
+NIP: d0000000000b5004 LR: c0000000000adce4 CTR: d0000000000b5000
+REGS: c0006c005e443a10 TRAP: 0300   Tainted: P         (2.6.23.1-43.fc8)
+MSR: 8000000000008032 <EE,IR,DR>  CR: 24000488  XER: 00000000
+DAR: 0000000000000000, DSISR: 0000000042000000
+TASK = c000000004fad1a0[15585] 'insmod' THREAD: c0006c005e440000 CPU: 1
+GPR00: d0000000000b5000 c0006c005e443c90 d0000000000c1710 0000000000000000 
+GPR04: 0000000000000001 d0000000000b5400 ffffffffffffffff 0000000000000000 
+GPR08: 0000000000000000 0000000000000000 c0000000007d8af0 d0000000000c1700 
+GPR12: 00000000000186a0 c00000000065cb00 0000000000000000 d000000000478888 
+GPR16: 0000000000000006 0000000000000000 00000000100d0000 000000000000001f 
+GPR20: d000000000477f50 d0000000000b5090 0000000000000000 d000000000465000 
+GPR24: 0000000000000022 d0000000000b5400 0000000000000023 0000000000000001 
+GPR28: c000000007bd45a0 c0000000006949d8 c0000000006e8670 d0000000000b5400 
+NIP [d0000000000b5004] .init_module+0x4/0x40 [foo]
+LR [c0000000000adce4] .sys_init_module+0x1690/0x184c
+Call Trace:
+[c0006c005e443c90] [c0000000000adcbc] .sys_init_module+0x1668/0x184c (unreliable)
+[c0006c005e443e30] [c000000000008548] syscall_exit+0x0/0x40
+
+---[end of oops]---

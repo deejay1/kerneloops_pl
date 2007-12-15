@@ -1,0 +1,29 @@
+Starting kerneloops in debug mode
+Scanning test/powerpc-with-jiffies-count.txt
+Found start of oops at line 216
+    start line is -Unable to handle kernel paging request for data at address 0x00000000-
+Submit text is:
+---[start of oops]---
+Unable to handle kernel paging request for data at address 0x00000000
+Faulting instruction address: 0xcb14f004
+Oops: Kernel access of bad area, sig: 11 [#1]
+Efika
+Modules linked in: foo(P) rfcomm l2cap bluetooth autofs4 sunrpc iptable_filter ip_tables ip6table_filter ip6_tables x_tables ipv6 loop dm_multipath fec_mpc52xx bestcomm_fec ieee80211 fec_mpc52xx_phy libphy ieee80211_crypt sg dm_snapshot dm_zero dm_mirror dm_mod pata_mpc52xx libata sd_mod scsi_mod ext3 jbd mbcache uhci_hcd ohci_hcd ehci_hcd
+NIP: cb14f004 LR: c0062550 CTR: cb14f000
+REGS: c2315df0 TRAP: 0300   Tainted: P         (2.6.24-rc3)
+MSR: 00009032 <EE,ME,IR,DR>  CR: 24000488  XER: 00000000
+DAR: 00000000, DSISR: 22000000
+TASK = c6ef3770[2026] 'insmod' THREAD: c2314000
+GPR00: cb14f000 c2315ea0 c6ef3770 00000000 00000001 cb14f280 ffffffff 00000000 
+GPR08: c6ef3770 00000000 000000c2 c6598410 00127309 10019350 cb1b377c 0000001c 
+GPR16: c5574000 cb1ad5a8 cb1ad580 0000001b cb1ad558 00000000 0000001e 0000001f 
+GPR24: cb1acfd6 cb19f000 c69dab68 00000001 cb14f280 00000001 c69dab60 c042b658 
+NIP [cb14f004] foo_init+0x4/0x40 [foo]
+LR [c0062550] sys_init_module+0x12d4/0x140c
+Call Trace:
+[c2315ea0] [c006253c] sys_init_module+0x12c0/0x140c (unreliable)
+[c2315f40] [c0013d00] ret_from_syscall+0x0/0x38
+--- Exception: c00 at 0xff13a24
+    LR = 0x10000a3c
+
+---[end of oops]---
