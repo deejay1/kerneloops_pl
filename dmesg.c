@@ -79,16 +79,18 @@ static void fill_linepointers(char *buffer, int remove_syslog)
 			c2 = strchr(c,'.');
 			c3 = strchr(c,']');
 			if (c2 && c3 && (c2<c3) && (c3-c)<14 && (c2-c)<8) {
-				c = c3;
+				c = c3+1;
+				if (*c==' ') c++;
 				linepointer[linecount] = c;
 			}
 		}
-		
+
 		c = strchr(c, '\n'); /* turn the \n into a string termination */
 		if (c) {
 			*c = 0;
 			c = c+1;
 		}
+		printf("Line is -%s-\n", linepointer[linecount]);
 		/* if we see our own marker, we know we submitted everything upto here already */
 		if (strstr(linepointer[linecount], "www.kerneloops.org")) {
 			linecount = 0;
@@ -237,7 +239,7 @@ void scan_dmesg(void)
 	submit_queue();
 }
 
-void scan_filename(char *filename)
+void scan_filename(char *filename, int issyslog)
 {
 	char *buffer;
 	struct stat statb;
@@ -261,7 +263,7 @@ void scan_filename(char *filename)
 	fclose(file);
 
 	if (ret > 0)
-		extract_oops(buffer, 1);
+		extract_oops(buffer, issyslog);
 	free(buffer);
 	submit_queue();
 
