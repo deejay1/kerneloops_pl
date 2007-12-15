@@ -1,0 +1,74 @@
+$ mkvt -id 6
+
+1:mon> t
+[c000000008c738d0] c000000000432060 .unix_stream_recvmsg+0x2b4/0x6e0
+[c000000008c73a20] c0000000003972e4 .sock_aio_read+0x154/0x18c
+[c000000008c73b50] c00000000010e5e4 .do_sync_read+0xc4/0x124
+[c000000008c73cf0] c00000000010f060 .vfs_read+0x13c/0x208
+[c000000008c73d90] c00000000010f830 .sys_read+0x4c/0x8c
+[c000000008c73e30] c0000000000086c8 syscall_exit+0x0/0x40
+--- Exception: c01 (System Call) at 000000001fa473c4
+SP (ffafe0d0) is in userspace
+1:mon> X
+Oops: Machine check, sig: 7 [#1]
+SMP NR_CPUS=128 NUMA pSeries
+Modules linked in: oprofile autofs4 hidp rfcomm l2cap bluetooth sunrpc nf_conntrack_netbios_ns nf_conntrack_ipv4 ipt_REJECT iptable_filter ip_tables nf_conntrack_ipv6 xt_state nf_conntrack nfnetlink xt_tcpudp ip6table_filter ip6_tables x_tables ipv6 dm_multipath snd_powermac snd_seq_dummy snd_seq_oss snd_seq_midi_event snd_seq snd_seq_device snd_pcm_oss snd_mixer_oss snd_pcm snd_page_alloc snd_timer snd soundcore parport_pc lp parport sg ibmveth dm_snapshot dm_zero dm_mirror dm_mod ibmvscsic sd_mod scsi_mod ext3 jbd mbcache ehci_hcd ohci_hcd uhci_hcd
+NIP: c000000000441188 LR: c000000000432060 CTR: c000000000073cfc
+REGS: c000000008c735d0 TRAP: 0200   Not tainted  (2.6.22.9-61.fc6)
+MSR: 8000000000109032 <EE,ME,IR,DR>  CR: 24000448  XER: 00000010
+TASK = c000000033b12000[28081] 'scp' THREAD: c000000008c70000 CPU: 1
+GPR00: 0000000080000001 c000000008c73850 c000000000741920 c000000018561584 
+GPR04: c000000033b12360 0000000000000e0c 0000000024000442 0000000000e98000 
+GPR08: 0000000000000000 0000000000000000 c0000000005fc080 0000000000000000 
+GPR12: 000000000000d032 c000000000625100 00000000ffafe9cb 0000000000000000 
+GPR16: 0000000000000000 c000000018aa1300 0000000000000000 0000000000000000 
+GPR20: 7fffffffffffffff 0000000000000000 0000000000001000 0000000000000001 
+GPR24: c000000008c73ac8 ffffffffffffffa1 c000000018561584 c000000008c73a90 
+GPR28: c000000018561300 c0000000185613b0 c000000000707988 c000000018561584 
+NIP [c000000000441188] ._spin_lock+0x20/0x88
+LR [c000000000432060] .unix_stream_recvmsg+0x2b4/0x6e0
+Call Trace:
+[c000000008c73850] [c0000000001971c4] .avc_has_perm+0x6c/0x9c (unreliable)
+[c000000008c738d0] [c000000000432060] .unix_stream_recvmsg+0x2b4/0x6e0
+[c000000008c73a20] [c0000000003972e4] .sock_aio_read+0x154/0x18c
+[c000000008c73b50] [c00000000010e5e4] .do_sync_read+0xc4/0x124
+[c000000008c73cf0] [c00000000010f060] .vfs_read+0x13c/0x208
+[c000000008c73d90] [c00000000010f830] .sys_read+0x4c/0x8c
+[c000000008c73e30] [c0000000000086c8] syscall_exit+0x0/0x40
+Instruction dump:
+e8010010 ebe1fff0 7c0803a6 4e800020 7c0802a6 fbe1fff0 7c7f1b78 f8010010 
+38000000 f821ff81 980d01dc 800d0010 <7d20f828> 2c090000 40820010 7c00f92d 
+BUG: sleeping function called from invalid context at kernel/rwsem.c:20
+in_atomic():0, irqs_disabled():1
+Call Trace:
+[c000000008c730b0] [c000000000010594] .show_stack+0x68/0x1b0 (unreliable)
+[c000000008c73150] [c000000000076ae0] .__might_sleep+0xec/0x108
+[c000000008c731d0] [c00000000009fc7c] .down_read+0x28/0x78
+[c000000008c73260] [c000000000091bf0] .__blocking_notifier_call_chain+0x4c/0xa4
+[c000000008c73310] [c0000000000820b0] .profile_task_exit+0x24/0x3c
+[c000000008c73390] [c000000000084ae4] .do_exit+0x3c/0x9bc
+[c000000008c73440] [c000000000027c94] .die+0x238/0x264
+[c000000008c734e0] [c0000000000286d0] .machine_check_exception+0x21c/0x24c
+[c000000008c73560] [c000000000003a24] machine_check_common+0x124/0x180
+--- Exception: 200 at ._spin_lock+0x20/0x88
+    LR = .unix_stream_recvmsg+0x2b4/0x6e0
+[c000000008c73850] [c0000000001971c4] .avc_has_perm+0x6c/0x9c (unreliable)
+[c000000008c738d0] [c000000000432060] .unix_stream_recvmsg+0x2b4/0x6e0
+[c000000008c73a20] [c0000000003972e4] .sock_aio_read+0x154/0x18c
+[c000000008c73b50] [c00000000010e5e4] .do_sync_read+0xc4/0x124
+[c000000008c73cf0] [c00000000010f060] .vfs_read+0x13c/0x208
+[c000000008c73d90] [c00000000010f830] .sys_read+0x4c/0x8c
+[c000000008c73e30] [c0000000000086c8] syscall_exit+0x0/0x40
+RTAS: event: 5, Type: Unknown, Severity: 3
+Machine check in kernel mode.
+Caused by (from SRR1=8000000000101032): L2 data cache parity error
+cpu 0x1: Vector: 200 (Machine Check) at [c000000008c72df0]
+    pc: d0000000002dee68: .sync_buffer+0x19c/0x4c0 [oprofile]
+    lr: d0000000002dee4c: .sync_buffer+0x180/0x4c0 [oprofile]
+    sp: c000000008c73070
+   msr: 8000000000101032
+  current = 0xc000000033b12000
+  paca    = 0xc000000000625100
+    pid   = 28081, comm = scp
+enter ? for help
+1:mon> zr
