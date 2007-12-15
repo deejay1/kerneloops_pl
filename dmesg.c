@@ -36,6 +36,7 @@
 
 static char** linepointer;
 
+static char * linelevel;
 static int linecount;
 
 
@@ -66,6 +67,7 @@ static void fill_linepointers(char *buffer, int remove_syslog)
 
 		linepointer[linecount] = c;
 		if (*c=='<' && *(c+2)=='>') {
+			linelevel[linecount] = *(c+1);
 			c = c + 3;
 			linepointer[linecount] = c;
 		}
@@ -90,7 +92,7 @@ static void fill_linepointers(char *buffer, int remove_syslog)
 static void extract_oops(char *buffer, int remove_syslog)
 {
 	int i;
-	
+	char prevlevel = 0;
 	int oopsstart = -1;
 	int oopsend;
 	int inbacktrace = 0;
@@ -98,7 +100,12 @@ static void extract_oops(char *buffer, int remove_syslog)
 	linepointer = calloc(strlen(buffer), sizeof(char*));
 	if (linepointer==NULL)
 		return;
-
+	linelevel = calloc(strlen(buffer), sizeof(char)+1);
+	if (linelevel==NULL) {
+		free(linepointer);
+		linepointer = NULL;
+		return;
+	}
 
 	fill_linepointers(buffer, remove_syslog);
 
@@ -121,6 +128,8 @@ static void extract_oops(char *buffer, int remove_syslog)
 				oopsstart = i;
 			if (strstr(linepointer[i], "Unable to handle kernel"))
 				oopsstart = i;
+			if (strstr(linepointer[i], "sysctl table check failed"))
+				oopsstart = i;
 			if (strstr(linepointer[i], "------------[ cut here ]------------"))
 				oopsstart = i;
 			if (strstr(linepointer[i], "Modules linked in:") && i>=4)
@@ -129,13 +138,25 @@ static void extract_oops(char *buffer, int remove_syslog)
 				oopsstart = i-3;
 		}
 
+		/* a calltrace starts with "Call Trace:" or with the " [<.......>] function+0xFF/0xAA" pattern */
+		if (oopsstart >=0 && strstr(linepointer[i], "Call Trace:"))
+			inbacktrace = 1;
+
+		else if (oopsstart >=0 && inbacktrace == 0 && strlen(linepointer[i])>8) {
+			char *c1, *c2, *c3;
+			c1 = strstr(linepointer[i], ">]");
+			c2 = strstr(linepointer[i], "+0x");
+			c3 = strstr(linepointer[i], "/0x");
+			if (linepointer[i][0] == ' ' && linepointer[i][1]=='[' && linepointer[i][2]=='<' && c1 && c2 && c3)
+				inbacktrace = 1;
+		} else
 
 		if (oopsstart>=0 && inbacktrace>0) {
 			char *c1, c2,c3;
 			c1 = strstr(linepointer[i], "Code:");
 			c2 = linepointer[i][0];
 			c3 = linepointer[i][1];
-			if (c1!=NULL || c2 != ' ' || c3 != '[' || strlen(linepointer[i])<8) {
+			if (c1!=NULL || c2 != ' ' || c3 != '[' || strlen(linepointer[i])<8 || linelevel[i] != prevlevel) {
 				int len;
 				char *oops;
 				oopsend = i-1;
@@ -158,18 +179,7 @@ static void extract_oops(char *buffer, int remove_syslog)
 				free(oops);
 			}
 		}
-		/* a calltrace starts with "Call Trace:" or with the " [<.......>] function+0xFF/0xAA" pattern */
-		if (oopsstart >=0 && strstr(linepointer[i], "Call Trace:"))
-			inbacktrace = 1;
-
-		if (oopsstart >=0 && inbacktrace == 0 && strlen(linepointer[i])>8) {
-			char *c1, *c2, *c3;
-			c1 = strstr(linepointer[i], ">]");
-			c2 = strstr(linepointer[i], "+0x");
-			c3 = strstr(linepointer[i], "/0x");
-			if (linepointer[i][0] == ' ' && linepointer[i][1]=='[' && linepointer[i][2]=='<' && c1 && c2 && c3)
-				inbacktrace = 1;
-		}
+		prevlevel = linelevel[i];
 		i++;
 	}
 	if (oopsstart>=0)  {
@@ -177,6 +187,7 @@ static void extract_oops(char *buffer, int remove_syslog)
 		int len;
 
 		len = 2;
+		while (oopsend>0 && linepointer[oopsend]==NULL) oopsend--;
 		for (i=oopsstart; i<=oopsend; i++) 
 			len += strlen(linepointer[i])+1;
 				
