@@ -1,0 +1,23 @@
+#
+# Configuration file for the kerneloops.org kernel crash collector
+#
+
+#
+# Set the following variable to "yes" if you want to automatically
+# submit your oopses to the database for use by your distribution or the
+# Linux kernel developers
+#
+allow-submit = no
+
+#
+# Set the following variable to "yes" if you want to allow your 
+# Linux distribution vendor to pass the oops on to the central kerneloops.org
+# database as used by the Linux kernel developers
+#
+allow-pass-on = yes
+
+#
+# URL for submitting the oopses
+#
+
+submit-url = http://submit.kerneloops.org/submitoops.php

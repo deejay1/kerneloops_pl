@@ -1,0 +1,77 @@
+#!/bin/bash
+#
+# kerneloops.org 
+#
+# chkconfig:   345 90 88
+# description: kerneloops.org is a tool that collects and submits \
+# kernel crash signatures to the kerneloops.org website for use by \
+# the Linux kernel developers.
+# processname: kerneloops
+# config:      /etc/kerneloops.org
+#
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+
+exec="/usr/sbin/kerneloops"
+prog=$(basename $exec)
+conf="/etc/kerneloops.org"
+lockfile=/var/lock/subsys/$prog
+
+[ -e /etc/sysconfig/$prog ] && . /etc/sysconfig/$prog
+
+start() {
+ 	echo -n $"Starting $prog:"
+	daemon $prog 
+	retval=$?
+	echo
+	[ $retval -eq 0 ] && touch $lockfile
+	return $retval
+}
+
+stop() {
+	echo -n $"Stopping $prog: "
+	killproc $prog
+	retval=$?
+	echo
+	[ $retval -eq 0 ] && rm -f $lockfile
+	return $retval
+}
+
+restart() {
+	stop
+	start
+}
+
+reload() {
+	restart
+}
+
+force_reload() {
+	restart
+}
+
+fdr_status() {
+	status $prog
+}
+
+
+case "$1" in
+	start|stop|restart|reload)
+  		$1
+		;;
+	force-reload)
+		force_reload
+		;;
+	status)
+		fdr_status
+		;;
+	condrestart|try-restart)
+		[ -f $lockfile ] || restart
+		;;
+	*)
+		echo $"Usage: $0 {start|stop|status|restart|try-restart|reload|force-reload}"
+		exit 1
+esac
+
