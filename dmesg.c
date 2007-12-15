@@ -90,7 +90,7 @@ static void fill_linepointers(char *buffer, int remove_syslog)
 			*c = 0;
 			c = c+1;
 		}
-		printf("Line is -%s-\n", linepointer[linecount]);
+//		printf("Line is -%s-\n", linepointer[linecount]);
 		/* if we see our own marker, we know we submitted everything upto here already */
 		if (strstr(linepointer[linecount], "www.kerneloops.org")) {
 			linecount = 0;
@@ -154,7 +154,8 @@ static void extract_oops(char *buffer, int remove_syslog)
 			if (oopsstart>=0 && testmode) {
 				printf("Found start of oops at line %i\n", oopsstart);
 				printf("    start line is -%s-\n", linepointer[oopsstart]);
-				printf("    trigger line is -%s-\n", linepointer[i]);
+				if (oopsstart!=i)
+					printf("    trigger line is -%s-\n", linepointer[i]);
 		}
 		}
 
@@ -172,11 +173,24 @@ static void extract_oops(char *buffer, int remove_syslog)
 		} else
 
 		if (oopsstart>=0 && inbacktrace>0) {
-			char *c1, c2,c3;
-			c1 = strstr(linepointer[i], "Code:");
+			int isend = 0;
+			char c2,c3;
 			c2 = linepointer[i][0];
 			c3 = linepointer[i][1];
-			if (c1!=NULL || c2 != ' ' || c3 != '[' || strlen(linepointer[i])<8 || linelevel[i] != prevlevel) {
+
+			/* line needs to start with " [" or have "] ["*/
+			if ((c2 != ' ' || c3 != '[') && strstr(linepointer[i],"] [")==NULL && strstr(linepointer[i],"--- Exception")==NULL)
+				isend = 1;
+				
+			if (strlen(linepointer[i])<8)
+				isend = 1;
+			if (linelevel[i] != prevlevel)
+				isend = 1;
+				
+			if (strstr(linepointer[i], "Code:")!=NULL)
+				isend = 1;
+				
+			if (isend) {
 				int len;
 				char *oops;
 				oopsend = i-1;
