@@ -33,6 +33,7 @@
 
 #include "kerneloops.h"
 
+int testmode = 0;
 int main(int argc, char**argv)
 {
 	int godaemon = 1;
@@ -59,6 +60,11 @@ int main(int argc, char**argv)
 
 	if (argc>1 && strstr(argv[1], "--nodaemon"))
 		godaemon = 0;
+	if (argc>1 && strstr(argv[1], "--debug")) {
+		printf("Starting kerneloops in debug mode\n");
+		godaemon = 0;
+		testmode = 1;
+	}
 
 	if (godaemon && daemon(0,0)) {
 		printf("kerneloops failed to daemonize.. exiting \n");
@@ -67,8 +73,12 @@ int main(int argc, char**argv)
 
 	/* we scan dmesg before /var/log/messages; dmesg is a more accurate source normally */
 	scan_dmesg();
-	scan_var_log_messages();
+	scan_filename("/var/log/messages");
+	if (testmode && argc>2 && argv[2])
+		scan_filename(argv[2]);
 
+	if (testmode)
+		return EXIT_SUCCESS;
 
 	/* now, start polling for oopses to occur */
 	while (1) {

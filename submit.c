@@ -99,12 +99,42 @@ void queue_oops(char *oops)
 }
 
 
+void print_queue(void)
+{	
+	struct oops *oops;
+	struct oops *queue;
+	int count = 0;
+
+	queue = queued_oopses;
+	queued_oopses = NULL;
+	barrier();
+	oops = queue;
+	while (oops) {
+		struct oops *next;
+
+		printf("Submit text is:\n%s", oops->text);	
+		next = oops->next;
+		free(oops->text);
+		free(oops);
+		oops = next;
+		count++;
+	}
+
+}
+
+
+
 void submit_queue(void)
 {	
 	int result;
 	struct oops *oops;
 	struct oops *queue;
 	int count = 0;
+	
+	if (testmode) {
+		print_queue();
+		return;
+	}
 
 	queue = queued_oopses;
 	queued_oopses = NULL;
@@ -143,7 +173,7 @@ void submit_queue(void)
 		count++;
 	}
 
-	if (count) {
+	if (count && !testmode) {
 		openlog("kerneloops", 0, LOG_KERN);
 		syslog(LOG_WARNING, "Submitted %i kernel oopses to www.kerneloops.org", count);
 		closelog();

@@ -32,11 +32,12 @@
 extern void queue_oops(char *oops);
 extern void submit_queue(void);
 extern void scan_dmesg(void);
-extern void scan_var_log_messages(void);
+extern void scan_filename(char *filename);
 extern void cancel_queue(void);
 extern int opted_in;
 extern int allow_distro_to_pass_on;
 extern char *submit_url;
 extern void read_config_file(char *filename);
 
+extern int testmode;
 #endif

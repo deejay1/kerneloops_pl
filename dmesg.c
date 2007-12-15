@@ -66,11 +66,24 @@ static void fill_linepointers(char *buffer, int remove_syslog)
 		}
 
 		linepointer[linecount] = c;
+		linelevel[linecount] = 0;
+		/* store and remove kernel log level */
 		if (*c=='<' && *(c+2)=='>') {
 			linelevel[linecount] = *(c+1);
 			c = c + 3;
 			linepointer[linecount] = c;
 		}
+		/* remove jiffies time stamp counter if present */
+		if (*c =='[') {
+			char *c2, *c3;
+			c2 = strchr(c,'.');
+			c3 = strchr(c,']');
+			if (c2 && c3 && (c2<c3) && (c3-c)<14 && (c2-c)<8) {
+				c = c3;
+				linepointer[linecount] = c;
+			}
+		}
+		
 		c = strchr(c, '\n'); /* turn the \n into a string termination */
 		if (c) {
 			*c = 0;
@@ -219,7 +232,7 @@ void scan_dmesg(void)
 	submit_queue();
 }
 
-void scan_var_log_messages(void)
+void scan_filename(char *filename)
 {
 	char *buffer;
 	struct stat statb;
@@ -228,13 +241,13 @@ void scan_var_log_messages(void)
 
 	memset(&statb, 0, sizeof(statb));
 
-	ret = stat("/var/log/messages", &statb);
+	ret = stat(filename, &statb);
 
 	if (statb.st_size<1 || ret!=0)
 		return;
 
 	buffer = calloc(statb.st_size+1024,1);
-	file = fopen("/var/log/messages", "rm");
+	file = fopen(filename, "rm");
 	if (!file) {
 		free(buffer);
 		return;
