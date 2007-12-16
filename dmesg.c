@@ -139,6 +139,8 @@ static void extract_oops(char *buffer, int remove_syslog)
 				oopsstart = i;
 			if (strstr(linepointer[i], "kernel BUG at"))
 				oopsstart = i;
+			if (strstr(linepointer[i], "Badness at"))
+				oopsstart = i;
 			if (strstr(linepointer[i], "WARNING:"))
 				oopsstart = i;
 			if (strstr(linepointer[i], "Unable to handle kernel"))
