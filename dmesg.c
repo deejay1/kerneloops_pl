@@ -211,7 +211,9 @@ static void extract_oops(char *buffer, int remove_syslog)
 					strcat(oops, linepointer[i]);
 					strcat(oops, "\n");
 				}
-				queue_oops(oops);
+				/* too short oopses are invalid */
+				if (strlen(oops)>100)
+					queue_oops(oops);
 				oopsstart = -1;
 				inbacktrace = 0;
 				oopsend=linecount;
@@ -232,6 +234,8 @@ static void extract_oops(char *buffer, int remove_syslog)
 	if (oopsstart>=0)  {
 		char *oops;
 		int len;
+		
+		oopsend = i-1;
 
 		len = 2;
 		while (oopsend>0 && linepointer[oopsend]==NULL) oopsend--;
@@ -244,7 +248,9 @@ static void extract_oops(char *buffer, int remove_syslog)
 			strcat(oops, linepointer[i]);
 			strcat(oops, "\n");
 		}
-		queue_oops(oops);
+		/* too short oopses are invalid */
+		if (strlen(oops)>100)
+			queue_oops(oops);
 		oopsstart = -1;
 		inbacktrace = 0;
 		free(oops);
