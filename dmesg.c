@@ -220,6 +220,14 @@ static void extract_oops(char *buffer, int remove_syslog)
 		}
 		prevlevel = linelevel[i];
 		i++;
+		if (oopsstart>0 && i-oopsstart>50) {
+			oopsstart = -1;
+			inbacktrace = 0;
+		}
+		if (oopsstart>0 && !inbacktrace && i-oopsstart>30) {
+			oopsstart = -1;
+			inbacktrace = 0;
+		}
 	}
 	if (oopsstart>=0)  {
 		char *oops;
