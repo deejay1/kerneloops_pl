@@ -210,6 +210,8 @@ static void extract_oops(char *buffer, int remove_syslog)
 				isend = 1;
 			if (strstr(linepointer[i], "Instruction dump::")!=NULL)
 				isend = 1;
+			if (strstr(linepointer[i], "---[ end trace")!=NULL)
+				isend = 1;
 				
 			if (isend) {
 				int len;
