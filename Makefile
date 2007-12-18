@@ -7,7 +7,9 @@ kerneloops:	kerneloops.o submit.o dmesg.o configfile.o kerneloops.h
 
 clean:
 	rm -f *~ *.o *.ko DEADJOE kerneloops *.out
-	
+
+dist: clean
+	rm -rf .git .gitignore push.sh .*~ 
 
 
 install:
