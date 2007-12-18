@@ -40,8 +40,13 @@
  * we keep track of 16 checksums of the last submitted oopses; this allows us to
  * make sure we don't submit the same oops twice (this allows us to not have to do
  * really expensive things during non-destructive dmesg-scanning)
+ *
+ * This also limits the number of oopses we'll submit per session;
+ * it's important that this is bounded to avoid feedback loops
+ * for the scenario where submitting an oopses causes a warning/oops
  */
-static unsigned int checksums[16];
+#define MAX_CHECKSUMS 16 
+static unsigned int checksums[MAX_CHECKSUMS];
 static int submitted = 0;
 
 struct oops;
@@ -78,7 +83,7 @@ void queue_oops(char *oops)
 	unsigned int sum;
 	struct oops *new;
 
-	if (submitted >= 15)
+	if (submitted >= MAX_CHECKSUMS-1)
 		return;
 	/* first, check if we haven't already submitted the oops */
 	sum = checksum(oops);
@@ -178,6 +183,12 @@ void submit_queue(void)
 		syslog(LOG_WARNING, "Submitted %i kernel oopses to www.kerneloops.org", count);
 		closelog();
 	}
+	/*
+	 * If we've reached the maximum count, we'll exit the program,
+	 * the program won't do any useful work anymore going forward.
+	 */
+	if (submitted >= MAX_CHECKSUMS-1)
+		exit(EXIT_SUCESS);
 }
 
 
