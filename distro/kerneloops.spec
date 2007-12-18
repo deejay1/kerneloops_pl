@@ -1,5 +1,5 @@
 Name:           kerneloops
-Version:        0.5
+Version:        0.6
 Release:        1%{?dist}
 Summary:        Tool to automatically collect and submit kernel crash signatures
 
@@ -54,6 +54,8 @@ fi
 
 
 %changelog
+* Wed Dec 19 2008 Arjan van de Ven <arjan@linux.intel.com> - 0.6-1
+- various cleanups and minor improvements
 * Tue Dec 18 2008 Arjan van de Ven <arjan@linux.intel.com> - 0.5-1
 - fix infinite loop
 * Mon Dec 17 2008 Arjan van de Ven <arjan@linux.intel.com> - 0.4-1
