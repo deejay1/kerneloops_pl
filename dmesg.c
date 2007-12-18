@@ -204,6 +204,10 @@ static void extract_oops(char *buffer, int remove_syslog)
 				
 			if (strstr(linepointer[i], "Code:")!=NULL)
 				isend = 1;
+			if (strstr(linepointer[i], "WARNING:")!=NULL && oopsstart!=i)
+				isend = 1;
+			if (strstr(linepointer[i], "Unable to handle")!=NULL && oopsstart!=i)
+				isend = 1;
 			if (strstr(linepointer[i], "Instruction dump::")!=NULL)
 				isend = 1;
 				

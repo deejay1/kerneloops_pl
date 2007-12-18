@@ -188,7 +188,7 @@ void submit_queue(void)
 	 * the program won't do any useful work anymore going forward.
 	 */
 	if (submitted >= MAX_CHECKSUMS-1)
-		exit(EXIT_SUCESS);
+		exit(EXIT_SUCCESS);
 }
 
 
