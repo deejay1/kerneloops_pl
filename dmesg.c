@@ -58,9 +58,10 @@ static void fill_linepointers(char *buffer, int remove_syslog)
 			c2 = strstr(c, "kernel:");
 			if (!c2) {
 				c2 = strchr(c,'\n');
-				if (c2)
+				if (c2) {
 					c = c2+1;
-				continue;
+					continue;
+				}
 			}
 			c = strchr(c, ':');
 			if (!c) break;

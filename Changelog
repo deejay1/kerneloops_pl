@@ -1,3 +1,5 @@
+0.5 - Dec 18th 2007
+	* fix infinite loop (Antony Dovgal)
 0.4 - Dec 17th 2007
 	* Many bugfixes for powerpc compatibility
 	* Reject many invalid (short or long) oopses
