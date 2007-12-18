@@ -1,0 +1,47 @@
+Starting kerneloops in debug mode
+Scanning test/i386-bug-on.txt
+Found start of oops at line 428
+    start line is -WARNING: at /tmp/oops.c:5 modinit() (Not tainted)-
+Found start of oops at line 437
+    start line is -------------[ cut here ]-------------
+Submit text is:
+---[start of oops]---
+------------[ cut here ]------------
+kernel BUG at /tmp/oops.c:5!
+invalid opcode: 0000 [#1] SMP 
+Modules linked in: oops cpufreq_stats ext2 i915 drm nf_conntrack_ipv4 ipt_REJECT iptable_filter ip_tables nf_conntrack_ipv6 xt_state nf_conntrack xt_tcpudp ip6t_ipv6header ip6t_REJECT ip6table_filter ip6_tables x_tables ipv6 loop dm_multipath rtc_cmos iTCO_wdt iTCO_vendor_support pcspkr i2c_i801 i2c_core battery video ac output power_supply button sg joydev usb_storage dm_snapshot dm_zero dm_mirror dm_mod ahci pata_acpi ata_generic ata_piix libata sd_mod scsi_mod ext3 jbd mbcache uhci_hcd ohci_hcd ehci_hcd
+
+Pid: 8369, comm: insmod Not tainted (2.6.24-0.77.rc4.git4.fc9 #1)
+EIP: 0060:[<e024e003>] EFLAGS: 00210286 CPU: 0
+EIP is at modinit+0x3/0x7 [oops]
+EAX: e024e000 EBX: d434d9c8 ECX: e024e300 EDX: 00000001
+ESI: e024e300 EDI: e024e300 EBP: d4347eb0 ESP: d4347eb0
+ DS: 007b ES: 007b FS: 00d8 GS: 0033 SS: 0068
+Process insmod (pid: 8369, ti=d4347000 task=d4222e10 task.ti=d4347000)
+Stack: d4347fb0 c0455445 00000000 00000000 d4347ee0 c0423edd 0000001c d434d9a8 
+       00795000 c16df1e8 d41a6af0 0000be7f 00000000 e024e300 00000000 00000000 
+       00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000 
+Call Trace:
+ [<c040649a>] show_trace_log_lvl+0x1a/0x2f
+ [<c040654a>] show_stack_log_lvl+0x9b/0xa3
+ [<c04065f9>] show_registers+0xa7/0x178
+ [<c04067eb>] die+0x121/0x20c
+ [<c06422a8>] do_trap+0x8a/0xa3
+ [<c0406b95>] do_invalid_op+0x88/0x92
+ [<c0642072>] error_code+0x72/0x78
+ [<c0455445>] sys_init_module+0x1430/0x155c
+ [<c0405252>] syscall_call+0x7/0xb
+
+---[end of oops]---
+Submit text is:
+---[start of oops]---
+WARNING: at /tmp/oops.c:5 modinit() (Not tainted)
+Pid: 8190, comm: insmod Not tainted 2.6.24-0.77.rc4.git4.fc9 #1
+ [<c040649a>] show_trace_log_lvl+0x1a/0x2f
+ [<c0406d41>] show_trace+0x12/0x14
+ [<c0407061>] dump_stack+0x6c/0x72
+ [<e024e03d>] modinit+0x38/0x3f [oops]
+ [<c0455445>] sys_init_module+0x1430/0x155c
+ [<c0405252>] syscall_call+0x7/0xb
+
+---[end of oops]---

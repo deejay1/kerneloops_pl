@@ -1,0 +1,16 @@
+Starting kerneloops in debug mode
+Scanning test/i386-warn-on.txt
+Found start of oops at line 428
+    start line is -WARNING: at /tmp/oops.c:5 modinit() (Not tainted)-
+Submit text is:
+---[start of oops]---
+WARNING: at /tmp/oops.c:5 modinit() (Not tainted)
+Pid: 8190, comm: insmod Not tainted 2.6.24-0.77.rc4.git4.fc9 #1
+ [<c040649a>] show_trace_log_lvl+0x1a/0x2f
+ [<c0406d41>] show_trace+0x12/0x14
+ [<c0407061>] dump_stack+0x6c/0x72
+ [<e024e03d>] modinit+0x38/0x3f [oops]
+ [<c0455445>] sys_init_module+0x1430/0x155c
+ [<c0405252>] syscall_call+0x7/0xb
+
+---[end of oops]---
