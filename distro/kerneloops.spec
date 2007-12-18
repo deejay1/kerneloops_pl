@@ -5,8 +5,8 @@ Summary:        Tool to automatically collect and submit kernel crash signatures
 
 Group:          System Environment/Base
 License:        GPLv2
-URL:            http://www.kerneloops
-Source0:        kerneloops-0.5.tar.gz
+URL:            http://www.kerneloops.org/download/kerneloops-%{version}.tar.gz
+Source0:        kerneloops-%{version}.tar.gz
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
