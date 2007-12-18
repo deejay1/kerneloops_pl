@@ -9,7 +9,7 @@ clean:
 	rm -f *~ *.o *.ko DEADJOE kerneloops *.out
 
 dist: clean
-	rm -rf .git .gitignore push.sh .*~ 
+	rm -rf .git .gitignore push.sh .*~  */*~
 
 
 install:
