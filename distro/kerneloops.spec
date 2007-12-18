@@ -1,12 +1,12 @@
 Name:           kerneloops
-Version:        0.3
+Version:        0.4
 Release:        1%{?dist}
 Summary:        Tool to automatically collect and submit kernel crash signatures
 
 Group:          System Environment/Base
 License:        GPLv2
 URL:            http://www.kerneloops
-Source0:        kerneloops-0.3.tar.gz
+Source0:        kerneloops-0.4.tar.gz
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -54,6 +54,8 @@ fi
 
 
 %changelog
+* Mon Dec 17 2008 Arjan van de Ven <arjan@linux.intel.com> - 0.4-1
+- PPC bugfixes
 * Sun Dec 9 2008 Arjan van de Ven <arjan@linux.intel.com> - 0.3-1
 - more fixes
 * Sat Dec 8 2008 Arjan van de Ven <arjan@linux.intel.com> - 0.2-1
