@@ -1,0 +1,4 @@
+0.4 - Dec 17th 2007
+	* Many bugfixes for powerpc compatibility
+	* Reject many invalid (short or long) oopses
+	* Create a testsuite
