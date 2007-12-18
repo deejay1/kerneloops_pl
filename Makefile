@@ -19,3 +19,4 @@ install:
 	
 tests: kerneloops
 	for i in test/*txt ; do ./kerneloops --debug $$i > $$i.dbg ; diff -u $$i.out $$i.dbg ; done
+	
