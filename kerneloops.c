@@ -38,7 +38,7 @@ int main(int argc, char**argv)
 {
 	int godaemon = 1;
 
-	read_config_file("/etc/kerneloops.org");
+	read_config_file("/etc/kerneloops.conf");
 
 
 	if (!opted_in) {

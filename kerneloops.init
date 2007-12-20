@@ -1,14 +1,25 @@
 #!/bin/bash
 #
-# kerneloops.org 
+# kerneloops
 #
 # chkconfig:   345 90 88
-# description: kerneloops.org is a tool that collects and submits \
-# kernel crash signatures to the kerneloops.org website for use by \
-# the Linux kernel developers.
+# description: A tool that collects and submits kernel crash \
+# signatures to the kerneloops.org website for use by the Linux \
+# kernel developers.
 # processname: kerneloops
-# config:      /etc/kerneloops.org
+# config:      /etc/kerneloops.conf
 #
+### BEGIN INIT INFO
+# Provides: kerneloops
+# Default-Start: 3 4 5
+# Default-Stop: 0 1 2 6
+# Required-Start: $local_fs $remote_fs $named $network $time $syslog
+# Required-Stop: $local_fs $remote_fs
+# Short-Description: Tool to automatically collect and submit kernel crash signatures
+# Description: A tool that collects and submits kernel crash
+#   signatures to the kerneloops.org website for use by the Linux
+#   kernel developers.
+### END INIT INFO
 
 # Source function library.
 . /etc/rc.d/init.d/functions
@@ -16,7 +27,7 @@
 
 exec="/usr/sbin/kerneloops"
 prog=$(basename $exec)
-conf="/etc/kerneloops.org"
+sconf="/etc/kerneloops.conf"
 lockfile=/var/lock/subsys/$prog
 
 [ -e /etc/sysconfig/$prog ] && . /etc/sysconfig/$prog
