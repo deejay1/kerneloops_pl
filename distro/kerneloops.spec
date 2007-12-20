@@ -5,57 +5,65 @@ Summary:        Tool to automatically collect and submit kernel crash signatures
 
 Group:          System Environment/Base
 License:        GPLv2
-URL:            http://www.kerneloops.org/download/kerneloops-%{version}.tar.gz
-Source0:        kerneloops-%{version}.tar.gz
+URL:            http://www.kerneloops.org
+Source0:        http://www.kerneloops.org/download/%{name}-%{version}.tar.gz
 
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
 BuildRequires:  curl-devel
+Requires(post): chkconfig
+Requires(preun): chkconfig, initscripts
+Requires(postun): initscripts
 
 %description
-This package contains the tools to collect kernel crash signatures, and to
-submit them to the kerneloops website where the kernel crash signatures
-get collected and groups for presentation to the Linux kernel developers.
+This package contains the tools to collect kernel crash signatures,
+and to submit them to the kerneloops.org website where the kernel
+crash signatures get collected and groups for presentation to the
+Linux kernel developers.
 
 %prep
 %setup -q
 
-
 %build
 make CFLAGS="$RPM_OPT_FLAGS" %{?_smp_mflags}
 
+%check
+# re-enable when upstream fixes this
+# make tests
 
 %install
 rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
-mkdir -p $RPM_BUILD_ROOT/etc/init.d/
-cp kerneloops.init $RPM_BUILD_ROOT/etc/init.d/kerneloops
+mkdir -m 0755 -p $RPM_BUILD_ROOT%{_sysconfdir}/init.d
+install -p -m 0755 kerneloops.init $RPM_BUILD_ROOT%{_sysconfdir}/init.d/kerneloops
 
 %clean
+make clean
 rm -rf $RPM_BUILD_ROOT
 
 %post
-if [ $1 = 1 ]; then
-        chkconfig --add kerneloops
+if [ "$1" = "1"  ]; then
+        /sbin/chkconfig --add kerneloops
 fi
 
 %preun
-if [ $1 = 0 ]; then
-        service kerneloops stop > /dev/null 2>&1
+if [ "$1" = "1" ]; then
+        /sbin/service kerneloops stop > /dev/null 2>&1
         /sbin/chkconfig --del kerneloops
 fi
 
 %files
-%defattr(-,root,root,-)
-%doc
-/usr/sbin/kerneloops
-%config(noreplace) /etc/kerneloops.org
-/etc/init.d/kerneloops
+%defattr(-,root,root)
+%doc COPYING Changelog
+%{_sbindir}/%{name}
+%config(noreplace) %{_sysconfdir}/kerneloops.conf
+%{_sysconfdir}/init.d/kerneloops
 
 
 %changelog
 * Wed Dec 19 2008 Arjan van de Ven <arjan@linux.intel.com> - 0.6-1
 - various cleanups and minor improvements
+- Merged Matt Domsch's improvements
 * Tue Dec 18 2008 Arjan van de Ven <arjan@linux.intel.com> - 0.5-1
 - fix infinite loop
 * Mon Dec 17 2008 Arjan van de Ven <arjan@linux.intel.com> - 0.4-1
