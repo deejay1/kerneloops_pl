@@ -208,7 +208,9 @@ static void extract_oops(char *buffer, int remove_syslog)
 			if ((c2 != ' ' || c3 != '[') && 
 				strstr(linepointer[i],"] [")==NULL && 
 				strstr(linepointer[i],"--- Exception")==NULL &&
-				strstr(linepointer[i],"    LR =")==NULL)
+				strstr(linepointer[i],"    LR =")==NULL &&
+				strstr(linepointer[i],"<#DF>")==NULL &&
+				strstr(linepointer[i],"<<EOE>>")==NULL )
 				oopsend = i-1;;
 				
 			if (strlen(linepointer[i])<8)

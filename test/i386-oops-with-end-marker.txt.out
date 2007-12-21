@@ -10,6 +10,20 @@ BUG: spinlock lockup on CPU#0, grub/2847, ffff81003c57fd50
 Pid: 2847, comm: grub Tainted: G      D 2.6.24-rc5 #234
 
 Call Trace:
+ <#DF>  [<ffffffff80460d15>] _raw_spin_lock+0xfd/0x125
+ [<ffffffff808690c2>] _spin_lock_irqsave+0x20/0x27
+ [<ffffffff8026ac07>] taskstats_exit+0xd2/0x2cf
+ [<ffffffff8023dddc>] do_exit+0x24f/0x772
+ [<ffffffff804d0409>] do_unblank_screen+0xf/0x11e
+ [<ffffffff8020d35f>] oops_begin+0x0/0x96
+ [<ffffffff8020dcba>] die+0x5d/0x66
+ [<ffffffff8020df6b>] do_double_fault+0x63/0x65
+ [<ffffffff8020d0ed>] double_fault+0x7d/0x90
+ [<ffffffff8020e66f>] do_general_protection+0x0/0x11a
+ [<ffffffff8020e732>] do_general_protection+0xc3/0x11a
+ [<ffffffff8020e732>] do_general_protection+0xc3/0x11a
+ [<ffffffff80224f28>] search_extable+0x0/0x64
+ <<EOE>> 
 
 ---[end of oops]---
 Submit text is:
