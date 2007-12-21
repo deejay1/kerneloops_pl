@@ -1,0 +1,42 @@
+Starting kerneloops in debug mode
+Scanning test/i386-oops-with-end-marker.txt
+Found start of oops at line 1
+    start line is -double fault: 0000 [1] PREEMPT SMP -
+Found start of oops at line 25
+    start line is -BUG: spinlock lockup on CPU#0, grub/2847, ffff81003c57fd50-
+Submit text is:
+---[start of oops]---
+BUG: spinlock lockup on CPU#0, grub/2847, ffff81003c57fd50
+Pid: 2847, comm: grub Tainted: G      D 2.6.24-rc5 #234
+
+Call Trace:
+
+---[end of oops]---
+Submit text is:
+---[start of oops]---
+double fault: 0000 [1] PREEMPT SMP 
+CPU 0 
+Pid: 2847, comm: grub Not tainted 2.6.24-rc5 #234
+RIP: 0010:[<ffffffff80224f28>]  [<ffffffff80224f28>] search_extable+0x0/0x64
+RSP: 0000:ffff810008000000  EFLAGS: 00010046
+RAX: ffffffff8020e66f RBX: 080e050809993830 RCX: ffffffff8020e732
+RDX: ffffffff8020e732 RSI: ffffffff80870460 RDI: ffffffff8086c370
+RBP: ffff810008000008 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000200 R12: ffff810008000048
+R13: 0000000000000000 R14: 0000000000000000 R15: ffff81003c913e78
+FS:  00007f80aed7f780(0000) GS:ffffffff80be4000(0063) knlGS:0000000009993830
+CS:  0010 DS: 002b ES: 002b CR0: 000000008005003b
+CR2: ffff810007fffff8 CR3: 000000003cddc000 CR4: 00000000000006e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000ffff0ff0 DR7: 0000000000000400
+Process grub (pid: 2847, threadinfo ffff81003c912000, task ffff81003fabade0)
+Stack: 
+Call Trace:
+
+
+Code: 55 48 89 d0 48 89 d1 48 c1 e8 20 48 89 e5 53 75 46 48 b8 00 
+RIP  [<ffffffff80224f28>] search_extable+0x0/0x64
+ RSP <ffff810008000000>
+---[ end trace a28726ab5968e532 ]---
+
+---[end of oops]---

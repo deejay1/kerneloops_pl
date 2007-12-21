@@ -149,6 +149,8 @@ static void extract_oops(char *buffer, int remove_syslog)
 				oopsstart = i;
 			if (strstr(linepointer[i], "kernel BUG at"))
 				oopsstart = i;
+			if (strstr(linepointer[i], "double fault:"))
+				oopsstart = i;
 			if (strstr(linepointer[i], "Badness at"))
 				oopsstart = i;
 			if (strstr(linepointer[i], "WARNING:"))
@@ -168,7 +170,20 @@ static void extract_oops(char *buffer, int remove_syslog)
 				printf("    start line is -%s-\n", linepointer[oopsstart]);
 				if (oopsstart!=i)
 					printf("    trigger line is -%s-\n", linepointer[i]);
-		}
+			}
+			/* try to find the end marker */
+			if (oopsstart >= 0) {
+				int i2;
+				i2 = i;
+				while (i2 < linecount && i2 < (i+50)) {
+					if (strstr(linepointer[i2],"---[ end trace")) {
+						inbacktrace=1;
+						i = i2;
+						break;
+					}
+					i2++;
+				}
+			}
 		}
 
 		/* a calltrace starts with "Call Trace:" or with the " [<.......>] function+0xFF/0xAA" pattern */
@@ -185,7 +200,6 @@ static void extract_oops(char *buffer, int remove_syslog)
 		} else
 
 		if (oopsstart>=0 && inbacktrace>0) {
-			int isend = 0;
 			char c2,c3;
 			c2 = linepointer[i][0];
 			c3 = linepointer[i][1];
@@ -195,38 +209,37 @@ static void extract_oops(char *buffer, int remove_syslog)
 				strstr(linepointer[i],"] [")==NULL && 
 				strstr(linepointer[i],"--- Exception")==NULL &&
 				strstr(linepointer[i],"    LR =")==NULL)
-				isend = 1;
+				oopsend = i-1;;
 				
 			if (strlen(linepointer[i])<8)
-				isend = 1;
+				oopsend = i-1;;
 			if (linelevel[i] != prevlevel)
-				isend = 1;
+				oopsend = i-1;;
 				
 			if (strstr(linepointer[i], "Code:")!=NULL)
-				isend = 1;
+				oopsend = i-1;;
 			if (strstr(linepointer[i], "WARNING:")!=NULL && oopsstart!=i)
-				isend = 1;
+				oopsend = i-1;;
 			if (strstr(linepointer[i], "Unable to handle")!=NULL && oopsstart!=i)
-				isend = 1;
+				oopsend = i-1;;
 			if (strstr(linepointer[i], "Instruction dump::")!=NULL)
-				isend = 1;
+				oopsend = i-1;;
 			if (strstr(linepointer[i], "---[ end trace")!=NULL)
-				isend = 1;
+				oopsend = i;
 				
-			if (isend) {
+			if (oopsend <= i) {
+				int q;
 				int len;
 				char *oops;
-				oopsend = i-1;
-
 
 				len = 2;
-				for (i=oopsstart; i<=oopsend; i++) 
-					len += strlen(linepointer[i])+1;
+				for (q=oopsstart; q<=oopsend; q++) 
+					len += strlen(linepointer[q])+1;
 				
 				oops = calloc(len, 1);
 
-				for (i=oopsstart; i<=oopsend; i++) {
-					strcat(oops, linepointer[i]);
+				for (q=oopsstart; q<=oopsend; q++) {
+					strcat(oops, linepointer[q]);
 					strcat(oops, "\n");
 				}
 				/* too short oopses are invalid */
@@ -243,27 +256,30 @@ static void extract_oops(char *buffer, int remove_syslog)
 		if (oopsstart>0 && i-oopsstart>50) {
 			oopsstart = -1;
 			inbacktrace = 0;
+			oopsend=linecount;
 		}
 		if (oopsstart>0 && !inbacktrace && i-oopsstart>30) {
 			oopsstart = -1;
 			inbacktrace = 0;
+			oopsend=linecount;
 		}
 	}
 	if (oopsstart>=0)  {
 		char *oops;
 		int len;
+		int q;
 		
 		oopsend = i-1;
 
 		len = 2;
 		while (oopsend>0 && linepointer[oopsend]==NULL) oopsend--;
-		for (i=oopsstart; i<=oopsend; i++) 
-			len += strlen(linepointer[i])+1;
+		for (q=oopsstart; q<=oopsend; q++) 
+			len += strlen(linepointer[q])+1;
 				
 		oops = calloc(len, 1);
 
-		for (i=oopsstart; i<=oopsend; i++) {	
-			strcat(oops, linepointer[i]);
+		for (q=oopsstart; q<=oopsend; q++) {	
+			strcat(oops, linepointer[q]);
 			strcat(oops, "\n");
 		}
 		/* too short oopses are invalid */
@@ -271,6 +287,7 @@ static void extract_oops(char *buffer, int remove_syslog)
 			queue_oops(oops);
 		oopsstart = -1;
 		inbacktrace = 0;
+		oopsend = linecount;
 		free(oops);
 	}
 	free(linepointer);
