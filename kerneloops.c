@@ -40,8 +40,16 @@ int main(int argc, char**argv)
 
 	read_config_file("/etc/kerneloops.conf");
 
+	if (argc>1 && strstr(argv[1], "--nodaemon"))
+		godaemon = 0;
+	if (argc>1 && strstr(argv[1], "--debug")) {
+		printf("Starting kerneloops in debug mode\n");
+		godaemon = 0;
+		testmode = 1;
+	}
 
-	if (!opted_in) {
+
+	if (!opted_in && !testmode) {
 		fprintf(stderr, " [Inactive by user preference]");
 		return EXIT_SUCCESS;
 	}
@@ -58,13 +66,6 @@ int main(int argc, char**argv)
 	curl_global_init(CURL_GLOBAL_ALL);
 */
 
-	if (argc>1 && strstr(argv[1], "--nodaemon"))
-		godaemon = 0;
-	if (argc>1 && strstr(argv[1], "--debug")) {
-		printf("Starting kerneloops in debug mode\n");
-		godaemon = 0;
-		testmode = 1;
-	}
 
 	if (godaemon && daemon(0,0)) {
 		printf("kerneloops failed to daemonize.. exiting \n");
