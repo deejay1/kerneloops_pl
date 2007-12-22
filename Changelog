@@ -2,6 +2,9 @@
 	* minor cleanups, adding comments
 	* more testcases
 	* use "start of new oops" also as oops-end condition
+	* rewrote most of the oops-end logic to work in the light of the
+          2.6.24-rc6 oops end marker/UUID code
+	* fixed infinite loop in oops parsing code due to shadowed variable
 0.5 - Dec 18th 2007
 	* fix infinite loop (Antony Dovgal)
 0.4 - Dec 17th 2007
