@@ -1,5 +1,5 @@
 Name:           kerneloops
-Version:        0.6
+Version:        0.7
 Release:        1%{?dist}
 Summary:        Tool to automatically collect and submit kernel crash signatures
 
