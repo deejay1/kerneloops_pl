@@ -174,7 +174,7 @@ static void extract_oops(char *buffer, int remove_syslog)
 			/* try to find the end marker */
 			if (oopsstart >= 0) {
 				int i2;
-				i2 = i;
+				i2 = i+1;
 				while (i2 < linecount && i2 < (i+50)) {
 					if (strstr(linepointer[i2],"---[ end trace")) {
 						inbacktrace=1;
