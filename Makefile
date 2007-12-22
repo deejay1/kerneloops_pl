@@ -15,7 +15,7 @@ dist: clean
 install:
 	mkdir -p $(DESTDIR)/usr/sbin/ $(DESTDIR)/etc
 	install -m 0755 kerneloops $(DESTDIR)/usr/sbin
-	install -m 0644 kerneloops.org $(DESTDIR)/etc/kerneloops.conf
+	install -m 0644 kerneloops.conf $(DESTDIR)/etc/kerneloops.conf
 
 tests: kerneloops
 	for i in test/*txt ; do ./kerneloops --debug $$i > $$i.dbg ; diff -u $$i.out $$i.dbg ; done
