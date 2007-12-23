@@ -61,7 +61,9 @@ static void fill_linepointers(char *buffer, int remove_syslog)
 				if (c2) {
 					c = c2+1;
 					continue;
-				}
+				} else
+					break;
+				
 			}
 			c = strchr(c, ':');
 			if (!c) break;
@@ -101,6 +103,7 @@ static void fill_linepointers(char *buffer, int remove_syslog)
 			c = c+1;
 		}
 //		printf("Line is -%s-\n", linepointer[linecount]);
+
 		/* if we see our own marker, we know we submitted everything upto here already */
 		if (strstr(linepointer[linecount], "www.kerneloops.org")) {
 			linecount = 0;
@@ -199,6 +202,8 @@ static void extract_oops(char *buffer, int remove_syslog)
 				inbacktrace = 1;
 		} else
 
+		/* try to see if we're at the end of an oops */
+
 		if (oopsstart>=0 && inbacktrace>0) {
 			char c2,c3;
 			c2 = linepointer[i][0];
@@ -213,19 +218,23 @@ static void extract_oops(char *buffer, int remove_syslog)
 				strstr(linepointer[i],"<<EOE>>")==NULL )
 				oopsend = i-1;
 				
+			/* oops lines are always more than 8 long */
 			if (strlen(linepointer[i])<8)
 				oopsend = i-1;
+			/* single oopses are of the same loglevel */
 			if (linelevel[i] != prevlevel)
 				oopsend = i-1;
-				
+			/* The Code: line means we're done with the backtrace */	
 			if (strstr(linepointer[i], "Code:")!=NULL)
 				oopsend = i-1;
+			if (strstr(linepointer[i], "Instruction dump::")!=NULL)
+				oopsend = i-1;
+			/* if a new oops starts, this one has ended */
 			if (strstr(linepointer[i], "WARNING:")!=NULL && oopsstart!=i)
 				oopsend = i-1;
 			if (strstr(linepointer[i], "Unable to handle")!=NULL && oopsstart!=i)
 				oopsend = i-1;
-			if (strstr(linepointer[i], "Instruction dump::")!=NULL)
-				oopsend = i-1;
+			/* kernel end-of-oops marker */
 			if (strstr(linepointer[i], "---[ end trace")!=NULL)
 				oopsend = i;
 				
@@ -336,5 +345,4 @@ void scan_filename(char *filename, int issyslog)
 		extract_oops(buffer, issyslog);
 	free(buffer);
 	submit_queue();
-
 }
