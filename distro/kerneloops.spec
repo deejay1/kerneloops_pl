@@ -1,5 +1,5 @@
 Name:           kerneloops
-Version:        0.7
+Version:        0.6
 Release:        1%{?dist}
 Summary:        Tool to automatically collect and submit kernel crash signatures
 
@@ -15,11 +15,23 @@ Requires(post): chkconfig
 Requires(preun): chkconfig, initscripts
 Requires(postun): initscripts
 
+%package defaulton
+Summary:        Tool to automatically collect and submit kernel crash signatures
+Group:          System Environment/Base
+License:        GPLv2
+
 %description
 This package contains the tools to collect kernel crash signatures,
 and to submit them to the kerneloops.org website where the kernel
 crash signatures get collected and groups for presentation to the
 Linux kernel developers.
+
+%description defaulton
+This package contains the tools to collect kernel crash signatures,
+and to submit them to the kerneloops.org website where the kernel
+crash signatures get collected and groups for presentation to the
+Linux kernel developers.
+
 
 %prep
 %setup -q
@@ -52,12 +64,33 @@ if [ "$1" = "1" ]; then
         /sbin/chkconfig --del kerneloops
 fi
 
+%post defaulton
+sed -i -e "s/allow-submit = no/allow-submit = yes/" /etc/kerneloops.conf
+if [ "$1" = "1"  ]; then
+        /sbin/chkconfig --add kerneloops
+fi
+
+%preun defaulton
+if [ "$1" = "1" ]; then
+        /sbin/service kerneloops stop > /dev/null 2>&1
+        /sbin/chkconfig --del kerneloops
+fi
+
 %files
 %defattr(-,root,root)
 %doc COPYING Changelog
 %{_sbindir}/%{name}
 %config(noreplace) %{_sysconfdir}/kerneloops.conf
 %{_sysconfdir}/init.d/kerneloops
+
+
+%files defaulton
+%defattr(-,root,root)
+%doc COPYING Changelog
+%{_sbindir}/%{name}
+%config(noreplace) %{_sysconfdir}/kerneloops.conf
+%{_sysconfdir}/init.d/kerneloops
+
 
 
 %changelog
