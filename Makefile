@@ -1,5 +1,5 @@
 
-CFLAGS := -O2 -g -fstack-protector -D_FORTIFY_SOURCE=2 -Wall -W 
+CFLAGS := -O2 -g -fstack-protector -D_FORTIFY_SOURCE=2 -Wall -W -Wstrict-prototypes -Wundef -fno-common -Werror-implicit-function-declaration -Wdeclaration-after-statement 
 
 
 kerneloops:	kerneloops.o submit.o dmesg.o configfile.o kerneloops.h

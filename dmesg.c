@@ -53,7 +53,7 @@ static void fill_linepointers(char *buffer, int remove_syslog)
 	while (c) {
 		/* in /var/log/messages, we need to strip the first part off, upto the 3rd ':' */
 		if (remove_syslog) {
-			char *c2;;
+			char *c2;
 			/* skip non-kernel lines */
 			c2 = strstr(c, "kernel:");
 			if (!c2) {
@@ -211,21 +211,21 @@ static void extract_oops(char *buffer, int remove_syslog)
 				strstr(linepointer[i],"    LR =")==NULL &&
 				strstr(linepointer[i],"<#DF>")==NULL &&
 				strstr(linepointer[i],"<<EOE>>")==NULL )
-				oopsend = i-1;;
+				oopsend = i-1;
 				
 			if (strlen(linepointer[i])<8)
-				oopsend = i-1;;
+				oopsend = i-1;
 			if (linelevel[i] != prevlevel)
-				oopsend = i-1;;
+				oopsend = i-1;
 				
 			if (strstr(linepointer[i], "Code:")!=NULL)
-				oopsend = i-1;;
+				oopsend = i-1;
 			if (strstr(linepointer[i], "WARNING:")!=NULL && oopsstart!=i)
-				oopsend = i-1;;
+				oopsend = i-1;
 			if (strstr(linepointer[i], "Unable to handle")!=NULL && oopsstart!=i)
-				oopsend = i-1;;
+				oopsend = i-1;
 			if (strstr(linepointer[i], "Instruction dump::")!=NULL)
-				oopsend = i-1;;
+				oopsend = i-1;
 			if (strstr(linepointer[i], "---[ end trace")!=NULL)
 				oopsend = i;
 				
