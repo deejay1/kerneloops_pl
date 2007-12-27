@@ -302,7 +302,9 @@ static void extract_oops(char *buffer, int remove_syslog)
 		free(oops);
 	}
 	free(linepointer);
+	free(linelevel);
 	linepointer = NULL;
+	linelevel = NULL;
 }
 
 void scan_dmesg(void)
