@@ -174,6 +174,10 @@ static void extract_oops(char *buffer, int remove_syslog)
 				if (oopsstart!=i)
 					printf("    trigger line is -%s-\n", linepointer[i]);
 			}
+			/* give the kernel some time to finish dumping the oops */
+			if (oopsstart >= 0)
+				sleep(1);
+
 			/* try to find the end marker */
 			if (oopsstart >= 0) {
 				int i2;
@@ -334,6 +338,12 @@ void scan_filename(char *filename, int issyslog)
 	if (statb.st_size<1 || ret!=0)
 		return;
 
+	/* 
+	 * in theory there's a race here, since someone could spew
+	 * to /var/log/messages before we read it in... we try to
+	 * deal with it by reading at most 1023 bytes extra. If there's
+	 * more than that.. any oops will be in dmesg anyway
+	 */
 	buffer = calloc(statb.st_size+1024,1);
 	file = fopen(filename, "rm");
 	if (!file) {
