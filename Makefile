@@ -1,5 +1,5 @@
 
-CFLAGS := -O2 -g -fstack-protector -D_FORTIFY_SOURCE=2 -Wall -W -Wstrict-prototypes -Wundef -fno-common -Werror-implicit-function-declaration -Wdeclaration-after-statement 
+CFLAGS := -O2 -g -fstack-protector-all -D_FORTIFY_SOURCE=2 -Wall -W -Wstrict-prototypes -Wundef -fno-common -Werror-implicit-function-declaration -Wdeclaration-after-statement 
 
 
 kerneloops:	kerneloops.o submit.o dmesg.o configfile.o kerneloops.h
@@ -20,3 +20,5 @@ install:
 tests: kerneloops
 	for i in test/*txt ; do ./kerneloops --debug $$i > $$i.dbg ; diff -u $$i.out $$i.dbg ; done
 
+valgrind: tests
+	valgrind --leak-check=full ./kerneloops --debug test/*.txt
