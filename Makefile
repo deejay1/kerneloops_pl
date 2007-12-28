@@ -19,7 +19,7 @@ install:
 
 tests: kerneloops
 	for i in test/*txt ; do ./kerneloops --debug $$i > $$i.dbg ; diff -u $$i.out $$i.dbg ; done
-	[ -e /usr/bin/valgrind ] && for i in test/*txt ; do valgrind -q ./kerneloops --debug $$i > $$i.dbg ; diff -u $$i.out $$i.dbg ; done
+	[ -e /usr/bin/valgrind ] && for i in test/*txt ; do echo -n . ; valgrind -q ./kerneloops --debug $$i > $$i.dbg ; diff -u $$i.out $$i.dbg ; done ; echo
 
 valgrind: tests
 	valgrind -q --leak-check=full ./kerneloops --debug test/*.txt
