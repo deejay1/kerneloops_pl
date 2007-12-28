@@ -175,7 +175,8 @@ static void extract_oops(char *buffer, int remove_syslog)
 					printf("    trigger line is -%s-\n", linepointer[i]);
 			}
 			/* give the kernel some time to finish dumping the oops */
-			if (oopsstart >= 0)
+			/* but not in testmode since that makes regression testins slow */
+			if (oopsstart >= 0 && !testmode)
 				sleep(1);
 
 			/* try to find the end marker */
