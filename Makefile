@@ -21,4 +21,5 @@ tests: kerneloops
 	for i in test/*txt ; do ./kerneloops --debug $$i > $$i.dbg ; diff -u $$i.out $$i.dbg ; done
 
 valgrind: tests
-	valgrind --leak-check=full ./kerneloops --debug test/*.txt
+	valgrind -q --leak-check=full ./kerneloops --debug test/*.txt
+	for i in test/*txt ; do valgrind -q ./kerneloops --debug $$i > $$i.dbg ; diff -u $$i.out $$i.dbg ; done
