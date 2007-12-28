@@ -75,9 +75,12 @@ int main(int argc, char**argv)
 	/* we scan dmesg before /var/log/messages; dmesg is a more accurate source normally */
 	scan_dmesg();
 	scan_filename("/var/log/messages", 1);
-	if (testmode && argc>2 && argv[2]) {
-		printf("Scanning %s\n", argv[2]);
-		scan_filename(argv[2], 0);
+	if (testmode && argc>2) {
+		int q;
+		for (q=2;q<argc;q++) {
+			printf("Scanning %s\n", argv[q]);
+			scan_filename(argv[q], 0);
+		}
 	}
 
 	if (testmode)
