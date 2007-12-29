@@ -1,3 +1,7 @@
+0.7 - Dec 29th 2007
+	* Fix memory leak (woops)
+	* Add valgrind to the testsuite
+	* minor cleanups
 0.6 - Dec 19th 2007
 	* minor cleanups, adding comments
 	* more testcases

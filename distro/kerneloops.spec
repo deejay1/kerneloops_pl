@@ -1,5 +1,5 @@
 Name:           kerneloops
-Version:        0.6
+Version:        0.7
 Release:        1%{?dist}
 Summary:        Tool to automatically collect and submit kernel crash signatures
 
@@ -94,6 +94,8 @@ fi
 
 
 %changelog
+* Sat Dec 29 2008 Arjan van de Ven <arjan@linux.intel.com> - 0.7-1
+- fix memory leak
 * Wed Dec 19 2008 Arjan van de Ven <arjan@linux.intel.com> - 0.6-1
 - various cleanups and minor improvements
 - Merged Matt Domsch's improvements
