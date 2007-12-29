@@ -6,7 +6,7 @@ kerneloops:	kerneloops.o submit.o dmesg.o configfile.o kerneloops.h
 	gcc kerneloops.o submit.o dmesg.o configfile.o `curl-config --libs` -Wl,"-z relro" -Wl,"-z now" -o kerneloops
 
 clean:
-	rm -f *~ *.o *.ko DEADJOE kerneloops *.out
+	rm -f *~ *.o *.ko DEADJOE kerneloops *.out */*~
 
 dist: clean
 	rm -rf .git .gitignore push.sh .*~  */*~
