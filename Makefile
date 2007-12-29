@@ -18,9 +18,9 @@ install:
 	install -m 0644 kerneloops.conf $(DESTDIR)/etc/kerneloops.conf
 
 tests: kerneloops
-	for i in test/*txt ; do ./kerneloops --debug $$i > $$i.dbg ; diff -u $$i.out $$i.dbg ; done
+	for i in test/*txt ; do echo -n . ; ./kerneloops --debug $$i > $$i.dbg ; diff -u $$i.out $$i.dbg ; done ; echo
 	[ -e /usr/bin/valgrind ] && for i in test/*txt ; do echo -n . ; valgrind -q ./kerneloops --debug $$i > $$i.dbg ; diff -u $$i.out $$i.dbg ; done ; echo
 
-valgrind: tests
+valgrind: kerneloops tests
 	valgrind -q --leak-check=full ./kerneloops --debug test/*.txt
 	for i in test/*txt ; do valgrind -q ./kerneloops --debug $$i > $$i.dbg ; diff -u $$i.out $$i.dbg ; done
