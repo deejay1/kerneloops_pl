@@ -1,12 +1,19 @@
 
 CFLAGS := -O2 -g -fstack-protector-all -D_FORTIFY_SOURCE=2 -Wall -W -Wstrict-prototypes -Wundef -fno-common -Werror-implicit-function-declaration -Wdeclaration-after-statement 
+CFLAGS += `pkg-config --cflags libnotify gtk+-2.0`
+LDF := `pkg-config --libs libnotify gtk+-2.0`
+
+all:	kerneloops kerneloops-applet
 
 
 kerneloops:	kerneloops.o submit.o dmesg.o configfile.o kerneloops.h
 	gcc kerneloops.o submit.o dmesg.o configfile.o `curl-config --libs` -Wl,"-z relro" -Wl,"-z now" -o kerneloops
 
+kerneloops-applet: kerneloops-applet.o
+	gcc kerneloops-applet.o $(LDF)-o kerneloops-applet
+
 clean:
-	rm -f *~ *.o *.ko DEADJOE kerneloops *.out */*~
+	rm -f *~ *.o *.ko DEADJOE kerneloops kernel-oops-applet *.out */*~
 
 dist: clean
 	rm -rf .git .gitignore push.sh .*~  */*~
