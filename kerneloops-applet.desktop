@@ -7,5 +7,4 @@ Exec=kerneloops-applet
 Terminal=false
 Type=Application
 Categories=
-OnlyShowIn=GNOME;
 X-GNOME-Autostart-enabled=true
