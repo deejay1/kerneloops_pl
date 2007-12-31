@@ -113,7 +113,7 @@ static void show_notification(const gchar *summary, const gchar *message,
 	}
 
 	notify = notify_notification_new(summary, message,
-						"stock_bluetooth", NULL);
+						"/usr/share/kerneloops/icon.png", NULL);
 
 	notify_notification_set_timeout(notify, timeout);
 
@@ -129,8 +129,8 @@ static void show_notification(const gchar *summary, const gchar *message,
 					"x", area.x + area.width / 2);
 		notify_notification_set_hint_int32(notify,
 					"y", area.y + area.height / 2);
-//		notify_notification_attach_to_widget(notify, GTK_WIDGET(statusicon));
 */
+		notify_notification_attach_to_status_icon(notify, statusicon);
 	}
 
 	notify_notification_set_urgency(notify, NOTIFY_URGENCY_CRITICAL);
@@ -228,7 +228,7 @@ int main(int argc, char *argv[])
 	/* hook dbus into the main loop */
 	dbus_connection_setup_with_g_main(bus, NULL);
 
-	statusicon = gtk_status_icon_new_from_icon_name("stock_bluetooth");
+	statusicon = gtk_status_icon_new_from_file("/usr/share/kerneloops/icon.png");
 
 	gtk_status_icon_set_tooltip(statusicon, _("kerneloops client"));
 

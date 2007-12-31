@@ -2,7 +2,7 @@
 Encoding=UTF-8
 Name=kerneloops applet
 Comment=Kerneloops.org privacy question applet
-Icon=stock_bluetooth
+Icon=stock_alarm
 Exec=kerneloops-applet
 Terminal=false
 Type=Application

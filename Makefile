@@ -21,12 +21,14 @@ dist: clean
 
 
 install:
-	mkdir -p $(DESTDIR)/usr/sbin/ $(DESTDIR)/etc
+	mkdir -p $(DESTDIR)/usr/sbin/ $(DESTDIR)/etc/xdg/autostart
+	mkdir -p $(DESTDIR)/usr/share/kerneloops $(DESTDIR)/etc/dbus-1/system.d/
 	install -m 0755 kerneloops $(DESTDIR)/usr/sbin
 	install -m 0755 kerneloops-applet $(DESTDIR)/usr/bin
 	install -m 0644 kerneloops.conf $(DESTDIR)/etc/kerneloops.conf
 	install -m 0755 kerneloops-applet.desktop $(DESTDIR)/etc/xdg/autostart/
 	install -m 0755 kerneloops.dbus $(DESTDIR)/etc/dbus-1/system.d/
+	install -m 0755 icon.png $(DESTDIR)/usr/share/kerneloops/icon.png
 
 tests: kerneloops
 	for i in test/*txt ; do echo -n . ; ./kerneloops --debug $$i > $$i.dbg ; diff -u $$i.out $$i.dbg ; done ; echo
