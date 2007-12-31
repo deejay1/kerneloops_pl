@@ -137,7 +137,7 @@ void submit_queue(void)
 	struct oops *oops;
 	struct oops *queue;
 	int count = 0;
-	
+
 	if (testmode) {
 		print_queue();
 		return;
@@ -218,6 +218,5 @@ void ask_permission(void)
 	newoops = 0;
 	if (queued_oopses)
 		dbus_ask_permission();
-
 }
 

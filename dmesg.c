@@ -56,6 +56,8 @@ static void fill_linepointers(char *buffer, int remove_syslog)
 			char *c2;
 			/* skip non-kernel lines */
 			c2 = strstr(c, "kernel:");
+			if (!c2)
+				c2 = strstr(c, "kerneloops:");
 			if (!c2) {
 				c2 = strchr(c,'\n');
 				if (c2) {

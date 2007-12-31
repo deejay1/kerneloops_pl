@@ -1,11 +1,13 @@
-
-CFLAGS := -O2 -g -fstack-protector-all -D_FORTIFY_SOURCE=2 -Wall -W -Wstrict-prototypes -Wundef -fno-common -Werror-implicit-function-declaration -Wdeclaration-after-statement 
-CFLAGS += `pkg-config --cflags libnotify gtk+-2.0`
+CFLAGS := -O2 -g -fstack-protector-all -D_FORTIFY_SOURCE=2 -Wall -W -Wstrict-prototypes -Wundef -fno-common -Werror-implicit-function-declaration -Wdeclaration-after-statement
+MY_CFLAGS := `pkg-config --cflags libnotify gtk+-2.0`
 LDF_A := `pkg-config --libs libnotify gtk+-2.0`
 LDF_D := `pkg-config --libs glib-2.0 dbus-glib-1` `curl-config --libs` -Wl,"-z relro" -Wl,"-z now" 
 
 all:	kerneloops kerneloops-applet
 
+.c.o:
+	$(CC) $(CFLAGS) $(MY_CFLAGS) -c -o $@ $<
+ 
 
 kerneloops:	kerneloops.o submit.o dmesg.o configfile.o kerneloops.h
 	gcc kerneloops.o submit.o dmesg.o configfile.o $(LDF_D) -o kerneloops
@@ -14,15 +16,16 @@ kerneloops-applet: kerneloops-applet.o
 	gcc kerneloops-applet.o $(LDF_A)-o kerneloops-applet
 
 clean:
-	rm -f *~ *.o *.ko DEADJOE kerneloops kernel-oops-applet *.out */*~
+	rm -f *~ *.o *.ko DEADJOE kerneloops kerneloops-applet *.out */*~
 
 dist: clean
 	rm -rf .git .gitignore push.sh .*~  */*~
 
 
 install:
-	mkdir -p $(DESTDIR)/usr/sbin/ $(DESTDIR)/etc/xdg/autostart
+	mkdir -p $(DESTDIR)/usr/sbin/ $(DESTDIR)/etc/xdg/autostart m
 	mkdir -p $(DESTDIR)/usr/share/kerneloops $(DESTDIR)/etc/dbus-1/system.d/
+	mkdir -p $(DESTDIR)/usr/bin
 	install -m 0755 kerneloops $(DESTDIR)/usr/sbin
 	install -m 0755 kerneloops-applet $(DESTDIR)/usr/bin
 	install -m 0644 kerneloops.conf $(DESTDIR)/etc/kerneloops.conf
