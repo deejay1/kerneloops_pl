@@ -22,7 +22,10 @@ dist: clean
 install:
 	mkdir -p $(DESTDIR)/usr/sbin/ $(DESTDIR)/etc
 	install -m 0755 kerneloops $(DESTDIR)/usr/sbin
+	install -m 0755 kerneloops-applet $(DESTDIR)/usr/bin
 	install -m 0644 kerneloops.conf $(DESTDIR)/etc/kerneloops.conf
+	install -m 0755 kerneloops-applet.desktop $(DESTDIR)/etc/xdg/autostart/
+	install -m 0755 kerneloops.dbus $(DESTDIR)/etc/dbus-1/system.d/
 
 tests: kerneloops
 	for i in test/*txt ; do echo -n . ; ./kerneloops --debug $$i > $$i.dbg ; diff -u $$i.out $$i.dbg ; done ; echo
