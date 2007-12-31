@@ -48,14 +48,6 @@
 
 static DBusConnection *bus;
 
-typedef enum {
-	ICON_POLICY_NEVER,
-	ICON_POLICY_ALWAYS,
-	ICON_POLICY_PRESENT,
-} EnumIconPolicy;
-
-static int icon_policy = ICON_POLICY_PRESENT;
-
 static GtkStatusIcon *statusicon = NULL;
 
 
@@ -77,25 +69,25 @@ static void send_permission(char *answer)
 static void notify_action_yes(NotifyNotification __unused *notify,
 					gchar __unused *action, gpointer __unused user_data)
 {
-	printf("yes\n");
+	gtk_status_icon_set_visible(statusicon, FALSE);
 	send_permission("yes");
 }
 static void notify_action_no(NotifyNotification __unused *notify,
 					gchar __unused *action, gpointer __unused user_data)
 {
-	printf("no\n");
+	gtk_status_icon_set_visible(statusicon, FALSE);
 	send_permission("no");
 }
 static void notify_action_always(NotifyNotification __unused *notify,
 					gchar __unused *action, gpointer __unused user_data)
 {
-	printf("always\n");
 	send_permission("always");
+	gtk_status_icon_set_visible(statusicon, FALSE);
 }
 static void notify_action_never(NotifyNotification __unused *notify,
 					gchar __unused *action, gpointer __unused user_data)
 {
-	printf("never\n");
+	gtk_status_icon_set_visible(statusicon, FALSE);
 	send_permission("never");
 }
 
@@ -116,23 +108,7 @@ static void show_notification(const gchar *summary, const gchar *message,
 						"/usr/share/kerneloops/icon.png", NULL);
 
 	notify_notification_set_timeout(notify, timeout);
-
-	if (gtk_status_icon_get_visible(statusicon) == TRUE) {
-
-/*
-		GdkScreen *screen;
-		GdkRectangle area;
-
-		gtk_status_icon_get_geometry(statusicon, &screen, &area, NULL);
-
-		notify_notification_set_hint_int32(notify,
-					"x", area.x + area.width / 2);
-		notify_notification_set_hint_int32(notify,
-					"y", area.y + area.height / 2);
-*/
-		notify_notification_attach_to_status_icon(notify, statusicon);
-	}
-
+	gtk_status_icon_set_visible(statusicon, TRUE);
 	notify_notification_set_urgency(notify, NOTIFY_URGENCY_CRITICAL);
 
 	callback_yes = notify_action_yes;
@@ -201,6 +177,7 @@ static DBusHandlerResult dbus_gotmessage(DBusConnection __unused *connection,
 	}
 	if (dbus_message_is_signal(message, 
 			"org.kerneloops.submit.permission", "ask")) {
+		gtk_status_icon_set_visible(statusicon, TRUE);
 		got_a_message();
 		return DBUS_HANDLER_RESULT_HANDLED;
 	}
@@ -234,8 +211,7 @@ int main(int argc, char *argv[])
 
 	notify_init("kerneloops-ui");
 
-	if (icon_policy != ICON_POLICY_ALWAYS)
-		gtk_status_icon_set_visible(statusicon, TRUE);
+	gtk_status_icon_set_visible(statusicon, FALSE);
 
 	/* set the dbus message to listen for */
 	dbus_bus_add_match(bus, "type='signal',interface='org.kerneloops.submit.permission'", &error);

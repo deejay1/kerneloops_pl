@@ -104,6 +104,7 @@ int main(int argc, char**argv)
 		printf("Starting kerneloops in debug mode\n");
 		godaemon = 0;
 		testmode = 1;
+		opted_in=2;
 	}
 
 
