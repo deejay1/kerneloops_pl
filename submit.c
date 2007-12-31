@@ -63,6 +63,7 @@ struct oops {
  * previously.
  */
 static struct oops *queued_oopses;
+static int newoops;
 
 
 static unsigned int checksum(char *ptr)
@@ -101,6 +102,7 @@ void queue_oops(char *oops)
 	new->checksum = sum;
 	new->text = strdup(oops);
 	queued_oopses = new;
+	newoops = 1;
 }
 
 
@@ -191,4 +193,31 @@ void submit_queue(void)
 		exit(EXIT_SUCCESS);
 }
 
+void clear_queue(void)
+{	
+	struct oops *oops, *next;
+	struct oops *queue;
+	
+	queue = queued_oopses;
+	queued_oopses = NULL;
+	barrier();
+	oops = queue;
+	while (oops) {
+		next = oops->next;
+		free(oops->text);
+		free(oops);
+		oops = next;
+	}
+}
+
+void ask_permission(void)
+{
+	if (!newoops && !pinged)
+		return;
+	pinged = 0;
+	newoops = 0;
+	if (queued_oopses)
+		dbus_ask_permission();
+
+}
 

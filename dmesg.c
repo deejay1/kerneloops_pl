@@ -312,7 +312,7 @@ static void extract_oops(char *buffer, int remove_syslog)
 	linelevel = NULL;
 }
 
-void scan_dmesg(void)
+int scan_dmesg(void __unused *unused)
 {
 	
 	char *buffer;
@@ -322,7 +322,11 @@ void scan_dmesg(void)
 	syscall(__NR_syslog, 3, buffer, getpagesize());
 	extract_oops(buffer, 0);
 	free(buffer);
-	submit_queue();
+	if (opted_in >= 2)
+		submit_queue();
+	else if (opted_in >= 1)
+		ask_permission();
+	return 1;
 }
 
 void scan_filename(char *filename, int issyslog)
@@ -357,5 +361,8 @@ void scan_filename(char *filename, int issyslog)
 	if (ret > 0)
 		extract_oops(buffer, issyslog);
 	free(buffer);
-	submit_queue();
+	if (opted_in >= 2)
+		submit_queue();
+	else if (opted_in >= 1)
+		ask_permission();
 }

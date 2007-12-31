@@ -30,7 +30,11 @@
 
 #include "kerneloops.h"
 
-int opted_in = 0;
+/* 0 =  No
+   1 =  Ask
+   2 =  Yes
+ */
+int opted_in = 0; 
 int allow_distro_to_pass_on = 0;
 char *submit_url = "http://submit.kerneloops.org/submitoops.php";
 
@@ -56,6 +60,8 @@ void read_config_file(char *filename)
 		if (c) {
 			c+=13;
 			if (strstr(c,"yes"))
+				opted_in = 2;
+			if (strstr(c,"ask"))
 				opted_in = 1;
 		}
 		c = strstr(line,"allow-pass-on ");

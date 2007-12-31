@@ -31,11 +31,69 @@
 
 #include <curl/curl.h>
 
+#include <glib.h>
+#include <dbus/dbus.h>
+#include <dbus/dbus-glib.h>
+#include <dbus/dbus-glib-lowlevel.h>
+
 #include "kerneloops.h"
+
+DBusConnection *bus;
+
+int pinged = 0;
+
+static DBusHandlerResult got_message(
+		DBusConnection 	__unused *conn,
+		DBusMessage	*message,
+		void		__unused *user_data)
+{
+	if (dbus_message_is_signal(message, 
+		"org.kerneloops.submit.ping","ping")) {
+		pinged = 1;
+		return DBUS_HANDLER_RESULT_HANDLED;
+	}
+
+	if (dbus_message_is_signal(message, 
+		"org.kerneloops.submit.permission","yes")) {
+		submit_queue();
+		return DBUS_HANDLER_RESULT_HANDLED;
+	}
+	if (dbus_message_is_signal(message, 
+		"org.kerneloops.submit.permission","always")) {
+		submit_queue();
+		opted_in = 2;
+		return DBUS_HANDLER_RESULT_HANDLED;
+	}
+	if (dbus_message_is_signal(message, 
+		"org.kerneloops.submit.permission","never")) {
+		opted_in = 0;
+		return DBUS_HANDLER_RESULT_HANDLED;
+	}
+	if (dbus_message_is_signal(message, 
+		"org.kerneloops.submit.permission","no")) {
+		clear_queue();
+		return DBUS_HANDLER_RESULT_HANDLED;
+	}
+			
+	return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
+}
+
+void dbus_ask_permission(void)
+{
+	DBusMessage *message;
+	if (!bus)
+		return;
+	message = dbus_message_new_signal("/org/kerneloops/submit/permission",
+			"org.kerneloops.submit.permission", "ask");
+	dbus_connection_send(bus, message, NULL);
+	dbus_message_unref(message);
+}
 
 int testmode = 0;
 int main(int argc, char**argv)
 {
+	GMainLoop *loop;
+	DBusError error;
 	int godaemon = 1;
 
 	read_config_file("/etc/kerneloops.conf");
@@ -72,8 +130,19 @@ int main(int argc, char**argv)
 		return EXIT_FAILURE;
 	}
 
+	loop = g_main_loop_new(NULL, FALSE);
+	dbus_error_init(&error);
+	bus = dbus_bus_get(DBUS_BUS_SYSTEM, &error);
+	if (bus) {
+		dbus_connection_setup_with_g_main(bus, NULL);
+		dbus_bus_add_match(bus, "type='signal',interface='org.kerneloops.submit.ping'", &error);
+		dbus_bus_add_match(bus, "type='signal',interface='org.kerneloops.submit.permission'", &error);
+		dbus_connection_add_filter(bus, got_message, NULL, NULL);
+	}
+	
+
 	/* we scan dmesg before /var/log/messages; dmesg is a more accurate source normally */
-	scan_dmesg();
+	scan_dmesg(NULL);
 	scan_filename("/var/log/messages", 1);
 	if (testmode && argc>2) {
 		int q;
@@ -87,10 +156,10 @@ int main(int argc, char**argv)
 		return EXIT_SUCCESS;
 
 	/* now, start polling for oopses to occur */
-	while (1) {
-		sleep(10);
-		scan_dmesg();
-	}
+
+	g_timeout_add_seconds(10, scan_dmesg, NULL);
+
+	g_main_loop_run(loop);
 
 	return EXIT_SUCCESS;
 }

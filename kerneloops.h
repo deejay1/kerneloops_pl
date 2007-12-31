@@ -28,17 +28,26 @@
 
 /* borrowed from the kernel */
 #define barrier() __asm__ __volatile__("": : :"memory")
+#define __unused  __attribute__ ((__unused__))
 
 extern void queue_oops(char *oops);
 extern void submit_queue(void);
-extern void scan_dmesg(void);
+extern void clear_queue(void);
+
+extern int scan_dmesg(void * unused);
 extern void scan_filename(char *filename, int issyslog);
 extern void read_config_file(char *filename);
+
+extern void ask_permission(void);
+extern void dbus_ask_permission(void);
 
 extern int opted_in;
 extern int allow_distro_to_pass_on;
 extern char *submit_url;
 
 extern int testmode;
+extern int pinged;
+
+
 
 #endif
