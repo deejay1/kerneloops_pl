@@ -50,8 +50,10 @@ void read_config_file(char *filename)
 	while (!feof(file)) {
 		char *c;
 		line = NULL;
-		if (getline(&line, &dummy, file)<=0)
+		if (getline(&line, &dummy, file)<=0) {
+			free(line);
 			break;
+		}
 		if (line[0] == '#') {
 			free(line);
 			continue;

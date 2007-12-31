@@ -153,14 +153,20 @@ int main(int argc, char**argv)
 		}
 	}
 
-	if (testmode)
+	if (testmode) {
+		g_main_loop_unref(loop);
 		return EXIT_SUCCESS;
+	}
 
 	/* now, start polling for oopses to occur */
 
 	g_timeout_add_seconds(10, scan_dmesg, NULL);
 
 	g_main_loop_run(loop);
+	dbus_bus_remove_match(bus, "type='signal',interface='org.kerneloops.submit.ping'", &error);
+	dbus_bus_remove_match(bus, "type='signal',interface='org.kerneloops.submit.permission'", &error);
+
+	g_main_loop_unref(loop);
 
 	return EXIT_SUCCESS;
 }
