@@ -1,3 +1,9 @@
+
+#
+# to build this package, you need to have the following components installed:
+# dbus-glib-devel libnotify-devel gtk2-devel curl-devel
+#
+
 BINDIR=/usr/bin
 LOCALESDIR=/usr/share/locale
 MANDIR=/usr/share/man/man8
@@ -6,6 +12,11 @@ CC?=gcc
 CFLAGS := -O2 -g -fstack-protector-all -D_FORTIFY_SOURCE=2 -Wall -W -Wstrict-prototypes -Wundef -fno-common -Werror-implicit-function-declaration -Wdeclaration-after-statement
 
 MY_CFLAGS := `pkg-config --cflags libnotify gtk+-2.0`
+#
+# pkg-config tends to make programs pull in a ton of libraries, not all 
+# are needed. -Wl,--as-needed tells the linker to just drop unused ones,
+# and that makes the applet load faster and use less memory.
+#
 LDF_A := -Wl,--as-needed `pkg-config --libs libnotify gtk+-2.0`
 LDF_D := -Wl,--as-needed `pkg-config --libs glib-2.0 dbus-glib-1` `curl-config --libs` -Wl,"-z relro" -Wl,"-z now" 
 
