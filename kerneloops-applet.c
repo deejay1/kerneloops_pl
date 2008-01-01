@@ -68,7 +68,6 @@ void write_config(char *permission)
 {
 	FILE *file;
 	char filename[2*PATH_MAX];
-	printf("Writing config file\n");
 
 	sprintf(filename, "%s/.kerneloops",getenv("HOME"));
 	file = fopen(filename,"w");
@@ -78,7 +77,6 @@ void write_config(char *permission)
 	}
 	fprintf(file,"allow-submit = %s\n", permission);
 	fclose(file);
-	printf("Written config file\n");
 }
 
 static void send_permission(char *answer)
@@ -146,13 +144,13 @@ static void show_notification(const gchar *summary, const gchar *message,
 	notify_notification_add_action(notify, "default", "action",
 						callback_no, NULL, NULL);
 
-	notify_notification_add_action(notify, "always", "Always",
+	notify_notification_add_action(notify, "always", _("Always"),
 						callback_always, NULL, NULL);
-	notify_notification_add_action(notify, "yes", "Yes",
+	notify_notification_add_action(notify, "yes", _("Yes"),
 						callback_yes, NULL, NULL);
-	notify_notification_add_action(notify, "no", "No",
+	notify_notification_add_action(notify, "no", _("No"),
 						callback_no, NULL, NULL);
-	notify_notification_add_action(notify, "never", "Never",
+	notify_notification_add_action(notify, "never", _("Never"),
 						callback_never, NULL, NULL);
 
 	notify_notification_show(notify, NULL);
@@ -171,9 +169,9 @@ static void close_notification(void)
 void got_a_message(void)
 {
 	show_notification(_("Your system had a kernel failure"),
-		"There is diagnostic information available for this failure."
+	       _("There is diagnostic information available for this failure."
 		" Do you want to submit this information to the <a href=\"http://www.kerneloops.org/\">www.kerneloops.org</a>"
-		" website for use by the Linux kernel developers?", 0);
+		" website for use by the Linux kernel developers?"), 0);
 
 
 }
@@ -245,6 +243,11 @@ int main(int argc, char *argv[])
 {
 	DBusError error;
 
+	setlocale (LC_ALL, "");
+	bindtextdomain ("kerneloops", "/usr/share/locale");
+	textdomain ("kerneloops");
+
+
 	gtk_init(&argc, &argv);
 
 	read_config();
@@ -253,7 +256,7 @@ int main(int argc, char *argv[])
 	dbus_error_init(&error);
 	bus = dbus_bus_get(DBUS_BUS_SYSTEM, &error);
 	if (bus == NULL) {
-		g_printerr("Connecting to system bus failed: %s\n",
+		g_printerr(_("Connecting to system bus failed: %s\n"),
 							error.message);
 		dbus_error_free(&error);
 		exit(EXIT_FAILURE);

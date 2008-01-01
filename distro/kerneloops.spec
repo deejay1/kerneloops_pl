@@ -1,5 +1,5 @@
 Name:           kerneloops
-Version:        0.8
+Version:        0.9
 Release:        1%{?dist}
 Summary:        Tool to automatically collect and submit kernel crash signatures
 
@@ -67,21 +67,26 @@ fi
 /etc/xdg/autostart/kerneloops-applet.desktop
 /usr/share/kerneloops/icon.png
 /usr/bin/kerneloops-applet
-
+/usr/share/locale
+/usr/share/man/man8
 
 %changelog
-* Sat Dec 29 2008 Arjan van de Ven <arjan@linux.intel.com> - 0.7-1
+* Tue Jan 1 2008 Arjan van de Ven <arjan@linux.intel.com> - 0.9-1
+- make translatable
+* Mon Dec 31 2007 Arjan van de Ven <arjan@linux.intel.com> - 0.8-1
+- Add UI applet to ask the privacy question
+* Sat Dec 29 2007 Arjan van de Ven <arjan@linux.intel.com> - 0.7-1
 - fix memory leak
-* Wed Dec 19 2008 Arjan van de Ven <arjan@linux.intel.com> - 0.6-1
+* Wed Dec 19 2007 Arjan van de Ven <arjan@linux.intel.com> - 0.6-1
 - various cleanups and minor improvements
 - Merged Matt Domsch's improvements
-* Tue Dec 18 2008 Arjan van de Ven <arjan@linux.intel.com> - 0.5-1
+* Tue Dec 18 2007 Arjan van de Ven <arjan@linux.intel.com> - 0.5-1
 - fix infinite loop
-* Mon Dec 17 2008 Arjan van de Ven <arjan@linux.intel.com> - 0.4-1
+* Mon Dec 17 2007 Arjan van de Ven <arjan@linux.intel.com> - 0.4-1
 - PPC bugfixes
-* Sun Dec 9 2008 Arjan van de Ven <arjan@linux.intel.com> - 0.3-1
+* Sun Dec 9 2007 Arjan van de Ven <arjan@linux.intel.com> - 0.3-1
 - more fixes
-* Sat Dec 8 2008 Arjan van de Ven <arjan@linux.intel.com> - 0.2-1
+* Sat Dec 8 2007 Arjan van de Ven <arjan@linux.intel.com> - 0.2-1
 - bugfix to submit the whole oops on x86
-* Sat Dec 1 2008 Arjan van de Ven <arjan@linux.intel.com> - 0.1-1
+* Sat Dec 1 2007 Arjan van de Ven <arjan@linux.intel.com> - 0.1-1
 - Initial packaging

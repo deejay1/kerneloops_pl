@@ -1,0 +1,56 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-01-01 02:21-0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: kerneloops-applet.c:147
+msgid "Always"
+msgstr "Altijd"
+
+#: kerneloops-applet.c:259
+#, c-format
+msgid "Connecting to system bus failed: %s\n"
+msgstr "Er was een probleem met D-BUS: %s\n"
+
+#: kerneloops-applet.c:153
+msgid "Never"
+msgstr "Nooit"
+
+#: kerneloops-applet.c:151
+msgid "No"
+msgstr "Ja"
+
+#: kerneloops-applet.c:172
+msgid ""
+"There is diagnostic information available for this failure. Do you want to "
+"submit this information to the <a href=\"http://www.kerneloops.org/\">www."
+"kerneloops.org</a> website for use by the Linux kernel developers?"
+msgstr "Er is diagnose-informatie beschikbaar voor het probleem. Wilt U"
+" deze informatie uploaden naar de <a href=\"http://www.kerneloops.org/\">www."
+"kerneloops.org</a> webite zodat de Linux kernel ontwikkelaars hier"
+" gebruik van kunnen maken?"
+
+#: kerneloops-applet.c:149
+msgid "Yes"
+msgstr "Nee"
+
+#: kerneloops-applet.c:171
+msgid "Your system had a kernel failure"
+msgstr "Uw systeem kernel heeft een probleem gehad"
+
+#: kerneloops-applet.c:270
+msgid "kerneloops client"
+msgstr "kerneloops applicatie"
