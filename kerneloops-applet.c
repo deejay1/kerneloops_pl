@@ -61,7 +61,7 @@ static NotifyNotification *notify = NULL;
    positive = always
    negative = never 
  */
-int user_preference = 0;
+static int user_preference = 0;
 
 
 void write_config(char *permission)
@@ -79,6 +79,10 @@ void write_config(char *permission)
 	fclose(file);
 }
 
+/* 
+ * send a dbus message to signal the users answer to the permission
+ * question.
+ */
 static void send_permission(char *answer)
 {
 	DBusMessage *message;
@@ -122,7 +126,7 @@ static void got_a_message(void)
 	char *message =
 	       _("There is diagnostic information available for this failure."
 		" Do you want to submit this information to the <a href=\"http://www.kerneloops.org/\">www.kerneloops.org</a>"
-		" website for use by the Linux kernel developers?");
+		" website for use by the Linux kernel developers?\n");
 
 	NotifyActionCallback callback_yes;
 	NotifyActionCallback callback_no;
@@ -161,14 +165,18 @@ static void got_a_message(void)
 	notify_notification_show(notify, NULL);
 }
 
+/*
+ * open a notification window (expires in 5 seconds) to say thank you
+ * to the user for his bug feedback.
+ */
 static void sent_an_oops(void)
 {
-	char *summary = _("Kernel diagnostic information sent");
+	char *summary = _("Kernel bug diagnostic information sent");
 	char *message =
 		_("Diagnostic information from your Linux kernel has been "
-		  "sent to the <a href=\"http://www.kerneloops.org\">www.kerneloops.org</a> "
-		  "website for the Linux kernel developers to work on. \n"
-		  "Thank you for contributing to the quality improvement of Linux.");
+		  "sent to <a href=\"http://www.kerneloops.org\">www.kerneloops.org</a> "
+		  "for the Linux kernel developers to work on. \n"
+		  "Thank you for contributing to improve the quality of the Linux kernel.\n");
 	NotifyActionCallback callback_no;
 	NotifyActionCallback callback_always;
 	NotifyActionCallback callback_never;
@@ -250,7 +258,7 @@ static DBusHandlerResult dbus_gotmessage(DBusConnection __unused *connection,
 			/* the user / config file says "never" */
 			send_permission("never");
 		} else {
-			/* make the icon visible */
+			/* ok time to ask the user */
 			gtk_status_icon_set_visible(statusicon, TRUE);
 			got_a_message();
 		}
@@ -268,7 +276,11 @@ static DBusHandlerResult dbus_gotmessage(DBusConnection __unused *connection,
 	return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
 }
 
-void read_config(void)
+/*
+ * read the ~/.kerneloops config file to see if the user pressed 
+ * "always" or "never" before, and then honor that.
+ */
+static void read_config(void)
 {
 	char filename[2*PATH_MAX];
 	size_t dummy;
@@ -298,6 +310,7 @@ int main(int argc, char *argv[])
 {
 	DBusError error;
 
+	/* Initialize translation stuff */
 	setlocale (LC_ALL, "");
 	bindtextdomain ("kerneloops", "/usr/share/locale");
 	textdomain ("kerneloops");
@@ -305,8 +318,13 @@ int main(int argc, char *argv[])
 
 	gtk_init(&argc, &argv);
 
+	/* read the config file early; we may be able to bug out of stuff */
 	read_config();
 
+	/* 
+	 * initialize the dbus connection; we want to listen to the system
+	 * bus (which is where all daemons send their messages
+	 */
 
 	dbus_error_init(&error);
 	bus = dbus_bus_get(DBUS_BUS_SYSTEM, &error);
@@ -326,6 +344,7 @@ int main(int argc, char *argv[])
 
 	notify_init("kerneloops-ui");
 
+	/* by default, don't show our icon */
 	gtk_status_icon_set_visible(statusicon, FALSE);
 
 	/* set the dbus message to listen for */
@@ -333,12 +352,18 @@ int main(int argc, char *argv[])
 	dbus_bus_add_match(bus, "type='signal',interface='org.kerneloops.submit.sent'", &error);
 	dbus_connection_add_filter(bus, dbus_gotmessage, NULL, NULL);
 
-	trigger_daemon();
-
+	/* 
+	 * if the user said always/never in the config file, let the daemon
+	 * know right away 
+	 */
 	if (user_preference < 0)
 		send_permission("never");
 	if (user_preference > 0)
 		send_permission("always");
+
+	/* send a ping to the userspace daemon to see if it has pending oopses */
+	trigger_daemon();
+
 
 	gtk_main();
 
