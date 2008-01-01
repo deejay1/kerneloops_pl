@@ -93,6 +93,10 @@ static void send_permission(char *answer)
 }
 
 
+/*
+ * the notify_action_* functions get called when the user clicks on 
+ * the respective buttons we put in the notification window 
+ */
 static void notify_action_yes(NotifyNotification __unused *notify,
 					gchar __unused *action, gpointer __unused user_data)
 {
@@ -128,27 +132,28 @@ static void got_a_message(void)
 		" Do you want to submit this information to the <a href=\"http://www.kerneloops.org/\">www.kerneloops.org</a>"
 		" website for use by the Linux kernel developers?\n");
 
-	NotifyActionCallback callback_yes;
-	NotifyActionCallback callback_no;
-	NotifyActionCallback callback_always;
-	NotifyActionCallback callback_never;
+	NotifyActionCallback callback_yes = notify_action_yes;
+	NotifyActionCallback callback_no = notify_action_no;
+	NotifyActionCallback callback_always = notify_action_always;
+	NotifyActionCallback callback_never = notify_action_never;
 
+	/* if there's a notification active already, close it first */
 	if (notify) {
 		g_signal_handlers_destroy(notify);
 		notify_notification_close(notify, NULL);
 	}
 
 	notify = notify_notification_new(summary, message,
-						"/usr/share/kerneloops/icon.png", NULL);
+				"/usr/share/kerneloops/icon.png", NULL);
 
 	notify_notification_set_timeout(notify, 0);
 	gtk_status_icon_set_visible(statusicon, TRUE);
 	notify_notification_set_urgency(notify, NOTIFY_URGENCY_CRITICAL);
 
-	callback_yes = notify_action_yes;
-	callback_no = notify_action_no;
-	callback_always = notify_action_always;
-	callback_never = notify_action_never;
+
+	/*
+	 * add the buttons and default action
+	 */
 
 	notify_notification_add_action(notify, "default", "action",
 						callback_no, NULL, NULL);
