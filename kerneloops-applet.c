@@ -92,6 +92,18 @@ static void send_permission(char *answer)
 	dbus_message_unref(message);
 }
 
+/*
+ * remove an existing notification
+ */
+static void close_notification(void)
+{
+	if (notify) {
+		g_signal_handlers_destroy(notify);
+		notify_notification_close(notify, NULL);
+		notify = NULL;
+	}
+}
+
 
 /*
  * the notify_action_* functions get called when the user clicks on 
@@ -138,10 +150,7 @@ static void got_a_message(void)
 	NotifyActionCallback callback_never = notify_action_never;
 
 	/* if there's a notification active already, close it first */
-	if (notify) {
-		g_signal_handlers_destroy(notify);
-		notify_notification_close(notify, NULL);
-	}
+	close_notification();
 
 	notify = notify_notification_new(summary, message,
 				"/usr/share/kerneloops/icon.png", NULL);
@@ -182,25 +191,19 @@ static void sent_an_oops(void)
 		  "sent to <a href=\"http://www.kerneloops.org\">www.kerneloops.org</a> "
 		  "for the Linux kernel developers to work on. \n"
 		  "Thank you for contributing to improve the quality of the Linux kernel.\n");
-	NotifyActionCallback callback_no;
-	NotifyActionCallback callback_always;
-	NotifyActionCallback callback_never;
+	NotifyActionCallback callback_no = notify_action_no;
+	NotifyActionCallback callback_always = notify_action_always;
+	NotifyActionCallback callback_never = notify_action_never;
 
-	if (notify) {
-		g_signal_handlers_destroy(notify);
-		notify_notification_close(notify, NULL);
-	}
+	close_notification();
 
 	notify = notify_notification_new(summary, message,
-						"/usr/share/kerneloops/icon.png", NULL);
+				"/usr/share/kerneloops/icon.png", NULL);
 
 	notify_notification_set_timeout(notify, 5000);
 	gtk_status_icon_set_visible(statusicon, TRUE);
 	notify_notification_set_urgency(notify, NOTIFY_URGENCY_LOW);
 
-	callback_always = notify_action_always;
-	callback_never = notify_action_never;
-	callback_no = notify_action_no;
 
 	notify_notification_add_action(notify, "default", "action",
 						callback_no, NULL, NULL);
@@ -214,14 +217,6 @@ static void sent_an_oops(void)
 	notify_notification_show(notify, NULL);
 }
 
-static void close_notification(void)
-{
-	if (notify) {
-		g_signal_handlers_destroy(notify);
-		notify_notification_close(notify, NULL);
-		notify = NULL;
-	}
-}
 
 
 /*
