@@ -49,7 +49,7 @@ msgstr "Nee"
 
 #: kerneloops-applet.c:171
 msgid "Your system had a kernel failure"
-msgstr "Uw systeem kernel heeft een probleem gehad"
+msgstr "Uw systeem heeft een kernel probleem gehad"
 
 #: kerneloops-applet.c:270
 msgid "kerneloops client"
