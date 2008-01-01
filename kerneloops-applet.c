@@ -166,8 +166,8 @@ static void sent_an_oops(void)
 	char *summary = _("Kernel diagnostic information sent");
 	char *message =
 		_("Diagnostic information from your Linux kernel has been "
-		  "sent to the <a href=\"www.kerneloops.org\">www.kerneloops.org "
-		  "website for the Linux kernel developers to work on. <br>"
+		  "sent to the <a href=\"http://www.kerneloops.org\">www.kerneloops.org</a> "
+		  "website for the Linux kernel developers to work on. \n"
 		  "Thank you for contributing to the quality improvement of Linux.");
 	NotifyActionCallback callback_no;
 	NotifyActionCallback callback_always;
@@ -181,7 +181,7 @@ static void sent_an_oops(void)
 	notify = notify_notification_new(summary, message,
 						"/usr/share/kerneloops/icon.png", NULL);
 
-	notify_notification_set_timeout(notify, 5);
+	notify_notification_set_timeout(notify, 5000);
 	gtk_status_icon_set_visible(statusicon, TRUE);
 	notify_notification_set_urgency(notify, NOTIFY_URGENCY_LOW);
 
@@ -192,9 +192,10 @@ static void sent_an_oops(void)
 	notify_notification_add_action(notify, "default", "action",
 						callback_no, NULL, NULL);
 
-	notify_notification_add_action(notify, "always", _("Always"),
+	if (user_preference <= 0)
+		notify_notification_add_action(notify, "always", _("Always"),
 						callback_always, NULL, NULL);
-	notify_notification_add_action(notify, "never", _("Never"),
+	notify_notification_add_action(notify, "never", _("Never again"),
 						callback_never, NULL, NULL);
 
 	notify_notification_show(notify, NULL);
@@ -329,6 +330,7 @@ int main(int argc, char *argv[])
 
 	/* set the dbus message to listen for */
 	dbus_bus_add_match(bus, "type='signal',interface='org.kerneloops.submit.permission'", &error);
+	dbus_bus_add_match(bus, "type='signal',interface='org.kerneloops.submit.sent'", &error);
 	dbus_connection_add_filter(bus, dbus_gotmessage, NULL, NULL);
 
 	trigger_daemon();
