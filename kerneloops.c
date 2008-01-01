@@ -155,6 +155,9 @@ int main(int argc, char**argv)
 
 	if (testmode) {
 		g_main_loop_unref(loop);
+		dbus_bus_remove_match(bus, "type='signal',interface='org.kerneloops.submit.ping'", &error);
+		dbus_bus_remove_match(bus, "type='signal',interface='org.kerneloops.submit.permission'", &error);
+		free(submit_url);
 		return EXIT_SUCCESS;
 	}
 
@@ -167,6 +170,7 @@ int main(int argc, char**argv)
 	dbus_bus_remove_match(bus, "type='signal',interface='org.kerneloops.submit.permission'", &error);
 
 	g_main_loop_unref(loop);
+	free(submit_url);
 
 	return EXIT_SUCCESS;
 }

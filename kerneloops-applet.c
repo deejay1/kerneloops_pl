@@ -226,8 +226,11 @@ void read_config(void)
 	file = fopen(filename,"r");
 	if (!file)
 		return;
-	if (getline(&line, &dummy, file) <=0)
+	if (getline(&line, &dummy, file) <=0) {
+		free(line);
+		fclose(file);
 		return;
+	}
 	if (strstr(line, "always"))
 		user_preference = 1;	
 	if (strstr(line, "never"))

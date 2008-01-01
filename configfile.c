@@ -36,7 +36,7 @@
  */
 int opted_in = 0; 
 int allow_distro_to_pass_on = 0;
-char *submit_url = "http://submit.kerneloops.org/submitoops.php";
+char *submit_url; 
 
 
 void read_config_file(char *filename)
@@ -82,4 +82,6 @@ void read_config_file(char *filename)
 		free(line);
 	}
 	fclose(file);
+	if (!submit_url)
+		submit_url = strdup("http://submit.kerneloops.org/submitoops.php");
 }

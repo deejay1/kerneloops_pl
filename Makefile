@@ -71,6 +71,6 @@ tests: kerneloops
 	[ -e /usr/bin/valgrind ] && for i in test/*txt ; do echo -n . ; valgrind -q --leak-check=full ./kerneloops --debug $$i > $$i.dbg ; diff -u $$i.out $$i.dbg ; done ; echo
 
 valgrind: kerneloops tests
-	valgrind -q --leak-check=full ./kerneloops --debug test/*.txt
+	valgrind -q --leak-check=full --show-reachable=yes ./kerneloops --debug test/*.txt
 
 
