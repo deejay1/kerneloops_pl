@@ -185,6 +185,8 @@ void submit_queue(void)
 		syslog(LOG_WARNING, "Submitted %i kernel oopses to www.kerneloops.org", count);
 		closelog();
 	}
+	if (count)
+		dbus_say_thanks();
 	/*
 	 * If we've reached the maximum count, we'll exit the program,
 	 * the program won't do any useful work anymore going forward.

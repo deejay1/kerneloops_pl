@@ -89,6 +89,19 @@ void dbus_ask_permission(void)
 	dbus_message_unref(message);
 }
 
+void dbus_say_thanks(void)
+{
+	DBusMessage *message;
+	if (!bus)
+		return;
+	message = dbus_message_new_signal("/org/kerneloops/submit/sent",
+			"org.kerneloops.submit.sent", "sent");
+	dbus_connection_send(bus, message, NULL);
+	dbus_message_unref(message);
+}
+
+
+
 int testmode = 0;
 int main(int argc, char**argv)
 {

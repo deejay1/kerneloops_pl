@@ -116,9 +116,14 @@ static void notify_action_never(NotifyNotification __unused *notify,
 	write_config("never");
 }
 
-static void show_notification(const gchar *summary, const gchar *message,
-					gint timeout)
+static void got_a_message(void)
 {
+	char *summary = _("Your system had a kernel failure");
+	char *message =
+	       _("There is diagnostic information available for this failure."
+		" Do you want to submit this information to the <a href=\"http://www.kerneloops.org/\">www.kerneloops.org</a>"
+		" website for use by the Linux kernel developers?");
+
 	NotifyActionCallback callback_yes;
 	NotifyActionCallback callback_no;
 	NotifyActionCallback callback_always;
@@ -132,7 +137,7 @@ static void show_notification(const gchar *summary, const gchar *message,
 	notify = notify_notification_new(summary, message,
 						"/usr/share/kerneloops/icon.png", NULL);
 
-	notify_notification_set_timeout(notify, timeout);
+	notify_notification_set_timeout(notify, 0);
 	gtk_status_icon_set_visible(statusicon, TRUE);
 	notify_notification_set_urgency(notify, NOTIFY_URGENCY_CRITICAL);
 
@@ -156,6 +161,45 @@ static void show_notification(const gchar *summary, const gchar *message,
 	notify_notification_show(notify, NULL);
 }
 
+static void sent_an_oops(void)
+{
+	char *summary = _("Kernel diagnostic information sent");
+	char *message =
+		_("Diagnostic information from your Linux kernel has been "
+		  "sent to the <a href=\"www.kerneloops.org\">www.kerneloops.org "
+		  "website for the Linux kernel developers to work on. <br>"
+		  "Thank you for contributing to the quality improvement of Linux.");
+	NotifyActionCallback callback_no;
+	NotifyActionCallback callback_always;
+	NotifyActionCallback callback_never;
+
+	if (notify) {
+		g_signal_handlers_destroy(notify);
+		notify_notification_close(notify, NULL);
+	}
+
+	notify = notify_notification_new(summary, message,
+						"/usr/share/kerneloops/icon.png", NULL);
+
+	notify_notification_set_timeout(notify, 5);
+	gtk_status_icon_set_visible(statusicon, TRUE);
+	notify_notification_set_urgency(notify, NOTIFY_URGENCY_LOW);
+
+	callback_always = notify_action_always;
+	callback_never = notify_action_never;
+	callback_no = notify_action_no;
+
+	notify_notification_add_action(notify, "default", "action",
+						callback_no, NULL, NULL);
+
+	notify_notification_add_action(notify, "always", _("Always"),
+						callback_always, NULL, NULL);
+	notify_notification_add_action(notify, "never", _("Never"),
+						callback_never, NULL, NULL);
+
+	notify_notification_show(notify, NULL);
+}
+
 static void close_notification(void)
 {
 	if (notify) {
@@ -165,16 +209,6 @@ static void close_notification(void)
 	}
 }
 
-
-void got_a_message(void)
-{
-	show_notification(_("Your system had a kernel failure"),
-	       _("There is diagnostic information available for this failure."
-		" Do you want to submit this information to the <a href=\"http://www.kerneloops.org/\">www.kerneloops.org</a>"
-		" website for use by the Linux kernel developers?"), 0);
-
-
-}
 
 /*
  * When we start up, the daemon may already have collected some oopses
@@ -190,6 +224,10 @@ static void trigger_daemon(void)
 	dbus_message_unref(message);
 }
 
+/*
+ * This function gets called if a dbus message arrives that we have
+ * subscribed to. 
+ */
 static DBusHandlerResult dbus_gotmessage(DBusConnection __unused *connection,
 		DBusMessage *message,
 		void __unused *user_data)
@@ -200,17 +238,30 @@ static DBusHandlerResult dbus_gotmessage(DBusConnection __unused *connection,
 		/* FIXME: need to exit the gtk main loop here */
 		return DBUS_HANDLER_RESULT_HANDLED;
 	}
+	/* check if it's the daemon that asks for permission */
 	if (dbus_message_is_signal(message, 
 			"org.kerneloops.submit.permission", "ask")) {
 
 		if (user_preference > 0) {
+			/* the user / config file says "always" */
 			send_permission("always");
 		} else if (user_preference < 0) {
+			/* the user / config file says "never" */
 			send_permission("never");
 		} else {
+			/* make the icon visible */
 			gtk_status_icon_set_visible(statusicon, TRUE);
 			got_a_message();
 		}
+		return DBUS_HANDLER_RESULT_HANDLED;
+	}
+	/* check if it's the daemon that asks for permission */
+	if (dbus_message_is_signal(message, 
+			"org.kerneloops.submit.sent", "sent")) {
+
+		gtk_status_icon_set_visible(statusicon, TRUE);
+		sent_an_oops();
+		gtk_status_icon_set_visible(statusicon, FALSE);
 		return DBUS_HANDLER_RESULT_HANDLED;
 	}
 	return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;

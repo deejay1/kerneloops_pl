@@ -40,6 +40,7 @@ extern void read_config_file(char *filename);
 
 extern void ask_permission(void);
 extern void dbus_ask_permission(void);
+extern void dbus_say_thanks(void);
 
 extern int opted_in;
 extern int allow_distro_to_pass_on;
