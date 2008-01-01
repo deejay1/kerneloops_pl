@@ -107,33 +107,20 @@ static void close_notification(void)
 
 /*
  * the notify_action_* functions get called when the user clicks on 
- * the respective buttons we put in the notification window 
+ * the respective buttons we put in the notification window.
+ * user_data contains the string we pass, so "yes" "no" "always" or "never".
  */
-static void notify_action_yes(NotifyNotification __unused *notify,
-					gchar __unused *action, gpointer __unused user_data)
+static void notify_action(NotifyNotification __unused *notify,
+					gchar __unused *action, gpointer user_data)
 {
+	char *answer = (char *) user_data;
+
+	send_permission(answer);
+	if (strcmp(answer, "always")==0)
+		write_config("alway");
+	if (strcmp(answer, "never")==0)
+		write_config("never");
 	gtk_status_icon_set_visible(statusicon, FALSE);
-	send_permission("yes");
-}
-static void notify_action_no(NotifyNotification __unused *notify,
-					gchar __unused *action, gpointer __unused user_data)
-{
-	gtk_status_icon_set_visible(statusicon, FALSE);
-	send_permission("no");
-}
-static void notify_action_always(NotifyNotification __unused *notify,
-					gchar __unused *action, gpointer __unused user_data)
-{
-	send_permission("always");
-	gtk_status_icon_set_visible(statusicon, FALSE);
-	write_config("always");
-}
-static void notify_action_never(NotifyNotification __unused *notify,
-					gchar __unused *action, gpointer __unused user_data)
-{
-	gtk_status_icon_set_visible(statusicon, FALSE);
-	send_permission("never");
-	write_config("never");
 }
 
 static void got_a_message(void)
@@ -144,10 +131,7 @@ static void got_a_message(void)
 		" Do you want to submit this information to the <a href=\"http://www.kerneloops.org/\">www.kerneloops.org</a>"
 		" website for use by the Linux kernel developers?\n");
 
-	NotifyActionCallback callback_yes = notify_action_yes;
-	NotifyActionCallback callback_no = notify_action_no;
-	NotifyActionCallback callback_always = notify_action_always;
-	NotifyActionCallback callback_never = notify_action_never;
+	NotifyActionCallback callback = notify_action;
 
 	/* if there's a notification active already, close it first */
 	close_notification();
@@ -165,16 +149,16 @@ static void got_a_message(void)
 	 */
 
 	notify_notification_add_action(notify, "default", "action",
-						callback_no, NULL, NULL);
+						callback, "default", NULL);
 
 	notify_notification_add_action(notify, "always", _("Always"),
-						callback_always, NULL, NULL);
+						callback, "always", NULL);
 	notify_notification_add_action(notify, "yes", _("Yes"),
-						callback_yes, NULL, NULL);
+						callback, "yes", NULL);
 	notify_notification_add_action(notify, "no", _("No"),
-						callback_no, NULL, NULL);
+						callback, "no", NULL);
 	notify_notification_add_action(notify, "never", _("Never"),
-						callback_never, NULL, NULL);
+						callback, "never", NULL);
 
 	notify_notification_show(notify, NULL);
 }
@@ -191,9 +175,7 @@ static void sent_an_oops(void)
 		  "sent to <a href=\"http://www.kerneloops.org\">www.kerneloops.org</a> "
 		  "for the Linux kernel developers to work on. \n"
 		  "Thank you for contributing to improve the quality of the Linux kernel.\n");
-	NotifyActionCallback callback_no = notify_action_no;
-	NotifyActionCallback callback_always = notify_action_always;
-	NotifyActionCallback callback_never = notify_action_never;
+	NotifyActionCallback callback = notify_action;
 
 	close_notification();
 
@@ -206,13 +188,13 @@ static void sent_an_oops(void)
 
 
 	notify_notification_add_action(notify, "default", "action",
-						callback_no, NULL, NULL);
+						callback, "default", NULL);
 
 	if (user_preference <= 0)
 		notify_notification_add_action(notify, "always", _("Always"),
-						callback_always, NULL, NULL);
+						callback, "always", NULL);
 	notify_notification_add_action(notify, "never", _("Never again"),
-						callback_never, NULL, NULL);
+						callback, "never", NULL);
 
 	notify_notification_show(notify, NULL);
 }
