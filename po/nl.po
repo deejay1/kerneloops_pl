@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-01-01 02:21-0800\n"
+"POT-Creation-Date: 2008-01-01 06:33-0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,41 +15,61 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: kerneloops-applet.c:147
+#: kerneloops-applet.c:170 kerneloops-applet.c:212
 msgid "Always"
 msgstr "Altijd"
 
-#: kerneloops-applet.c:259
+#: kerneloops-applet.c:332
 #, c-format
 msgid "Connecting to system bus failed: %s\n"
 msgstr "Er was een probleem met D-BUS: %s\n"
 
-#: kerneloops-applet.c:153
+#: kerneloops-applet.c:190
+msgid ""
+"Diagnostic information from your Linux kernel has been sent to <a href="
+"\"http://www.kerneloops.org\">www.kerneloops.org</a> for the Linux kernel "
+"developers to work on. \n"
+"Thank you for contributing to improve the quality of the Linux kernel.\n"
+msgstr "Bug informatie van uw Linux kernel is verstuurd naar "
+"<a href=\"http://www.kerneloops.org\">www.kerneloops.org</a> zodat "
+"de Linux kernel developers dit kunnen gebruiken. \n"
+"Hartelijk bedankt voor uw bijdrage aan de kwaliteit van de Linux kernel.\n"
+
+#: kerneloops-applet.c:188
+msgid "Kernel bug diagnostic information sent"
+msgstr "Kernel bug informatie verzonden"
+
+#: kerneloops-applet.c:176
 msgid "Never"
 msgstr "Nooit"
 
-#: kerneloops-applet.c:151
-msgid "No"
-msgstr "Ja"
+#: kerneloops-applet.c:214
+msgid "Never again"
+msgstr "Niet meer"
 
-#: kerneloops-applet.c:172
+#: kerneloops-applet.c:174
+msgid "No"
+msgstr "Nee"
+
+#: kerneloops-applet.c:143
 msgid ""
 "There is diagnostic information available for this failure. Do you want to "
 "submit this information to the <a href=\"http://www.kerneloops.org/\">www."
-"kerneloops.org</a> website for use by the Linux kernel developers?"
-msgstr "Er is diagnose-informatie beschikbaar voor het probleem. Wilt U"
-" deze informatie uploaden naar de <a href=\"http://www.kerneloops.org/\">www."
-"kerneloops.org</a> webite zodat de Linux kernel ontwikkelaars hier"
-" gebruik van kunnen maken?"
+"kerneloops.org</a> website for use by the Linux kernel developers?\n"
+msgstr ""
+"Er is diagnose-informatie beschikbaar voor het probleem. Wilt U deze "
+"informatie uploaden naar de <a href=\"http://www.kerneloops.org/\">www."
+"kerneloops.org</a> webite zodat de Linux kernel ontwikkelaars hier gebruik "
+"van kunnen maken?\n"
 
-#: kerneloops-applet.c:149
+#: kerneloops-applet.c:172
 msgid "Yes"
-msgstr "Nee"
+msgstr "Ja"
 
-#: kerneloops-applet.c:171
+#: kerneloops-applet.c:141
 msgid "Your system had a kernel failure"
 msgstr "Uw systeem heeft een kernel probleem gehad"
 
-#: kerneloops-applet.c:270
+#: kerneloops-applet.c:343
 msgid "kerneloops client"
 msgstr "kerneloops applicatie"
