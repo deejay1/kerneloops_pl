@@ -15,6 +15,7 @@ BuildRequires:	libnotify-devel
 BuildRequires:  gtk2-devel
 BuildRequires:  dbus-glib-devel
 BuildRequires:  gettext
+BuildRequires:  desktop-file-utils
 Requires(post): chkconfig
 Requires(preun): chkconfig, initscripts
 Requires(postun): initscripts
@@ -42,6 +43,7 @@ make install DESTDIR=$RPM_BUILD_ROOT
 mkdir -m 0755 -p $RPM_BUILD_ROOT%{_sysconfdir}/init.d
 install -p -m 0755 kerneloops.init $RPM_BUILD_ROOT%{_sysconfdir}/init.d/kerneloops
 %find_lang %{name}
+desktop-file-install --vendor="kerneloops.org" --dir=$RPM_BUILD_ROOT/etc/xdg/autostart/ $RPM_BUILD_ROOT/etc/xdg/autostart/
 
 %clean
 make clean
