@@ -1,0 +1,301 @@
+scsi0 : ata_piix
+scsi1 : ata_piix
+ata1: SATA max UDMA/133 cmd 0x000101f0 ctl 0x000103f6 bmdma 0x000118c0 irq 14
+ata2: PATA max UDMA/100 cmd 0x00010170 ctl 0x00010376 bmdma 0x000118c8 irq 15
+ata1.00: ATA-6: TOSHIBA MK8032GAX, AB311E, max UDMA/100
+ata1.00: 156301488 sectors, multi 16: LBA48 
+ata1.00: applying bridge limits
+ata1.00: configured for UDMA/100
+ata2.00: ATAPI: UJDA765 DVD/CDRW, 1.70, max UDMA/33
+ata2.00: configured for UDMA/33
+scsi 0:0:0:0: Direct-Access     ATA      TOSHIBA MK8032GA AB31 PQ: 0 ANSI: 5
+sd 0:0:0:0: [sda] 156301488 512-byte hardware sectors (80026 MB)
+sd 0:0:0:0: [sda] Write Protect is off
+sd 0:0:0:0: [sda] Mode Sense: 00 3a 00 00
+sd 0:0:0:0: [sda] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+sd 0:0:0:0: [sda] 156301488 512-byte hardware sectors (80026 MB)
+sd 0:0:0:0: [sda] Write Protect is off
+sd 0:0:0:0: [sda] Mode Sense: 00 3a 00 00
+sd 0:0:0:0: [sda] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+ sda: sda1 sda2 sda3 sda4
+sd 0:0:0:0: [sda] Attached SCSI disk
+sd 0:0:0:0: Attached scsi generic sg0 type 0
+scsi 1:0:0:0: CD-ROM            MATSHITA UJDA765 DVD/CDRW 1.70 PQ: 0 ANSI: 5
+sr0: scsi3-mmc drive: 24x/24x writer cd/rw xa/form2 cdda tray
+Uniform CD-ROM driver Revision: 3.20
+sr 1:0:0:0: Attached scsi CD-ROM sr0
+sr 1:0:0:0: Attached scsi generic sg1 type 5
+Yenta: CardBus bridge found at 0000:04:00.0 [1014:056c]
+Clocksource tsc unstable (delta = -441916489 ns)
+Yenta: ISA IRQ mask 0x04b8, PCI irq 16
+Socket status: 30000006
+pcmcia: parent PCI bridge I/O window: 0x5000 - 0x8fff
+pcmcia: parent PCI bridge Memory window: 0xa8400000 - 0xb7ffffff
+pcmcia: parent PCI bridge Memory window: 0xd0000000 - 0xd7ffffff
+usbmon: debugfs is not available
+Initializing USB Mass Storage driver...
+usbcore: registered new interface driver usb-storage
+USB Mass Storage support registered.
+PNP: PS/2 Controller [PNP0303:KBD,PNP0f13:MOU] at 0x60,0x64 irq 1,12
+serio: i8042 KBD port at 0x60,0x64 irq 1
+serio: i8042 AUX port at 0x60,0x64 irq 12
+mice: PS/2 mouse device common for all mice
+input: AT Translated Set 2 keyboard as /class/input/input4
+device-mapper: ioctl: 4.11.0-ioctl (2006-10-12) initialised: dm-devel@redhat.com
+usbcore: registered new interface driver usbhid
+drivers/hid/usbhid/hid-core.c: v2.6:USB HID core driver
+Advanced Linux Sound Architecture Driver Version 1.0.14 (Fri Jul 20 09:12:58 2007 UTC).
+ALSA device list:
+  No soundcards found.
+TCP cubic registered
+NET: Registered protocol family 1
+NET: Registered protocol family 17
+ieee80211: 802.11 data/management/control stack, git-1.1.13
+ieee80211: Copyright (C) 2004-2005 Intel Corporation <jketreno@linux.intel.com>
+ieee80211_crypt: registered algorithm 'NULL'
+Using IPI Shortcut mode
+drivers/rtc/hctosys.c: unable to open rtc device (rtc0)
+Synaptics Touchpad, model: 1, fw: 5.9, id: 0x2c6ab1, caps: 0x884793/0x0
+serio: Synaptics pass-through port at isa0060/serio1/input0
+input: SynPS/2 Synaptics TouchPad as /class/input/input5
+IBM TrackPoint firmware: 0x0e, buttons: 3/3
+input: TPPS/2 IBM TrackPoint as /class/input/input6
+kjournald starting.  Commit interval 5 seconds
+EXT3-fs: mounted filesystem with ordered data mode.
+VFS: Mounted root (ext3 filesystem) readonly.
+Freeing unused kernel memory: 228k freed
+EXT3 FS on sda2, internal journal
+Adding 1958032k swap on /dev/sda4.  Priority:-1 extents:1 across:1958032k
+kjournald starting.  Commit interval 5 seconds
+EXT3 FS on sda1, internal journal
+EXT3-fs: mounted filesystem with ordered data mode.
+kjournald starting.  Commit interval 5 seconds
+EXT3 FS on sda3, internal journal
+EXT3-fs: mounted filesystem with ordered data mode.
+pcmcia: Detected deprecated PCMCIA ioctl usage from process: discover.
+pcmcia: This interface will soon be removed from the kernel; please expect breakage unless you upgrade to new tools.
+pcmcia: see http://www.kernel.org/pub/linux/utils/kernel/pcmcia/pcmcia.html for details.
+Linux agpgart interface v0.102
+USB Universal Host Controller Interface driver v3.0
+ACPI: PCI Interrupt 0000:00:1d.0[A] -> GSI 16 (level, low) -> IRQ 16
+PCI: Setting latency timer of device 0000:00:1d.0 to 64
+uhci_hcd 0000:00:1d.0: UHCI Host Controller
+uhci_hcd 0000:00:1d.0: new USB bus registered, assigned bus number 1
+uhci_hcd 0000:00:1d.0: irq 16, io base 0x00001800
+usb usb1: configuration #1 chosen from 1 choice
+hub 1-0:1.0: USB hub found
+hub 1-0:1.0: 2 ports detected
+ACPI: PCI Interrupt 0000:00:1d.1[B] -> GSI 17 (level, low) -> IRQ 20
+PCI: Setting latency timer of device 0000:00:1d.1 to 64
+uhci_hcd 0000:00:1d.1: UHCI Host Controller
+uhci_hcd 0000:00:1d.1: new USB bus registered, assigned bus number 2
+uhci_hcd 0000:00:1d.1: irq 20, io base 0x00001820
+usb usb2: configuration #1 chosen from 1 choice
+hub 2-0:1.0: USB hub found
+hub 2-0:1.0: 2 ports detected
+ACPI: PCI Interrupt 0000:00:1d.2[C] -> GSI 18 (level, low) -> IRQ 21
+PCI: Setting latency timer of device 0000:00:1d.2 to 64
+uhci_hcd 0000:00:1d.2: UHCI Host Controller
+uhci_hcd 0000:00:1d.2: new USB bus registered, assigned bus number 3
+uhci_hcd 0000:00:1d.2: irq 21, io base 0x00001840
+usb usb3: configuration #1 chosen from 1 choice
+hub 3-0:1.0: USB hub found
+hub 3-0:1.0: 2 ports detected
+usb 1-1: new full speed USB device using uhci_hcd and address 2
+ACPI: PCI Interrupt 0000:00:1d.3[D] -> GSI 19 (level, low) -> IRQ 22
+PCI: Setting latency timer of device 0000:00:1d.3 to 64
+uhci_hcd 0000:00:1d.3: UHCI Host Controller
+uhci_hcd 0000:00:1d.3: new USB bus registered, assigned bus number 4
+uhci_hcd 0000:00:1d.3: irq 22, io base 0x00001860
+usb usb4: configuration #1 chosen from 1 choice
+hub 4-0:1.0: USB hub found
+hub 4-0:1.0: 2 ports detected
+usb 1-1: configuration #1 chosen from 1 choice
+hub 1-1:1.0: USB hub found
+hub 1-1:1.0: 4 ports detected
+ACPI: PCI Interrupt 0000:00:1d.7[D] -> GSI 19 (level, low) -> IRQ 22
+PCI: Setting latency timer of device 0000:00:1d.7 to 64
+ehci_hcd 0000:00:1d.7: EHCI Host Controller
+ehci_hcd 0000:00:1d.7: new USB bus registered, assigned bus number 5
+ehci_hcd 0000:00:1d.7: debug port 1
+PCI: cache line size of 32 is not supported by device 0000:00:1d.7
+ehci_hcd 0000:00:1d.7: irq 22, io mem 0xa8000000
+ehci_hcd 0000:00:1d.7: USB 2.0 started, EHCI 1.00, driver 10 Dec 2004
+usb usb5: configuration #1 chosen from 1 choice
+hub 5-0:1.0: USB hub found
+hub 5-0:1.0: 8 ports detected
+hub 1-1:1.0: hub_port_status failed (err = -71)
+hub 1-1:1.0: hub_port_status failed (err = -71)
+hub 1-1:1.0: hub_port_status failed (err = -71)
+hub 1-1:1.0: hub_port_status failed (err = -71)
+ACPI: PCI Interrupt 0000:00:1e.2[A] -> GSI 22 (level, low) -> IRQ 18
+PCI: Setting latency timer of device 0000:00:1e.2 to 64
+usb 5-1: new high speed USB device using ehci_hcd and address 2
+usb 5-1: configuration #1 chosen from 1 choice
+hub 5-1:1.0: USB hub found
+hub 5-1:1.0: 4 ports detected
+usb 1-1: USB disconnect, address 2
+AC'97 0 analog subsections not ready
+usb 5-1.1: new full speed USB device using ehci_hcd and address 3
+usb 5-1.1: configuration #1 chosen from 1 choice
+hub 5-1.1:1.0: USB hub found
+hub 5-1.1:1.0: 3 ports detected
+usb 5-1.3: new low speed USB device using ehci_hcd and address 4
+intel8x0_measure_ac97_clock: measured 50504 usecs
+intel8x0: clocking to 48000
+usb 5-1.3: configuration #1 chosen from 1 choice
+input: HID 04b3:310b as /class/input/input7
+input: USB HID v1.00 Mouse [HID 04b3:310b] on usb-0000:00:1d.7-1.3
+usb 5-1.1.1: new full speed USB device using ehci_hcd and address 5
+usb 5-1.1.1: configuration #1 chosen from 1 choice
+input: Lite-On Technology USB Productivity Option Keyboard( has the hub in # 1 ) as /class/input/input8
+input: USB HID v1.10 Keyboard [Lite-On Technology USB Productivity Option Keyboard( has the hub in # 1 )] on usb-0000:00:1d.7-1.1.1
+input: Lite-On Technology USB Productivity Option Keyboard( has the hub in # 1 ) as /class/input/input9
+input: USB HID v1.10 Device [Lite-On Technology USB Productivity Option Keyboard( has the hub in # 1 )] on usb-0000:00:1d.7-1.1.1
+ACPI: PCI Interrupt 0000:00:1e.3[B] -> GSI 23 (level, low) -> IRQ 19
+PCI: Setting latency timer of device 0000:00:1e.3 to 64
+MC'97 1 converters and GPIO not ready (0xff00)
+ACPI: PCI Interrupt 0000:00:1f.3[A] -> GSI 23 (level, low) -> IRQ 19
+tg3.c:v3.81.1 (October 18, 2007)
+ACPI: PCI Interrupt 0000:02:00.0[A] -> GSI 16 (level, low) -> IRQ 16
+PCI: Setting latency timer of device 0000:02:00.0 to 64
+eth0: Tigon3 [partno(BCM95751M) rev 4101 PHY(5750)] (PCI Express) 10/100/1000Base-T Ethernet 00:16:41:11:10:17
+eth0: RXcsums[1] LinkChgREG[0] MIirq[0] ASF[0] WireSpeed[1] TSOcap[1]
+eth0: dma_rwctrl[76180000] dma_mask[64-bit]
+ipw2200: Intel(R) PRO/Wireless 2200/2915 Network Driver, 1.2.2kmq
+ipw2200: Copyright(c) 2003-2006 Intel Corporation
+ACPI: PCI Interrupt 0000:04:02.0[A] -> GSI 21 (level, low) -> IRQ 23
+ipw2200: Detected Intel PRO/Wireless 2915ABG Network Connection
+ipw2200: Detected geography ZZA (11 802.11bg channels, 13 802.11a channels)
+fuse init (API version 7.8)
+BUG: soft lockup detected on CPU#0!
+ [<c014e31b>] softlockup_tick+0xbb/0x100
+ [<c01290e2>] update_process_times+0x32/0x80
+ [<c013c5bf>] tick_sched_timer+0x7f/0x110
+ [<c013c540>] tick_sched_timer+0x0/0x110
+ [<c013749f>] hrtimer_interrupt+0x17f/0x210
+ [<c013c540>] tick_sched_timer+0x0/0x110
+ [<c013b933>] tick_do_broadcast+0x43/0x50
+ [<c013be18>] tick_handle_oneshot_broadcast+0x58/0xd0
+ [<c0107244>] timer_interrupt+0x14/0x50
+ [<c014e685>] handle_IRQ_event+0x25/0x60
+ [<c015027f>] handle_edge_irq+0xbf/0x170
+ [<c0106265>] do_IRQ+0x45/0x80
+ [<c0104b2f>] common_interrupt+0x23/0x28
+ =======================
+ip_tables: (C) 2000-2006 Netfilter Core Team
+NET: Registered protocol family 10
+lo: Disabled Privacy Extensions
+ADDRCONF(NETDEV_UP): eth0: link is not ready
+ADDRCONF(NETDEV_UP): eth1: link is not ready
+tg3: eth0: Link is up at 1000 Mbps, full duplex.
+tg3: eth0: Flow control is on for TX and on for RX.
+ADDRCONF(NETDEV_CHANGE): eth0: link becomes ready
+ADDRCONF(NETDEV_CHANGE): eth1: link becomes ready
+[drm] Initialized drm 1.1.0 20060810
+ACPI: PCI Interrupt 0000:01:00.0[A] -> GSI 16 (level, low) -> IRQ 16
+PCI: Setting latency timer of device 0000:01:00.0 to 64
+[drm] Initialized radeon 1.28.0 20060524 on minor 0
+ata1.00: exception Emask 0x0 SAct 0x0 SErr 0x0 action 0x2 frozen
+ata1.00: cmd b0/d2:f1:00:4f:c2/00:00:00:00:00/00 tag 0 cdb 0x0 data 123392 in
+         res 50/00:f1:00:4f:c2/00:00:00:00:00/00 Emask 0x202 (HSM violation)
+ata1: soft resetting port
+ata1.00: configured for UDMA/100
+ata1: EH complete
+ata1.00: exception Emask 0x0 SAct 0x0 SErr 0x0 action 0x2 frozen
+ata1.00: cmd b0/d2:f1:00:4f:c2/00:00:00:00:00/00 tag 0 cdb 0x0 data 123392 in
+         res 50/00:f1:00:4f:c2/00:00:00:00:00/00 Emask 0x202 (HSM violation)
+ata1: soft resetting port
+ata1.00: configured for UDMA/100
+ata1: EH complete
+ata1.00: exception Emask 0x0 SAct 0x0 SErr 0x0 action 0x2 frozen
+ata1.00: cmd b0/d2:f1:00:4f:c2/00:00:00:00:00/00 tag 0 cdb 0x0 data 123392 in
+         res 50/00:f1:00:4f:c2/00:00:00:00:00/00 Emask 0x202 (HSM violation)
+ata1: soft resetting port
+ata1.00: configured for UDMA/100
+ata1: EH complete
+ata1.00: exception Emask 0x0 SAct 0x0 SErr 0x0 action 0x2 frozen
+ata1.00: cmd b0/d2:f1:00:4f:c2/00:00:00:00:00/00 tag 0 cdb 0x0 data 123392 in
+         res 50/00:f1:00:4f:c2/00:00:00:00:00/00 Emask 0x202 (HSM violation)
+ata1: soft resetting port
+ata1.00: configured for UDMA/100
+ata1: EH complete
+ata1.00: exception Emask 0x0 SAct 0x0 SErr 0x0 action 0x2 frozen
+ata1.00: cmd b0/d2:f1:00:4f:c2/00:00:00:00:00/00 tag 0 cdb 0x0 data 123392 in
+         res 50/00:f1:00:4f:c2/00:00:00:00:00/00 Emask 0x202 (HSM violation)
+ata1: soft resetting port
+ata1.00: configured for UDMA/100
+ata1: EH complete
+ata1.00: exception Emask 0x0 SAct 0x0 SErr 0x0 action 0x2 frozen
+ata1.00: cmd b0/d2:f1:00:4f:c2/00:00:00:00:00/00 tag 0 cdb 0x0 data 123392 in
+         res 50/00:f1:00:4f:c2/00:00:00:00:00/00 Emask 0x202 (HSM violation)
+ata1: soft resetting port
+ata1.00: configured for UDMA/100
+ata1: EH complete
+sd 0:0:0:0: [sda] 156301488 512-byte hardware sectors (80026 MB)
+sd 0:0:0:0: [sda] Write Protect is off
+sd 0:0:0:0: [sda] Mode Sense: 00 3a 00 00
+ata1.00: exception Emask 0x0 SAct 0x0 SErr 0x0 action 0x2 frozen
+ata1.00: cmd b0/db:f8:00:4f:c2/00:00:00:00:00/00 tag 0 cdb 0x0 data 126976 in
+         res 50/00:f8:00:4f:c2/00:00:00:00:00/00 Emask 0x202 (HSM violation)
+ata1: soft resetting port
+ata1.00: configured for UDMA/100
+ata1: EH complete
+ata1.00: exception Emask 0x0 SAct 0x0 SErr 0x0 action 0x2 frozen
+ata1.00: cmd b0/db:f8:00:4f:c2/00:00:00:00:00/00 tag 0 cdb 0x0 data 126976 in
+         res 50/00:f8:00:4f:c2/00:00:00:00:00/00 Emask 0x202 (HSM violation)
+ata1: soft resetting port
+ata1.00: configured for UDMA/100
+ata1: EH complete
+ata1.00: exception Emask 0x0 SAct 0x0 SErr 0x0 action 0x2 frozen
+ata1.00: cmd b0/db:f8:00:4f:c2/00:00:00:00:00/00 tag 0 cdb 0x0 data 126976 in
+         res 50/00:f8:00:4f:c2/00:00:00:00:00/00 Emask 0x202 (HSM violation)
+ata1: soft resetting port
+ata1.00: configured for UDMA/100
+ata1: EH complete
+ata1.00: exception Emask 0x0 SAct 0x0 SErr 0x0 action 0x2 frozen
+ata1.00: cmd b0/db:f8:00:4f:c2/00:00:00:00:00/00 tag 0 cdb 0x0 data 126976 in
+         res 50/00:f8:00:4f:c2/00:00:00:00:00/00 Emask 0x202 (HSM violation)
+ata1: soft resetting port
+ata1.00: configured for UDMA/100
+ata1: EH complete
+ata1.00: exception Emask 0x0 SAct 0x0 SErr 0x0 action 0x2 frozen
+ata1.00: cmd b0/db:f8:00:4f:c2/00:00:00:00:00/00 tag 0 cdb 0x0 data 126976 in
+         res 50/00:f8:00:4f:c2/00:00:00:00:00/00 Emask 0x202 (HSM violation)
+ata1: soft resetting port
+ata1.00: configured for UDMA/100
+ata1: EH complete
+ata1.00: exception Emask 0x0 SAct 0x0 SErr 0x0 action 0x2 frozen
+ata1.00: cmd b0/db:f8:00:4f:c2/00:00:00:00:00/00 tag 0 cdb 0x0 data 126976 in
+         res 50/00:f8:00:4f:c2/00:00:00:00:00/00 Emask 0x202 (HSM violation)
+ata1: soft resetting port
+ata1.00: configured for UDMA/100
+ata1: EH complete
+sd 0:0:0:0: [sda] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+sd 0:0:0:0: [sda] 156301488 512-byte hardware sectors (80026 MB)
+sd 0:0:0:0: [sda] Write Protect is off
+sd 0:0:0:0: [sda] Mode Sense: 00 3a 00 00
+[drm] Setting GART location based on new memory map
+[drm] Loading R300 Microcode
+[drm] writeback test succeeded in 1 usecs
+sd 0:0:0:0: [sda] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+eth0: no IPv6 routers present
+eth1: no IPv6 routers present
+process `host' is using obsolete setsockopt SO_BSDCOMPAT
+ipw2200: Failed to send ASSOCIATE: Already sending a command.
+ipw2200: Failed to send ASSOCIATE: Already sending a command.
+ipw2200: Failed to send ASSOCIATE: Already sending a command.
+ipw2200: Failed to send ASSOCIATE: Already sending a command.
+ipw2200: Firmware error detected.  Restarting.
+ipw2200: Failed to send SYSTEM_CONFIG: Already sending a command.
+ipw2200: Failed to send SYSTEM_CONFIG: Already sending a command.
+ipw2200: Failed to send ASSOCIATE: Already sending a command.
+ipw2200: Failed to send ASSOCIATE: Already sending a command.
+ipw2200: Failed to send ASSOCIATE: Already sending a command.
+ipw2200: Failed to send ASSOCIATE: Already sending a command.
+ipw2200: Failed to send ASSOCIATE: Already sending a command.
+ipw2200: Failed to send ASSOCIATE: Already sending a command.
+ipw2200: Failed to send ASSOCIATE: Already sending a command.
+ipw2200: Failed to send ASSOCIATE: Already sending a command.
+ipw2200: Failed to send ASSOCIATE: Already sending a command.
+ipw2200: Failed to send ASSOCIATE: Already sending a command.

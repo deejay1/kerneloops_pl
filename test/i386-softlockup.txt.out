@@ -1,0 +1,22 @@
+Starting kerneloops in debug mode
+Scanning test/i386-softlockup.txt
+Found start of oops at line 170
+    start line is -BUG: soft lockup detected on CPU#0!-
+Submit text is:
+---[start of oops]---
+BUG: soft lockup detected on CPU#0!
+ [<c014e31b>] softlockup_tick+0xbb/0x100
+ [<c01290e2>] update_process_times+0x32/0x80
+ [<c013c5bf>] tick_sched_timer+0x7f/0x110
+ [<c013c540>] tick_sched_timer+0x0/0x110
+ [<c013749f>] hrtimer_interrupt+0x17f/0x210
+ [<c013c540>] tick_sched_timer+0x0/0x110
+ [<c013b933>] tick_do_broadcast+0x43/0x50
+ [<c013be18>] tick_handle_oneshot_broadcast+0x58/0xd0
+ [<c0107244>] timer_interrupt+0x14/0x50
+ [<c014e685>] handle_IRQ_event+0x25/0x60
+ [<c015027f>] handle_edge_irq+0xbf/0x170
+ [<c0106265>] do_IRQ+0x45/0x80
+ [<c0104b2f>] common_interrupt+0x23/0x28
+
+---[end of oops]---
