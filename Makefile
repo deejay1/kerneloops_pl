@@ -51,7 +51,7 @@ install: kerneloops kerneloops-applet kerneloops.1.gz
 	install -m 0755 kerneloops $(DESTDIR)/usr/sbin
 	install -m 0755 kerneloops-applet $(DESTDIR)$(BINDIR)
 	install -m 0644 kerneloops.conf $(DESTDIR)/etc/kerneloops.conf
-	desktop-file-install -m 0644 --vendor="kerneloops.org" --dir=$(DESTDIR)/etc/xdg/autostart/ kerneloops-applet.desktop
+	desktop-file-install -m 0644 --dir=$(DESTDIR)/etc/xdg/autostart/ kerneloops-applet.desktop
 	install -m 0755 kerneloops.dbus $(DESTDIR)/etc/dbus-1/system.d/
 	install -m 0755 kerneloops.1.gz $(DESTDIR)$(MANDIR)
 	install -m 0755 icon.png $(DESTDIR)/usr/share/kerneloops/icon.png
