@@ -40,8 +40,8 @@ make CFLAGS="$RPM_OPT_FLAGS" %{?_smp_mflags}
 %install
 rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
-mkdir -m 0755 -p $RPM_BUILD_ROOT%{_sysconfdir}/init.d
-install -p -m 0755 kerneloops.init $RPM_BUILD_ROOT%{_sysconfdir}/init.d/kerneloops
+mkdir -m 0755 -p $RPM_BUILD_ROOT%{_initrddir}
+install -p -m 0755 kerneloops.init $RPM_BUILD_ROOT%{_initrddir}/kerneloops
 %find_lang %{name}
 desktop-file-install --vendor="kerneloops.org" --dir=$RPM_BUILD_ROOT/etc/xdg/autostart/ $RPM_BUILD_ROOT/etc/xdg/autostart/
 
@@ -66,12 +66,12 @@ fi
 %doc COPYING Changelog
 %{_sbindir}/%{name}
 %config(noreplace) %{_sysconfdir}/kerneloops.conf
-%{_sysconfdir}/init.d/kerneloops
+%{_initrddir}/kerneloops
 %{_sysconfdir}/dbus-1/system.d/kerneloops.dbus
 %{_sysconfdir}/xdg/autostart/kerneloops-applet.desktop
-/usr/share/kerneloops/
+%{_datadir}/kerneloops/
 %{_bindir}/kerneloops-applet
-/usr/share/man/man8/kerneloops.1.gz
+%{_mandir}/man8/kerneloops.1.gz
 
 %changelog
 * Tue Jan 1 2008 Arjan van de Ven <arjan@linux.intel.com> - 0.9-1
