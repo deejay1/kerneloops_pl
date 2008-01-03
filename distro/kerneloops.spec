@@ -14,6 +14,7 @@ BuildRequires:  curl-devel
 BuildRequires:	libnotify-devel
 BuildRequires:  gtk2-devel
 BuildRequires:  dbus-glib-devel
+BuildRequires:  gettext
 Requires(post): chkconfig
 Requires(preun): chkconfig, initscripts
 Requires(postun): initscripts
@@ -40,6 +41,7 @@ rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
 mkdir -m 0755 -p $RPM_BUILD_ROOT%{_sysconfdir}/init.d
 install -p -m 0755 kerneloops.init $RPM_BUILD_ROOT%{_sysconfdir}/init.d/kerneloops
+%find_lang %{name}
 
 %clean
 make clean
@@ -57,7 +59,7 @@ if [ "$1" = "1" ]; then
 fi
 
 
-%files
+%files -f %{name}.lang
 %defattr(-,root,root)
 %doc COPYING Changelog
 %{_sbindir}/%{name}
@@ -65,10 +67,10 @@ fi
 %{_sysconfdir}/init.d/kerneloops
 /etc/dbus-1/system.d/kerneloops.dbus
 /etc/xdg/autostart/kerneloops-applet.desktop
+/usr/share/kerneloops/
 /usr/share/kerneloops/icon.png
 /usr/bin/kerneloops-applet
-/usr/share/locale
-/usr/share/man/man8
+/usr/share/man/man8/kerneloops.1.gz
 
 %changelog
 * Tue Jan 1 2008 Arjan van de Ven <arjan@linux.intel.com> - 0.9-1
