@@ -43,7 +43,7 @@ make install DESTDIR=$RPM_BUILD_ROOT
 mkdir -m 0755 -p $RPM_BUILD_ROOT%{_initrddir}
 install -p -m 0755 kerneloops.init $RPM_BUILD_ROOT%{_initrddir}/kerneloops
 %find_lang %{name}
-desktop-file-install --vendor="kerneloops.org" --dir=$RPM_BUILD_ROOT/etc/xdg/autostart/ $RPM_BUILD_ROOT/etc/xdg/autostart/
+desktop-file-install --vendor="kerneloops.org" --dir=$RPM_BUILD_ROOT/etc/xdg/autostart/ $RPM_BUILD_ROOT/etc/xdg/autostart/kerneloops-applet.desktop
 
 %clean
 make clean
