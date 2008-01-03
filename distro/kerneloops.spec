@@ -1,24 +1,24 @@
-Name:           kerneloops
-Version:        0.9
-Release:        1%{?dist}
-Summary:        Tool to automatically collect and submit kernel crash signatures
+Name:		kerneloops
+Version:	0.9
+Release:	1%{?dist}
+Summary:	Tool to automatically collect and submit kernel crash signatures
 
-Group:          System Environment/Base
-License:        GPLv2
-URL:            http://www.kerneloops.org
-Source0:        http://www.kerneloops.org/download/%{name}-%{version}.tar.gz
+Group:		System Environment/Base
+License:	GPLv2
+URL:		http://www.kerneloops.org
+Source0:	http://www.kerneloops.org/download/%{name}-%{version}.tar.gz
 
-BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
+BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 
-BuildRequires:  curl-devel
+BuildRequires:	curl-devel
 BuildRequires:	libnotify-devel
-BuildRequires:  gtk2-devel
-BuildRequires:  dbus-glib-devel
-BuildRequires:  gettext
-BuildRequires:  desktop-file-utils
-Requires(post): chkconfig
-Requires(preun): chkconfig, initscripts
-Requires(postun): initscripts
+BuildRequires:	gtk2-devel
+BuildRequires:	dbus-glib-devel
+BuildRequires:	gettext
+BuildRequires:	desktop-file-utils
+Requires(post):	chkconfig
+Requires(preun):	chkconfig, initscripts
+Requires(postun):	initscripts
 
 %description
 This package contains the tools to collect kernel crash signatures,

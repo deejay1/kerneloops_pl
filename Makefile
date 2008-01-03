@@ -34,7 +34,7 @@ kerneloops-applet: kerneloops-applet.o
 	gcc kerneloops-applet.o $(LDF_A)-o kerneloops-applet
 
 kerneloops.1.gz: kerneloops.1
-	gzip -c $< > $@
+	gzip -9 -c $< > $@
 
 clean:
 	rm -f *~ *.o *.ko DEADJOE kerneloops kerneloops-applet *.out */*~ kerneloops.1.gz
