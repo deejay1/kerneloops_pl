@@ -9,7 +9,7 @@ LOCALESDIR=/usr/share/locale
 MANDIR=/usr/share/man/man8
 CC?=gcc
 
-CFLAGS := -O2 -g -fstack-protector-all -D_FORTIFY_SOURCE=2 -Wall -W -Wstrict-prototypes -Wundef -fno-common -Werror-implicit-function-declaration -Wdeclaration-after-statement
+CFLAGS := -O2 -g -fstack-protector -D_FORTIFY_SOURCE=2 -Wall -W -Wstrict-prototypes -Wundef -fno-common -Werror-implicit-function-declaration -Wdeclaration-after-statement
 
 MY_CFLAGS := `pkg-config --cflags libnotify gtk+-2.0`
 #
@@ -45,7 +45,7 @@ dist: clean
 
 
 install: kerneloops kerneloops-applet kerneloops.1.gz
-	mkdir -p $(DESTDIR)/usr/sbin/ $(DESTDIR)/etc/xdg/autostart m
+	mkdir -p $(DESTDIR)/usr/sbin/ $(DESTDIR)/etc/xdg/autostart
 	mkdir -p $(DESTDIR)/usr/share/kerneloops $(DESTDIR)/etc/dbus-1/system.d/
 	mkdir -p $(DESTDIR)$(BINDIR) $(DESTDIR)$(MANDIR)
 	install -m 0755 kerneloops $(DESTDIR)/usr/sbin

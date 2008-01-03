@@ -23,7 +23,7 @@ Requires(postun): initscripts
 %description
 This package contains the tools to collect kernel crash signatures,
 and to submit them to the kerneloops.org website where the kernel
-crash signatures get collected and groups for presentation to the
+crash signatures get collected and grouped for presentation to the
 Linux kernel developers.
 
 
