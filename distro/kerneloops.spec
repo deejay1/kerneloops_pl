@@ -41,9 +41,9 @@ make CFLAGS="$RPM_OPT_FLAGS" %{?_smp_mflags}
 rm -rf $RPM_BUILD_ROOT
 make install DESTDIR=$RPM_BUILD_ROOT
 mkdir -m 0755 -p $RPM_BUILD_ROOT%{_initrddir}
-install -p -m 0755 kerneloops.init $RPM_BUILD_ROOT%{_initrddir}/kerneloops
+install -p -m 0755 kerneloops.init $RPM_BUILD_ROOT%{_initrddir}/%{name}
 %find_lang %{name}
-desktop-file-install --vendor="kerneloops.org" --dir=$RPM_BUILD_ROOT/etc/xdg/autostart/ $RPM_BUILD_ROOT/etc/xdg/autostart/kerneloops-applet.desktop
+desktop-file-install --vendor="kerneloops.org" --dir=$RPM_BUILD_ROOT/etc/xdg/autostart/ $RPM_BUILD_ROOT/%{_sysconfdir}/xdg/autostart/kerneloops-applet.desktop
 
 %clean
 make clean
@@ -51,13 +51,13 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 if [ "$1" = "1"  ]; then
-        /sbin/chkconfig --add kerneloops
+        /sbin/chkconfig --add %{name}
 fi
 
 %preun
 if [ "$1" = "1" ]; then
-        /sbin/service kerneloops stop > /dev/null 2>&1
-        /sbin/chkconfig --del kerneloops
+        /sbin/service %{name} stop > /dev/null 2>&1
+        /sbin/chkconfig --del %{name}
 fi
 
 
@@ -66,7 +66,7 @@ fi
 %doc COPYING Changelog
 %{_sbindir}/%{name}
 %config(noreplace) %{_sysconfdir}/kerneloops.conf
-%{_initrddir}/kerneloops
+%{_initrddir}/%{name}
 %{_sysconfdir}/dbus-1/system.d/kerneloops.dbus
 %{_sysconfdir}/xdg/autostart/kerneloops-applet.desktop
 %{_datadir}/kerneloops/
