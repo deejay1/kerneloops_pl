@@ -65,11 +65,10 @@ fi
 %{_sbindir}/%{name}
 %config(noreplace) %{_sysconfdir}/kerneloops.conf
 %{_sysconfdir}/init.d/kerneloops
-/etc/dbus-1/system.d/kerneloops.dbus
-/etc/xdg/autostart/kerneloops-applet.desktop
+%{_sysconfdir}/dbus-1/system.d/kerneloops.dbus
+%{_sysconfdir}/xdg/autostart/kerneloops-applet.desktop
 /usr/share/kerneloops/
-/usr/share/kerneloops/icon.png
-/usr/bin/kerneloops-applet
+%{_bindir}/kerneloops-applet
 /usr/share/man/man8/kerneloops.1.gz
 
 %changelog
