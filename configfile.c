@@ -34,15 +34,15 @@
    1 =  Ask
    2 =  Yes
  */
-int opted_in = 0; 
-int allow_distro_to_pass_on = 0;
-char *submit_url; 
+int opted_in;
+int allow_distro_to_pass_on;
+char *submit_url;
 
 
 void read_config_file(char *filename)
 {
 	FILE *file;
-	char *line = NULL;	
+	char *line = NULL;
 	size_t dummy;
 	file = fopen(filename, "r");
 	if (!file)
@@ -50,7 +50,7 @@ void read_config_file(char *filename)
 	while (!feof(file)) {
 		char *c;
 		line = NULL;
-		if (getline(&line, &dummy, file)<=0) {
+		if (getline(&line, &dummy, file) <= 0) {
 			free(line);
 			break;
 		}
@@ -58,24 +58,24 @@ void read_config_file(char *filename)
 			free(line);
 			continue;
 		}
-		c = strstr(line,"allow-submit ");
+		c = strstr(line, "allow-submit ");
 		if (c) {
-			c+=13;
-			if (strstr(c,"yes"))
+			c += 13;
+			if (strstr(c, "yes"))
 				opted_in = 2;
-			if (strstr(c,"ask"))
+			if (strstr(c, "ask"))
 				opted_in = 1;
 		}
-		c = strstr(line,"allow-pass-on ");
+		c = strstr(line, "allow-pass-on ");
 		if (c) {
-			c+=14;
-			if (strstr(c,"yes"))
+			c += 14;
+			if (strstr(c, "yes"))
 				allow_distro_to_pass_on = 1;
 		}
-		c = strstr(line,"submit-url ");
+		c = strstr(line, "submit-url ");
 		if (c) {
-			c+=11;
-			c=strstr(c,"http:");
+			c += 11;
+			c = strstr(c, "http:");
 			if (c)
 				submit_url = strdup(c);
 		}

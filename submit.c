@@ -36,7 +36,7 @@
 #include "kerneloops.h"
 
 
-/* 
+/*
  * we keep track of 16 checksums of the last submitted oopses; this allows us to
  * make sure we don't submit the same oops twice (this allows us to not have to do
  * really expensive things during non-destructive dmesg-scanning)
@@ -45,9 +45,9 @@
  * it's important that this is bounded to avoid feedback loops
  * for the scenario where submitting an oopses causes a warning/oops
  */
-#define MAX_CHECKSUMS 16 
+#define MAX_CHECKSUMS 16
 static unsigned int checksums[MAX_CHECKSUMS];
-static int submitted = 0;
+static int submitted;
 
 struct oops;
 
@@ -59,7 +59,7 @@ struct oops {
 
 /* we queue up oopses, and then submit in a batch.
  * This is useful to be able to cancel all submissions, in case
- * we later find our marker indicating we submitted everything so far already 
+ * we later find our marker indicating we submitted everything so far already
  * previously.
  */
 static struct oops *queued_oopses;
@@ -79,7 +79,7 @@ static unsigned int checksum(char *ptr)
 }
 
 void queue_oops(char *oops)
-{	
+{
 	int i;
 	unsigned int sum;
 	struct oops *new;
@@ -88,7 +88,7 @@ void queue_oops(char *oops)
 		return;
 	/* first, check if we haven't already submitted the oops */
 	sum = checksum(oops);
-	for (i=0; i<submitted; i++) {
+	for (i = 0; i < submitted; i++) {
 		if (checksums[i] == sum) {
 			printf("Match with oops %i (%x)\n", i, sum);
 			return;
@@ -107,7 +107,7 @@ void queue_oops(char *oops)
 
 
 static void print_queue(void)
-{	
+{
 	struct oops *oops;
 	struct oops *queue;
 	int count = 0;
@@ -119,7 +119,7 @@ static void print_queue(void)
 	while (oops) {
 		struct oops *next;
 
-		printf("Submit text is:\n---[start of oops]---\n%s\n---[end of oops]---\n", oops->text);	
+		printf("Submit text is:\n---[start of oops]---\n%s\n---[end of oops]---\n", oops->text);
 		next = oops->next;
 		free(oops->text);
 		free(oops);
@@ -132,7 +132,7 @@ static void print_queue(void)
 
 
 void submit_queue(void)
-{	
+{
 	int result;
 	struct oops *oops;
 	struct oops *queue;
@@ -149,19 +149,19 @@ void submit_queue(void)
 	oops = queue;
 	while (oops) {
 		CURL *handle;
-		struct curl_httppost *post=NULL;
-		struct curl_httppost *last=NULL;
+		struct curl_httppost *post = NULL;
+		struct curl_httppost *last = NULL;
 		struct oops *next;
 
-	
-		handle = curl_easy_init( );
+
+		handle = curl_easy_init();
 		curl_easy_setopt(handle, CURLOPT_URL, submit_url);
 
-		/* set up the POST data */		
+		/* set up the POST data */
 		curl_formadd(&post, &last,
 			CURLFORM_COPYNAME, "oopsdata",
 			CURLFORM_COPYCONTENTS, oops->text, CURLFORM_END);
-	
+
 		if (allow_distro_to_pass_on) {
 			curl_formadd(&post, &last,
 				CURLFORM_COPYNAME, "pass_on_allowed",
@@ -169,7 +169,7 @@ void submit_queue(void)
 		}
 
 		curl_easy_setopt(handle, CURLOPT_HTTPPOST, post);
-		result = curl_easy_perform(handle); 
+		result = curl_easy_perform(handle);
 
 		curl_formfree(post);
 		curl_easy_cleanup(handle);
@@ -196,10 +196,10 @@ void submit_queue(void)
 }
 
 void clear_queue(void)
-{	
+{
 	struct oops *oops, *next;
 	struct oops *queue;
-	
+
 	queue = queued_oopses;
 	queued_oopses = NULL;
 	barrier();

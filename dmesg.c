@@ -26,6 +26,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <assert.h>
 
 #include <asm/unistd.h>
 #include <sys/types.h>
@@ -34,15 +35,15 @@
 #include "kerneloops.h"
 
 
-static char** linepointer;
+static char **linepointer;
 
-static char * linelevel;
+static char *linelevel;
 static int linecount;
 
 
-/* 
+/*
  * This function splits the dmesg buffer data into lines
- * (null terminated). The linepointer array is assumed to be 
+ * (null terminated). The linepointer array is assumed to be
  * allocated already.
  */
 static void fill_linepointers(char *buffer, int remove_syslog)
@@ -59,42 +60,46 @@ static void fill_linepointers(char *buffer, int remove_syslog)
 			if (!c2)
 				c2 = strstr(c, "kerneloops:");
 			if (!c2) {
-				c2 = strchr(c,'\n');
+				c2 = strchr(c, '\n');
 				if (c2) {
 					c = c2+1;
 					continue;
 				} else
 					break;
-				
 			}
 			c = strchr(c, ':');
-			if (!c) break;
+			if (!c)
+				break;
 			c++;
 			c = strchr(c, ':');
-			if (!c) break;
+			if (!c)
+				break;
 			c++;
 			c = strchr(c, ':');
-			if (!c) break;
+			if (!c)
+				break;
 			c++;
-			if (*c) c++;
+			if (*c)
+				c++;
 		}
 
 		linepointer[linecount] = c;
 		linelevel[linecount] = 0;
 		/* store and remove kernel log level */
-		if (*c=='<' && *(c+2)=='>') {
+		if (*c == '<' && *(c+2) == '>') {
 			linelevel[linecount] = *(c+1);
 			c = c + 3;
 			linepointer[linecount] = c;
 		}
 		/* remove jiffies time stamp counter if present */
-		if (*c =='[') {
+		if (*c == '[') {
 			char *c2, *c3;
-			c2 = strchr(c,'.');
-			c3 = strchr(c,']');
-			if (c2 && c3 && (c2<c3) && (c3-c)<14 && (c2-c)<8) {
+			c2 = strchr(c, '.');
+			c3 = strchr(c, ']');
+			if (c2 && c3 && (c2 < c3) && (c3-c) < 14 && (c2-c) < 8) {
 				c = c3+1;
-				if (*c==' ') c++;
+				if (*c == ' ')
+					c++;
 				linepointer[linecount] = c;
 			}
 		}
@@ -104,7 +109,6 @@ static void fill_linepointers(char *buffer, int remove_syslog)
 			*c = 0;
 			c = c+1;
 		}
-//		printf("Line is -%s-\n", linepointer[linecount]);
 
 		/* if we see our own marker, we know we submitted everything upto here already */
 		if (strstr(linepointer[linecount], "www.kerneloops.org")) {
@@ -117,7 +121,7 @@ static void fill_linepointers(char *buffer, int remove_syslog)
 
 
 /*
- * extract_oops tries to find oops signatures in a log 
+ * extract_oops tries to find oops signatures in a log
  */
 static void extract_oops(char *buffer, int remove_syslog)
 {
@@ -128,10 +132,10 @@ static void extract_oops(char *buffer, int remove_syslog)
 	int inbacktrace = 0;
 
 	linepointer = calloc(strlen(buffer), sizeof(char*));
-	if (linepointer==NULL)
+	if (!linepointer)
 		return;
 	linelevel = calloc(strlen(buffer), sizeof(char)+1);
-	if (linelevel==NULL) {
+	if (!linelevel) {
 		free(linepointer);
 		linepointer = NULL;
 		return;
@@ -143,11 +147,12 @@ static void extract_oops(char *buffer, int remove_syslog)
 
 	i = 0;
 	while (i < linecount) {
-		if (linepointer[i]==NULL) {
+		if (linepointer[i] == NULL) {
 			i++;
 			continue;
 		}
-		if (oopsstart < 0) { /* find start-of-oops markers */
+		if (oopsstart < 0) {
+			/* find start-of-oops markers */
 			if (strstr(linepointer[i], "general protection fault:"))
 				oopsstart = i;
 			if (strstr(linepointer[i], "BUG:"))
@@ -166,14 +171,14 @@ static void extract_oops(char *buffer, int remove_syslog)
 				oopsstart = i;
 			if (strstr(linepointer[i], "------------[ cut here ]------------"))
 				oopsstart = i;
-			if (strstr(linepointer[i], "Modules linked in:") && i>=4)
+			if (strstr(linepointer[i], "Modules linked in:") && i >= 4)
 				oopsstart = i-4;
-			if (strstr(linepointer[i], "Oops:") && i>=3)
+			if (strstr(linepointer[i], "Oops:") && i >= 3)
 				oopsstart = i-3;
-			if (oopsstart>=0 && testmode) {
+			if (oopsstart >= 0 && testmode) {
 				printf("Found start of oops at line %i\n", oopsstart);
 				printf("    start line is -%s-\n", linepointer[oopsstart]);
-				if (oopsstart!=i)
+				if (oopsstart != i)
 					printf("    trigger line is -%s-\n", linepointer[i]);
 			}
 			/* give the kernel some time to finish dumping the oops */
@@ -186,8 +191,8 @@ static void extract_oops(char *buffer, int remove_syslog)
 				int i2;
 				i2 = i+1;
 				while (i2 < linecount && i2 < (i+50)) {
-					if (strstr(linepointer[i2],"---[ end trace")) {
-						inbacktrace=1;
+					if (strstr(linepointer[i2], "---[ end trace")) {
+						inbacktrace = 1;
 						i = i2;
 						break;
 					}
@@ -197,111 +202,112 @@ static void extract_oops(char *buffer, int remove_syslog)
 		}
 
 		/* a calltrace starts with "Call Trace:" or with the " [<.......>] function+0xFF/0xAA" pattern */
-		if (oopsstart >=0 && strstr(linepointer[i], "Call Trace:"))
+		if (oopsstart >= 0 && strstr(linepointer[i], "Call Trace:"))
 			inbacktrace = 1;
 
-		else if (oopsstart >=0 && inbacktrace == 0 && strlen(linepointer[i])>8) {
+		else if (oopsstart >= 0 && inbacktrace == 0 && strlen(linepointer[i]) > 8) {
 			char *c1, *c2, *c3;
 			c1 = strstr(linepointer[i], ">]");
 			c2 = strstr(linepointer[i], "+0x");
 			c3 = strstr(linepointer[i], "/0x");
-			if (linepointer[i][0] == ' ' && linepointer[i][1]=='[' && linepointer[i][2]=='<' && c1 && c2 && c3)
+			if (linepointer[i][0] == ' ' && linepointer[i][1] == '[' && linepointer[i][2] == '<' && c1 && c2 && c3)
 				inbacktrace = 1;
 		} else
 
 		/* try to see if we're at the end of an oops */
 
-		if (oopsstart>=0 && inbacktrace>0) {
-			char c2,c3;
+		if (oopsstart >= 0 && inbacktrace > 0) {
+			char c2, c3;
 			c2 = linepointer[i][0];
 			c3 = linepointer[i][1];
 
 			/* line needs to start with " [" or have "] ["*/
-			if ((c2 != ' ' || c3 != '[') && 
-				strstr(linepointer[i],"] [")==NULL && 
-				strstr(linepointer[i],"--- Exception")==NULL &&
-				strstr(linepointer[i],"    LR =")==NULL &&
-				strstr(linepointer[i],"<#DF>")==NULL &&
-				strstr(linepointer[i],"<<EOE>>")==NULL )
+			if ((c2 != ' ' || c3 != '[') &&
+				strstr(linepointer[i], "] [") == NULL &&
+				strstr(linepointer[i], "--- Exception") == NULL &&
+				strstr(linepointer[i], "    LR =") == NULL &&
+				strstr(linepointer[i], "<#DF>") == NULL &&
+				strstr(linepointer[i], "<<EOE>>") == NULL)
 				oopsend = i-1;
-				
+
 			/* oops lines are always more than 8 long */
-			if (strlen(linepointer[i])<8)
+			if (strlen(linepointer[i]) < 8)
 				oopsend = i-1;
 			/* single oopses are of the same loglevel */
 			if (linelevel[i] != prevlevel)
 				oopsend = i-1;
-			/* The Code: line means we're done with the backtrace */	
-			if (strstr(linepointer[i], "Code:")!=NULL)
+			/* The Code: line means we're done with the backtrace */
+			if (strstr(linepointer[i], "Code:") != NULL)
 				oopsend = i-1;
-			if (strstr(linepointer[i], "Instruction dump::")!=NULL)
+			if (strstr(linepointer[i], "Instruction dump::") != NULL)
 				oopsend = i-1;
 			/* if a new oops starts, this one has ended */
-			if (strstr(linepointer[i], "WARNING:")!=NULL && oopsstart!=i)
+			if (strstr(linepointer[i], "WARNING:") != NULL && oopsstart != i)
 				oopsend = i-1;
-			if (strstr(linepointer[i], "Unable to handle")!=NULL && oopsstart!=i)
+			if (strstr(linepointer[i], "Unable to handle") != NULL && oopsstart != i)
 				oopsend = i-1;
 			/* kernel end-of-oops marker */
-			if (strstr(linepointer[i], "---[ end trace")!=NULL)
+			if (strstr(linepointer[i], "---[ end trace") != NULL)
 				oopsend = i;
-				
+
 			if (oopsend <= i) {
 				int q;
 				int len;
 				char *oops;
 
 				len = 2;
-				for (q=oopsstart; q<=oopsend; q++) 
+				for (q = oopsstart; q <= oopsend; q++)
 					len += strlen(linepointer[q])+1;
-				
+
 				oops = calloc(len, 1);
 
-				for (q=oopsstart; q<=oopsend; q++) {
+				for (q = oopsstart; q <= oopsend; q++) {
 					strcat(oops, linepointer[q]);
 					strcat(oops, "\n");
 				}
 				/* too short oopses are invalid */
-				if (strlen(oops)>100)
+				if (strlen(oops) > 100)
 					queue_oops(oops);
 				oopsstart = -1;
 				inbacktrace = 0;
-				oopsend=linecount;
+				oopsend = linecount;
 				free(oops);
 			}
 		}
 		prevlevel = linelevel[i];
 		i++;
-		if (oopsstart>0 && i-oopsstart>50) {
+		if (oopsstart > 0 && i-oopsstart > 50) {
 			oopsstart = -1;
 			inbacktrace = 0;
-			oopsend=linecount;
+			oopsend = linecount;
 		}
-		if (oopsstart>0 && !inbacktrace && i-oopsstart>30) {
+		if (oopsstart > 0 && !inbacktrace && i-oopsstart > 30) {
 			oopsstart = -1;
 			inbacktrace = 0;
-			oopsend=linecount;
+			oopsend = linecount;
 		}
 	}
-	if (oopsstart>=0)  {
+	if (oopsstart >= 0)  {
 		char *oops;
 		int len;
 		int q;
-		
+
 		oopsend = i-1;
 
 		len = 2;
-		while (oopsend>0 && linepointer[oopsend]==NULL) oopsend--;
-		for (q=oopsstart; q<=oopsend; q++) 
+		while (oopsend > 0 && linepointer[oopsend] == NULL)
+			oopsend--;
+		for (q = oopsstart; q <= oopsend; q++)
 			len += strlen(linepointer[q])+1;
-				
+
 		oops = calloc(len, 1);
 
-		for (q=oopsstart; q<=oopsend; q++) {	
+		for (q = oopsstart; q <= oopsend; q++) {
 			strcat(oops, linepointer[q]);
 			strcat(oops, "\n");
 		}
 		/* too short oopses are invalid */
-		if (strlen(oops)>100)
+		if (strlen(oops) > 100)
 			queue_oops(oops);
 		oopsstart = -1;
 		inbacktrace = 0;
@@ -316,7 +322,6 @@ static void extract_oops(char *buffer, int remove_syslog)
 
 int scan_dmesg(void __unused *unused)
 {
-	
 	char *buffer;
 
 	buffer = calloc(getpagesize()+1, 1);
@@ -342,16 +347,18 @@ void scan_filename(char *filename, int issyslog)
 
 	ret = stat(filename, &statb);
 
-	if (statb.st_size<1 || ret!=0)
+	if (statb.st_size < 1 || ret != 0)
 		return;
 
-	/* 
+	/*
 	 * in theory there's a race here, since someone could spew
 	 * to /var/log/messages before we read it in... we try to
 	 * deal with it by reading at most 1023 bytes extra. If there's
 	 * more than that.. any oops will be in dmesg anyway
 	 */
-	buffer = calloc(statb.st_size+1024,1);
+	buffer = calloc(statb.st_size+1024, 1);
+	assert(buffer != NULL);
+
 	file = fopen(filename, "rm");
 	if (!file) {
 		free(buffer);

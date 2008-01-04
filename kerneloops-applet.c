@@ -49,37 +49,38 @@
 
 static DBusConnection *bus;
 
-static GtkStatusIcon *statusicon = NULL;
+static GtkStatusIcon *statusicon;
 
 
-static NotifyNotification *notify = NULL;
+static NotifyNotification *notify;
 
 #define __unused  __attribute__ ((__unused__))
 
 
 /* 0 = ask
    positive = always
-   negative = never 
+   negative = never
  */
-static int user_preference = 0;
 
+
+int user_preference;
 
 static void write_config(char *permission)
 {
 	FILE *file;
 	char filename[2*PATH_MAX];
 
-	sprintf(filename, "%s/.kerneloops",getenv("HOME"));
-	file = fopen(filename,"w");
+	sprintf(filename, "%s/.kerneloops", getenv("HOME"));
+	file = fopen(filename, "w");
 	if (!file) {
 		printf("error is %s \n", strerror(errno));
 		return;
 	}
-	fprintf(file,"allow-submit = %s\n", permission);
+	fprintf(file, "allow-submit = %s\n", permission);
 	fclose(file);
 }
 
-/* 
+/*
  * send a dbus message to signal the users answer to the permission
  * question.
  */
@@ -106,7 +107,7 @@ static void close_notification(void)
 
 
 /*
- * the notify_action_* functions get called when the user clicks on 
+ * the notify_action_* functions get called when the user clicks on
  * the respective buttons we put in the notification window.
  * user_data contains the string we pass, so "yes" "no" "always" or "never".
  */
@@ -116,9 +117,9 @@ static void notify_action(NotifyNotification __unused *notify,
 	char *answer = (char *) user_data;
 
 	send_permission(answer);
-	if (strcmp(answer, "always")==0)
+	if (strcmp(answer, "always") == 0)
 		write_config("alway");
-	if (strcmp(answer, "never")==0)
+	if (strcmp(answer, "never") == 0)
 		write_config("never");
 	gtk_status_icon_set_visible(statusicon, FALSE);
 }
@@ -203,7 +204,7 @@ static void sent_an_oops(void)
 
 /*
  * When we start up, the daemon may already have collected some oopses
- * so we send it a ping message to let it know someone is listening 
+ * so we send it a ping message to let it know someone is listening
  * now.
  */
 static void trigger_daemon(void)
@@ -217,7 +218,7 @@ static void trigger_daemon(void)
 
 /*
  * This function gets called if a dbus message arrives that we have
- * subscribed to. 
+ * subscribed to.
  */
 static DBusHandlerResult dbus_gotmessage(DBusConnection __unused *connection,
 		DBusMessage *message,
@@ -230,7 +231,7 @@ static DBusHandlerResult dbus_gotmessage(DBusConnection __unused *connection,
 		return DBUS_HANDLER_RESULT_HANDLED;
 	}
 	/* check if it's the daemon that asks for permission */
-	if (dbus_message_is_signal(message, 
+	if (dbus_message_is_signal(message,
 			"org.kerneloops.submit.permission", "ask")) {
 
 		if (user_preference > 0) {
@@ -247,7 +248,7 @@ static DBusHandlerResult dbus_gotmessage(DBusConnection __unused *connection,
 		return DBUS_HANDLER_RESULT_HANDLED;
 	}
 	/* check if it's the daemon that asks for permission */
-	if (dbus_message_is_signal(message, 
+	if (dbus_message_is_signal(message,
 			"org.kerneloops.submit.sent", "sent")) {
 
 		gtk_status_icon_set_visible(statusicon, TRUE);
@@ -259,7 +260,7 @@ static DBusHandlerResult dbus_gotmessage(DBusConnection __unused *connection,
 }
 
 /*
- * read the ~/.kerneloops config file to see if the user pressed 
+ * read the ~/.kerneloops config file to see if the user pressed
  * "always" or "never" before, and then honor that.
  */
 static void read_config(void)
@@ -269,20 +270,20 @@ static void read_config(void)
 	FILE *file;
 	char *line = NULL;
 	sprintf(filename, "%s/.kerneloops", getenv("HOME"));
-	file = fopen(filename,"r");
+	file = fopen(filename, "r");
 	if (!file)
 		return;
-	if (getline(&line, &dummy, file) <=0) {
+	if (getline(&line, &dummy, file) <= 0) {
 		free(line);
 		fclose(file);
 		return;
 	}
 	if (strstr(line, "always"))
-		user_preference = 1;	
+		user_preference = 1;
 	if (strstr(line, "never"))
-		user_preference = -1;	
+		user_preference = -1;
 	if (strstr(line, "ask"))
-		user_preference = 0;	
+		user_preference = 0;
 	free(line);
 	fclose(file);
 }
@@ -293,9 +294,9 @@ int main(int argc, char *argv[])
 	DBusError error;
 
 	/* Initialize translation stuff */
-	setlocale (LC_ALL, "");
-	bindtextdomain ("kerneloops", "/usr/share/locale");
-	textdomain ("kerneloops");
+	setlocale(LC_ALL, "");
+	bindtextdomain("kerneloops", "/usr/share/locale");
+	textdomain("kerneloops");
 
 
 	gtk_init(&argc, &argv);
@@ -303,7 +304,7 @@ int main(int argc, char *argv[])
 	/* read the config file early; we may be able to bug out of stuff */
 	read_config();
 
-	/* 
+	/*
 	 * initialize the dbus connection; we want to listen to the system
 	 * bus (which is where all daemons send their messages
 	 */
@@ -334,9 +335,9 @@ int main(int argc, char *argv[])
 	dbus_bus_add_match(bus, "type='signal',interface='org.kerneloops.submit.sent'", &error);
 	dbus_connection_add_filter(bus, dbus_gotmessage, NULL, NULL);
 
-	/* 
+	/*
 	 * if the user said always/never in the config file, let the daemon
-	 * know right away 
+	 * know right away
 	 */
 	if (user_preference < 0)
 		send_permission("never");
