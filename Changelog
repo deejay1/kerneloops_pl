@@ -1,3 +1,7 @@
+0.9 - Jan 03 2007
+	* Make the UI translatable
+	* Have the applet show a thank-you message on oops submission
+	* bunch of comments in the code
 0.8 - Dec 31th 2007
 	* Add kerneloops-applet, so that we can ask the user for permission
 0.7 - Dec 29th 2007
