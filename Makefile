@@ -41,7 +41,7 @@ clean:
 	@(cd po/ && $(MAKE) $@)
 
 dist: clean
-	rm -rf .git .gitignore push.sh .*~  */*~
+	rm -rf .git .gitignore push.sh .*~  */*~ test/*dbg
 
 
 install: kerneloops kerneloops-applet kerneloops.1.gz
