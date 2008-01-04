@@ -48,7 +48,7 @@
 
 #include "kerneloops.h"
 
-DBusConnection *bus;
+static DBusConnection *bus;
 
 int pinged = 0;
 

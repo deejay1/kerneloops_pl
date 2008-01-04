@@ -106,7 +106,7 @@ void queue_oops(char *oops)
 }
 
 
-void print_queue(void)
+static void print_queue(void)
 {	
 	struct oops *oops;
 	struct oops *queue;

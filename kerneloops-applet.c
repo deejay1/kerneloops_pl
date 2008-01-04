@@ -64,7 +64,7 @@ static NotifyNotification *notify = NULL;
 static int user_preference = 0;
 
 
-void write_config(char *permission)
+static void write_config(char *permission)
 {
 	FILE *file;
 	char filename[2*PATH_MAX];
