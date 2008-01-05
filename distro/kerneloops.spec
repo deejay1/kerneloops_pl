@@ -50,13 +50,13 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 if [ "$1" = "1"  ]; then
-        /sbin/chkconfig --add %{name}
+	/sbin/chkconfig --add %{name}
 fi
 
 %preun
 if [ "$1" = "1" ]; then
-        /sbin/service %{name} stop > /dev/null 2>&1
-        /sbin/chkconfig --del %{name}
+	/sbin/service %{name} stop > /dev/null 2>&1
+	/sbin/chkconfig --del %{name}
 fi
 
 
