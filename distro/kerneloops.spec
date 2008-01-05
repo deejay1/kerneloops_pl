@@ -1,5 +1,5 @@
 Name:		kerneloops
-Version:	0.9
+Version:	0.10
 Release:	1%{?dist}
 Summary:	Tool to automatically collect and submit kernel crash signatures
 
@@ -16,9 +16,8 @@ BuildRequires:	gtk2-devel
 BuildRequires:	dbus-glib-devel
 BuildRequires:	gettext
 BuildRequires:	desktop-file-utils
-Requires(post):	chkconfig
+Requires(post):		chkconfig
 Requires(preun):	chkconfig, initscripts
-Requires(postun):	initscripts
 
 %description
 This package contains the tools to collect kernel crash signatures,
@@ -34,8 +33,7 @@ Linux kernel developers.
 make CFLAGS="$RPM_OPT_FLAGS" %{?_smp_mflags}
 
 %check
-# re-enable when upstream fixes this
-# make tests
+make tests
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -49,12 +47,11 @@ make clean
 rm -rf $RPM_BUILD_ROOT
 
 %post
-if [ "$1" = "1"  ]; then
-	/sbin/chkconfig --add %{name}
-fi
+/sbin/chkconfig --add %{name}
+
 
 %preun
-if [ "$1" = "1" ]; then
+if [ $1 = 0 ]; then
 	/sbin/service %{name} stop > /dev/null 2>&1
 	/sbin/chkconfig --del %{name}
 fi
@@ -73,6 +70,8 @@ fi
 %{_mandir}/man8/kerneloops.1.gz
 
 %changelog
+* Sat Jan 5 2008 Arjan van de Ven <arjan@linux.intel.com> - 0.10-1
+- fix some bugs caught by the fedora review process
 * Tue Jan 1 2008 Arjan van de Ven <arjan@linux.intel.com> - 0.9-1
 - make translatable
 * Mon Dec 31 2007 Arjan van de Ven <arjan@linux.intel.com> - 0.8-1

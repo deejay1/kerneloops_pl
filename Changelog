@@ -1,4 +1,6 @@
-0.9 - Jan 03 2007
+0.10 - Jan 05 2008
+	* Fix some bugs found in the fedora package review process
+0.9 - Jan 03 2008
 	* Make the UI translatable
 	* Have the applet show a thank-you message on oops submission
 	* bunch of comments in the code
