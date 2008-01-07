@@ -230,6 +230,8 @@ static void extract_oops(char *buffer, int remove_syslog)
 				strstr(linepointer[i], "--- Exception") == NULL &&
 				strstr(linepointer[i], "    LR =") == NULL &&
 				strstr(linepointer[i], "<#DF>") == NULL &&
+				strstr(linepointer[i], "<IRQ>") == NULL &&
+				strstr(linepointer[i], "<EOI>") == NULL &&
 				strstr(linepointer[i], "<<EOE>>") == NULL)
 				oopsend = i-1;
 
