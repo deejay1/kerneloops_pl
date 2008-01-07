@@ -22,6 +22,8 @@ LDF_D := -Wl,--as-needed `pkg-config --libs glib-2.0 dbus-glib-1` `curl-config -
 
 all:	kerneloops kerneloops-applet kerneloops.1.gz
 
+noui:	kerneloops kerneloops.1.gz
+
 .c.o:
 	$(CC) $(CFLAGS) $(MY_CFLAGS) -c -o $@ $<
  
@@ -56,6 +58,16 @@ install: kerneloops kerneloops-applet kerneloops.1.gz
 	install -m 0644 kerneloops.1.gz $(DESTDIR)$(MANDIR)
 	install -m 0644 icon.png $(DESTDIR)/usr/share/kerneloops/icon.png
 	@(cd po/ && env LOCALESDIR=$(LOCALESDIR) DESTDIR=$(DESTDIR) $(MAKE) $@)
+
+install-noui: kerneloops kerneloops.1.gz
+	mkdir -p $(DESTDIR)/usr/share/kerneloops $(DESTDIR)/etc/dbus-1/system.d/
+	mkdir -p $(DESTDIR)$(BINDIR) $(DESTDIR)$(MANDIR)
+	install -m 0755 kerneloops $(DESTDIR)/usr/sbin
+	install -m 0644 kerneloops.conf $(DESTDIR)/etc/kerneloops.conf
+	install -m 0644 kerneloops.dbus $(DESTDIR)/etc/dbus-1/system.d/
+	install -m 0644 kerneloops.1.gz $(DESTDIR)$(MANDIR)
+	@(cd po/ && env LOCALESDIR=$(LOCALESDIR) DESTDIR=$(DESTDIR) $(MAKE) $@)
+
 	
 	
 # This is for translators. To update your po with new strings, do :
