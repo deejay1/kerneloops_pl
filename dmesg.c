@@ -134,10 +134,10 @@ static void extract_oops(char *buffer, int remove_syslog)
 	int oopsend;
 	int inbacktrace = 0;
 
-	linepointer = calloc(strlen(buffer), sizeof(char*));
+	linepointer = calloc(strlen(buffer)+1, sizeof(char*));
 	if (!linepointer)
 		return;
-	linelevel = calloc(strlen(buffer), sizeof(char)+1);
+	linelevel = calloc(strlen(buffer)+1, sizeof(char));
 	if (!linelevel) {
 		free(linepointer);
 		linepointer = NULL;
