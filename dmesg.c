@@ -243,9 +243,9 @@ static void extract_oops(char *buffer, int remove_syslog)
 				oopsend = i-1;
 			/* The Code: line means we're done with the backtrace */
 			if (strstr(linepointer[i], "Code:") != NULL)
-				oopsend = i-1;
+				oopsend = i;
 			if (strstr(linepointer[i], "Instruction dump::") != NULL)
-				oopsend = i-1;
+				oopsend = i;
 			/* if a new oops starts, this one has ended */
 			if (strstr(linepointer[i], "WARNING:") != NULL && oopsstart != i)
 				oopsend = i-1;
