@@ -5,6 +5,7 @@
 #
 
 BINDIR=/usr/bin
+SBINDIR=/usr/sbin
 LOCALESDIR=/usr/share/locale
 MANDIR=/usr/share/man/man8
 CC?=gcc
@@ -45,31 +46,31 @@ clean:
 dist: clean
 	rm -rf .git .gitignore push.sh .*~  */*~ test/*dbg
 
-
-install: kerneloops kerneloops-applet kerneloops.1.gz
-	mkdir -p $(DESTDIR)/usr/sbin/ $(DESTDIR)/etc/xdg/autostart
-	mkdir -p $(DESTDIR)/usr/share/kerneloops $(DESTDIR)/etc/dbus-1/system.d/
-	mkdir -p $(DESTDIR)$(BINDIR) $(DESTDIR)$(MANDIR)
-	install -m 0755 kerneloops $(DESTDIR)/usr/sbin
-	install -m 0755 kerneloops-applet $(DESTDIR)$(BINDIR)
+install-system: kerneloops.1.gz
+	-mkdir -p $(DESTDIR)$(MANDIR)
+	-mkdir -p $(DESTDIR)/etc/dbus-1/system.d/
 	install -m 0644 kerneloops.conf $(DESTDIR)/etc/kerneloops.conf
+	install -m 0644 kerneloops.dbus $(DESTDIR)/etc/dbus-1/system.d/
+	install -m 0644 kerneloops.1.gz $(DESTDIR)$(MANDIR)/
+	@(cd po/ && env LOCALESDIR=$(LOCALESDIR) DESTDIR=$(DESTDIR) $(MAKE) install)
+
+install-kerneloops: kerneloops
+	-mkdir -p $(DESTDIR)$(SBINDIR)
+	install -m 0755 kerneloops $(DESTDIR)$(SBINDIR)/
+
+install-applet: kerneloops-applet
+	-mkdir -p $(DESTDIR)$(BINDIR)
+	-mkdir -p $(DESTDIR)/etc/xdg/autostart
+	-mkdir -p $(DESTDIR)/usr/share/kerneloops
+	install -m 0755 kerneloops-applet $(DESTDIR)$(BINDIR)/
 	desktop-file-install --mode 0644 --dir=$(DESTDIR)/etc/xdg/autostart/ kerneloops-applet.desktop
-	install -m 0644 kerneloops.dbus $(DESTDIR)/etc/dbus-1/system.d/
-	install -m 0644 kerneloops.1.gz $(DESTDIR)$(MANDIR)
 	install -m 0644 icon.png $(DESTDIR)/usr/share/kerneloops/icon.png
-	@(cd po/ && env LOCALESDIR=$(LOCALESDIR) DESTDIR=$(DESTDIR) $(MAKE) $@)
 
-install-noui: kerneloops kerneloops.1.gz
-	mkdir -p $(DESTDIR)/usr/share/kerneloops $(DESTDIR)/etc/dbus-1/system.d/
-	mkdir -p $(DESTDIR)$(BINDIR) $(DESTDIR)$(MANDIR)
-	install -m 0755 kerneloops $(DESTDIR)/usr/sbin
-	install -m 0644 kerneloops.conf $(DESTDIR)/etc/kerneloops.conf
-	install -m 0644 kerneloops.dbus $(DESTDIR)/etc/dbus-1/system.d/
-	install -m 0644 kerneloops.1.gz $(DESTDIR)$(MANDIR)
-	@(cd po/ && env LOCALESDIR=$(LOCALESDIR) DESTDIR=$(DESTDIR) $(MAKE) $@)
+install: install-system install-kerneloops install-applet
 
-	
-	
+install-noui: install-system install-kerneloops
+
+
 # This is for translators. To update your po with new strings, do :
 # svn up ; make uptrans LG=fr # or de, ru, hu, it, ...
 uptrans:
