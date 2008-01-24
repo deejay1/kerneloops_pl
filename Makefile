@@ -21,9 +21,9 @@ MY_CFLAGS := `pkg-config --cflags libnotify gtk+-2.0`
 LDF_A := -Wl,--as-needed `pkg-config --libs libnotify gtk+-2.0`
 LDF_D := -Wl,--as-needed `pkg-config --libs glib-2.0 dbus-glib-1` `curl-config --libs` -Wl,"-z relro" -Wl,"-z now" 
 
-all:	kerneloops kerneloops-applet kerneloops.1.gz
+all:	kerneloops kerneloops-applet kerneloops.8.gz
 
-noui:	kerneloops kerneloops.1.gz
+noui:	kerneloops kerneloops.8.gz
 
 .c.o:
 	$(CC) $(CFLAGS) $(MY_CFLAGS) -c -o $@ $<
@@ -36,22 +36,22 @@ kerneloops:	kerneloops.o submit.o dmesg.o configfile.o kerneloops.h
 kerneloops-applet: kerneloops-applet.o
 	gcc kerneloops-applet.o $(LDF_A)-o kerneloops-applet
 
-kerneloops.1.gz: kerneloops.1
+kerneloops.8.gz: kerneloops.8
 	gzip -9 -c $< > $@
 
 clean:
-	rm -f *~ *.o *.ko DEADJOE kerneloops kerneloops-applet *.out */*~ kerneloops.1.gz
+	rm -f *~ *.o *.ko DEADJOE kerneloops kerneloops-applet *.out */*~ kerneloops.8.gz
 	@(cd po/ && $(MAKE) $@)
 
 dist: clean
 	rm -rf .git .gitignore push.sh .*~  */*~ test/*dbg
 
-install-system: kerneloops.1.gz
+install-system: kerneloops.8.gz
 	-mkdir -p $(DESTDIR)$(MANDIR)
 	-mkdir -p $(DESTDIR)/etc/dbus-1/system.d/
 	install -m 0644 kerneloops.conf $(DESTDIR)/etc/kerneloops.conf
 	install -m 0644 kerneloops.dbus $(DESTDIR)/etc/dbus-1/system.d/
-	install -m 0644 kerneloops.1.gz $(DESTDIR)$(MANDIR)/
+	install -m 0644 kerneloops.8.gz $(DESTDIR)$(MANDIR)/
 	@(cd po/ && env LOCALESDIR=$(LOCALESDIR) DESTDIR=$(DESTDIR) $(MAKE) install)
 
 install-kerneloops: kerneloops

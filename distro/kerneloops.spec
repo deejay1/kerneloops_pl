@@ -67,7 +67,7 @@ fi
 %{_sysconfdir}/xdg/autostart/kerneloops-applet.desktop
 %{_datadir}/kerneloops/
 %{_bindir}/kerneloops-applet
-%{_mandir}/man8/kerneloops.1.gz
+%{_mandir}/man8/kerneloops.8.gz
 
 %changelog
 * Sat Jan 5 2008 Arjan van de Ven <arjan@linux.intel.com> - 0.10-1
