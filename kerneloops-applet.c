@@ -119,7 +119,7 @@ static void notify_action(NotifyNotification __unused *notify,
 
 	send_permission(answer);
 	if (strcmp(answer, "always") == 0)
-		write_config("alway");
+		write_config("always");
 	if (strcmp(answer, "never") == 0)
 		write_config("never");
 	gtk_status_icon_set_visible(statusicon, FALSE);
