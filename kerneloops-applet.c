@@ -142,7 +142,6 @@ static void got_a_message(void)
 				"/usr/share/kerneloops/icon.png", NULL);
 
 	notify_notification_set_timeout(notify, 0);
-	gtk_status_icon_set_visible(statusicon, TRUE);
 	notify_notification_set_urgency(notify, NOTIFY_URGENCY_CRITICAL);
 
 
@@ -185,7 +184,6 @@ static void sent_an_oops(void)
 				"/usr/share/kerneloops/icon.png", NULL);
 
 	notify_notification_set_timeout(notify, 5000);
-	gtk_status_icon_set_visible(statusicon, TRUE);
 	notify_notification_set_urgency(notify, NOTIFY_URGENCY_LOW);
 
 
@@ -245,6 +243,7 @@ static DBusHandlerResult dbus_gotmessage(DBusConnection __unused *connection,
 			/* ok time to ask the user */
 			gtk_status_icon_set_visible(statusicon, TRUE);
 			got_a_message();
+			gtk_status_icon_set_visible(statusicon, FALSE);
 		}
 		return DBUS_HANDLER_RESULT_HANDLED;
 	}
