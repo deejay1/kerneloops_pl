@@ -150,37 +150,40 @@ static void extract_oops(char *buffer, int remove_syslog)
 
 	i = 0;
 	while (i < linecount) {
-		if (linepointer[i] == NULL) {
+		char *c = linepointer[i];
+
+		if (c == NULL) {
 			i++;
 			continue;
 		}
 		if (oopsstart < 0) {
 			/* find start-of-oops markers */
-			if (strstr(linepointer[i], "general protection fault:"))
+			if (strstr(c, "general protection fault:"))
 				oopsstart = i;
-			if (strstr(linepointer[i], "BUG:"))
+			if (strstr(c, "BUG:"))
 				oopsstart = i;
-			if (strstr(linepointer[i], "kernel BUG at"))
+			if (strstr(c, "kernel BUG at"))
 				oopsstart = i;
-			if (strstr(linepointer[i], "double fault:"))
+			if (strstr(c, "double fault:"))
 				oopsstart = i;
-			if (strstr(linepointer[i], "Badness at"))
+			if (strstr(c, "Badness at"))
 				oopsstart = i;
-			if (strstr(linepointer[i], "WARNING:"))
+			if (strstr(c, "WARNING:") &&
+			    !strstr(c, "appears to be on the same physical disk"))
 				oopsstart = i;
-			if (strstr(linepointer[i], "Unable to handle kernel"))
+			if (strstr(c, "Unable to handle kernel"))
 				oopsstart = i;
-			if (strstr(linepointer[i], "sysctl table check failed"))
+			if (strstr(c, "sysctl table check failed"))
 				oopsstart = i;
-			if (strstr(linepointer[i], "------------[ cut here ]------------"))
+			if (strstr(c, "------------[ cut here ]------------"))
 				oopsstart = i;
-			if (strstr(linepointer[i], "Oops:") && i >= 3)
+			if (strstr(c, "Oops:") && i >= 3)
 				oopsstart = i-3;
 			if (oopsstart >= 0 && testmode) {
 				printf("Found start of oops at line %i\n", oopsstart);
 				printf("    start line is -%s-\n", linepointer[oopsstart]);
 				if (oopsstart != i)
-					printf("    trigger line is -%s-\n", linepointer[i]);
+					printf("    trigger line is -%s-\n", c);
 			}
 			/* give the kernel some time to finish dumping the oops */
 			/* but not in testmode since that makes regression testins slow */
