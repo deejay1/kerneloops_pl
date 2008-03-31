@@ -77,6 +77,7 @@ static DBusHandlerResult got_message(
 	}
 	if (dbus_message_is_signal(message,
 		"org.kerneloops.submit.permission", "never")) {
+		clear_queue();
 		opted_in = 0;
 		return DBUS_HANDLER_RESULT_HANDLED;
 	}

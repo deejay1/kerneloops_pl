@@ -129,7 +129,12 @@ static void print_queue(void)
 
 }
 
-
+static void write_logfile(int count)
+{
+	openlog("kerneloops", 0, LOG_KERN);
+	syslog(LOG_WARNING, "Submitted %i kernel oopses to www.kerneloops.org", count);
+	closelog();
+}
 
 void submit_queue(void)
 {
@@ -180,11 +185,9 @@ void submit_queue(void)
 		count++;
 	}
 
-	if (count && !testmode) {
-		openlog("kerneloops", 0, LOG_KERN);
-		syslog(LOG_WARNING, "Submitted %i kernel oopses to www.kerneloops.org", count);
-		closelog();
-	}
+	if (count && !testmode)
+		write_logfile(count);
+
 	if (count)
 		dbus_say_thanks();
 	/*
@@ -210,6 +213,7 @@ void clear_queue(void)
 		free(oops);
 		oops = next;
 	}
+	write_logfile(0);
 }
 
 void ask_permission(void)
