@@ -174,8 +174,6 @@ static void extract_oops(char *buffer, int remove_syslog)
 				oopsstart = i;
 			if (strstr(linepointer[i], "------------[ cut here ]------------"))
 				oopsstart = i;
-			if (strstr(linepointer[i], "Modules linked in:") && i >= 4)
-				oopsstart = i-4;
 			if (strstr(linepointer[i], "Oops:") && i >= 3)
 				oopsstart = i-3;
 			if (oopsstart >= 0 && testmode) {
