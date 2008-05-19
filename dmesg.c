@@ -177,6 +177,10 @@ static void extract_oops(char *buffer, int remove_syslog)
 				oopsstart = i;
 			if (strstr(c, "------------[ cut here ]------------"))
 				oopsstart = i;
+			if (strstr(c, "list_del corruption."))
+				oopsstart = i;
+			if (strstr(c, "list_add corruption."))
+				oopsstart = i;
 			if (strstr(c, "Oops:") && i >= 3)
 				oopsstart = i-3;
 			if (oopsstart >= 0 && testmode) {
