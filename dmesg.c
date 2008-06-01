@@ -166,6 +166,8 @@ static void extract_oops(char *buffer, int remove_syslog)
 				oopsstart = i;
 			if (strstr(c, "RTNL: assertion failed"))
 				oopsstart = i;
+			if (strstr(c, "Eeek! page_mapcount(page) went negative!"))
+				oopsstart = i;
 			if (strstr(c, "double fault:"))
 				oopsstart = i;
 			if (strstr(c, "Badness at"))
