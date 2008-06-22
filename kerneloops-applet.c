@@ -34,9 +34,13 @@
 
 #include <stdio.h>
 #include <errno.h>
+#include <fcntl.h>
 #include <stdlib.h>
 #include <string.h>
 #include <locale.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 #include <dbus/dbus-glib.h>
 #include <dbus/dbus.h>
@@ -65,6 +69,7 @@ static NotifyNotification *notify;
 
 
 int user_preference;
+static char *detail_file_name;
 
 static void write_config(char *permission)
 {
@@ -92,6 +97,7 @@ static void send_permission(char *answer)
 			"org.kerneloops.submit.permission", answer);
 	dbus_connection_send(bus, message, NULL);
 	dbus_message_unref(message);
+	detail_file_name = NULL;
 }
 
 /*
@@ -118,11 +124,103 @@ static void notify_action(NotifyNotification __unused *notify,
 	char *answer = (char *) user_data;
 
 	send_permission(answer);
+	detail_file_name = NULL;
 	if (strcmp(answer, "always") == 0)
 		write_config("always");
 	if (strcmp(answer, "never") == 0)
 		write_config("never");
 	gtk_status_icon_set_visible(statusicon, FALSE);
+}
+
+/* Called only from the detail window */
+static void send_action(NotifyNotification __unused *notify,
+			gchar __unused *action, gpointer __unused user_data)
+{
+	send_permission("yes");
+}
+
+
+/* Called only to display details */
+static void detail_action(NotifyNotification __unused *notify,
+			  gchar __unused *action, gpointer __unused user_data)
+{
+	GtkWidget *dialog;
+	GtkWidget *scrollwindow;
+	GtkWidget *view;
+	GtkTextBuffer *buffer;
+	GtkWidget *button_cancel;
+	GtkWidget *button_send;
+	char *detail_data;
+	struct stat statb;
+	int detail_fd;
+	int ret;
+
+	/* If anything goes wrong, return as early as possible... */
+
+	if (!detail_file_name)
+		return;
+
+        memset(&statb, 0, sizeof(statb));
+	ret = stat(detail_file_name, &statb);
+	if (statb.st_size < 1 || ret != 0)
+		return;
+
+	detail_fd = open(detail_file_name, O_RDONLY);
+	if (detail_fd < 0)
+		return;
+
+	detail_data = malloc(statb.st_size+1);
+	if (!detail_data)
+		return;
+	
+	if (read(detail_fd, detail_data, statb.st_size) != statb.st_size) {
+		free(detail_data);
+		return;
+	}
+	close(detail_fd);
+
+	dialog = gtk_dialog_new();
+	gtk_window_set_title(GTK_WINDOW(dialog), _("Kernel failure details"));
+	gtk_widget_set_size_request(dialog, 600, 400);
+	scrollwindow = gtk_scrolled_window_new(NULL, NULL);
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW (scrollwindow),
+				       GTK_POLICY_AUTOMATIC,
+				       GTK_POLICY_AUTOMATIC);
+	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), scrollwindow, 
+			   TRUE, TRUE, 0);
+	view = gtk_text_view_new();
+	buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW (view));
+	gtk_text_buffer_set_text(buffer, detail_data, -1);
+	free(detail_data);
+	gtk_scrolled_window_add_with_viewport(
+		GTK_SCROLLED_WINDOW(scrollwindow), view);
+	gtk_text_view_set_editable(GTK_TEXT_VIEW(view), FALSE);
+	button_send = gtk_button_new_with_label (_("Send"));
+	GTK_WIDGET_SET_FLAGS(button_send, GTK_CAN_DEFAULT);
+	gtk_widget_grab_default(button_send);
+	button_cancel = gtk_button_new_with_label (_("Cancel"));
+
+	g_signal_connect(G_OBJECT(dialog), "delete_event",
+			 G_CALLBACK(gtk_widget_destroy), dialog);
+	g_signal_connect_swapped(G_OBJECT(button_cancel), "clicked",
+		         G_CALLBACK(gtk_widget_destroy),
+			 G_OBJECT(dialog));
+	g_signal_connect(G_OBJECT(dialog), "destroy",
+			 G_CALLBACK(gtk_widget_destroy),
+			 G_OBJECT(dialog));
+	g_signal_connect(G_OBJECT(button_send), "clicked",
+			 G_CALLBACK(send_action), NULL);
+  
+	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->action_area),
+		button_send, TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->action_area),
+		button_cancel, TRUE, TRUE, 0);
+
+	gtk_widget_show(view);
+	gtk_widget_show(button_send);
+	gtk_widget_show(button_cancel);
+	gtk_widget_show(scrollwindow);
+	gtk_widget_show(dialog);
 }
 
 static void got_a_message(void)
@@ -160,6 +258,11 @@ static void got_a_message(void)
 						callback, "no", NULL);
 	notify_notification_add_action(notify, "never", _("Never"),
 						callback, "never", NULL);
+	if (detail_file_name) {
+		notify_notification_add_action(notify,
+			"details", _("Show Details"),
+			detail_action, "details", NULL);
+	}
 
 	notify_notification_show(notify, NULL);
 }
@@ -242,6 +345,9 @@ static DBusHandlerResult dbus_gotmessage(DBusConnection __unused *connection,
 		} else {
 			/* ok time to ask the user */
 			gtk_status_icon_set_visible(statusicon, TRUE);
+			dbus_message_get_args(message, NULL,
+			        DBUS_TYPE_STRING, &detail_file_name,
+			        DBUS_TYPE_INVALID);
 			got_a_message();
 			gtk_status_icon_set_visible(statusicon, FALSE);
 		}

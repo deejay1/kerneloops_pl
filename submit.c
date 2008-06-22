@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <syslog.h>
+#include <sys/stat.h>
 
 #include <asm/unistd.h>
 
@@ -64,6 +65,11 @@ struct oops {
  */
 static struct oops *queued_oopses;
 static int newoops;
+
+/* For communicating details to the applet, we write the
+ * details in a file, and provide the filename to the applet
+ */
+static char *detail_filename;
 
 
 static unsigned int checksum(char *ptr)
@@ -103,6 +109,46 @@ void queue_oops(char *oops)
 	new->text = strdup(oops);
 	queued_oopses = new;
 	newoops = 1;
+}
+
+
+void write_detail_file(void)
+{
+	int temp_fileno;
+	FILE *tmpf;
+	struct oops *oops;
+	int count = 0;
+
+	detail_filename = strdup("/tmp/kerneloops.XXXXXX");
+	temp_fileno = mkstemp(detail_filename);
+	if (temp_fileno < 0) {
+		free(detail_filename);
+		detail_filename = NULL;
+		return;
+	}
+	/* regular user must be able to read this detail file to be
+	 * useful; there is nothing worth doing if fchmod fails.
+	 */
+	fchmod(temp_fileno, 0644);
+	tmpf = fdopen(temp_fileno, "w");
+	oops = queued_oopses;
+	while (oops) {
+		count++; /* Users are not programmers, start at 1 */
+		fprintf(tmpf, "Kernel failure message %d:\n", count);
+		fprintf(tmpf, oops->text);
+		fprintf(tmpf, "\n\n");
+		oops = oops->next;
+	}
+	fclose(tmpf);
+	close(temp_fileno);
+}
+
+void unlink_detail_file(void)
+{
+	if (detail_filename) {
+		unlink(detail_filename);
+		free(detail_filename);
+	}
 }
 
 
@@ -194,8 +240,10 @@ void submit_queue(void)
 	 * If we've reached the maximum count, we'll exit the program,
 	 * the program won't do any useful work anymore going forward.
 	 */
-	if (submitted >= MAX_CHECKSUMS-1)
+	if (submitted >= MAX_CHECKSUMS-1) {
+		unlink_detail_file();
 		exit(EXIT_SUCCESS);
+	}
 }
 
 void clear_queue(void)
@@ -222,7 +270,8 @@ void ask_permission(void)
 		return;
 	pinged = 0;
 	newoops = 0;
-	if (queued_oopses)
-		dbus_ask_permission();
+	if (queued_oopses) {
+		write_detail_file();
+		dbus_ask_permission(detail_filename);
+	}
 }
-

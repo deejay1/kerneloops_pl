@@ -39,7 +39,7 @@ extern void scan_filename(char *filename, int issyslog);
 extern void read_config_file(char *filename);
 
 extern void ask_permission(void);
-extern void dbus_ask_permission(void);
+extern void dbus_ask_permission(char * detail_file_name);
 extern void dbus_say_thanks(void);
 
 extern int opted_in;

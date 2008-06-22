@@ -90,13 +90,18 @@ static DBusHandlerResult got_message(
 	return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
 }
 
-void dbus_ask_permission(void)
+void dbus_ask_permission(char * detail_file_name)
 {
 	DBusMessage *message;
 	if (!bus)
 		return;
 	message = dbus_message_new_signal("/org/kerneloops/submit/permission",
 			"org.kerneloops.submit.permission", "ask");
+	if (detail_file_name) {
+		dbus_message_append_args(message,
+			DBUS_TYPE_STRING, &detail_file_name,
+			DBUS_TYPE_INVALID);
+	}
 	dbus_connection_send(bus, message, NULL);
 	dbus_message_unref(message);
 }
