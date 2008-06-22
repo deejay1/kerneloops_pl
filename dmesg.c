@@ -126,7 +126,7 @@ static void fill_linepointers(char *buffer, int remove_syslog)
 /*
  * extract_oops tries to find oops signatures in a log
  */
-static void extract_oops(char *buffer, int remove_syslog)
+static void extract_oops(char *buffer, size_t buflen, int remove_syslog)
 {
 	int i;
 	char prevlevel = 0;
@@ -134,10 +134,10 @@ static void extract_oops(char *buffer, int remove_syslog)
 	int oopsend;
 	int inbacktrace = 0;
 
-	linepointer = calloc(strlen(buffer)+1, sizeof(char*));
+	linepointer = calloc(buflen+1, sizeof(char*));
 	if (!linepointer)
 		return;
-	linelevel = calloc(strlen(buffer)+1, sizeof(char));
+	linelevel = calloc(buflen+1, sizeof(char));
 	if (!linelevel) {
 		free(linepointer);
 		linepointer = NULL;
@@ -193,10 +193,6 @@ static void extract_oops(char *buffer, int remove_syslog)
 				if (oopsstart != i)
 					printf("    trigger line is -%s-\n", c);
 			}
-			/* give the kernel some time to finish dumping the oops */
-			/* but not in testmode since that makes regression testins slow */
-			if (oopsstart >= 0 && !testmode)
-				sleep(1);
 
 			/* try to find the end marker */
 			if (oopsstart >= 0) {
@@ -341,7 +337,7 @@ int scan_dmesg(void __unused *unused)
 	buffer = calloc(getpagesize()+1, 1);
 
 	syscall(__NR_syslog, 3, buffer, getpagesize());
-	extract_oops(buffer, 0);
+	extract_oops(buffer, strlen(buffer), 0);
 	free(buffer);
 	if (opted_in >= 2)
 		submit_queue();
@@ -382,7 +378,7 @@ void scan_filename(char *filename, int issyslog)
 	fclose(file);
 
 	if (ret > 0)
-		extract_oops(buffer, issyslog);
+		extract_oops(buffer, statb.st_size+1023, issyslog);
 	free(buffer);
 	if (opted_in >= 2)
 		submit_queue();
