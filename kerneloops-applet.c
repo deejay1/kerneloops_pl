@@ -267,6 +267,8 @@ static void got_a_message(void)
 	notify_notification_show(notify, NULL);
 }
 
+char url_to_oops[4095];
+
 /*
  * open a notification window (expires in 5 seconds) to say thank you
  * to the user for his bug feedback.
@@ -274,14 +276,31 @@ static void got_a_message(void)
 static void sent_an_oops(void)
 {
 	char *summary = _("Kernel bug diagnostic information sent");
-	char *message =
+	char message[8200];
+	char *message_1 =
 		_("Diagnostic information from your Linux kernel has been "
 		  "sent to <a href=\"http://www.kerneloops.org\">www.kerneloops.org</a> "
 		  "for the Linux kernel developers to work on. \n"
 		  "Thank you for contributing to improve the quality of the Linux kernel.\n");
+
+	char *message_2 =
+		_("Diagnostic information from your Linux kernel has been "
+		  "sent to <a href=\"http://www.kerneloops.org\">www.kerneloops.org</a> "
+		  "for the Linux kernel developers to work on. \n"
+		  "Thank you for contributing to improve the quality of the Linux kernel.\n"
+		"You can watch your submitted oops <a href=\"%s\">here</a>\n");
 	NotifyActionCallback callback = notify_action;
 
 	close_notification();
+
+
+	if (strlen(url_to_oops)==0)
+		sprintf(message, message_1);
+	else
+		sprintf(message, message_2, url_to_oops);
+
+
+	url_to_oops[0] = 0;
 
 	notify = notify_notification_new(summary, message,
 				"/usr/share/kerneloops/icon.png", NULL);
@@ -302,6 +321,17 @@ static void sent_an_oops(void)
 	notify_notification_show(notify, NULL);
 }
 
+/*
+ * store the URL for the user
+ */
+static void got_an_url(DBusMessage *message)
+{
+	char *string = NULL;
+	dbus_message_get_args(message, NULL, DBUS_TYPE_STRING, &string, DBUS_TYPE_INVALID);
+	if (string)
+		strncpy(url_to_oops, string, 4095);
+
+}
 
 
 /*
@@ -360,6 +390,13 @@ static DBusHandlerResult dbus_gotmessage(DBusConnection __unused *connection,
 		gtk_status_icon_set_visible(statusicon, TRUE);
 		sent_an_oops();
 		gtk_status_icon_set_visible(statusicon, FALSE);
+		return DBUS_HANDLER_RESULT_HANDLED;
+	}
+	/* check if it's the daemon that asks for permission */
+	if (dbus_message_is_signal(message,
+			"org.kerneloops.submit.url", "url")) {
+
+		got_an_url(message);
 		return DBUS_HANDLER_RESULT_HANDLED;
 	}
 	return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
@@ -439,6 +476,7 @@ int main(int argc, char *argv[])
 	/* set the dbus message to listen for */
 	dbus_bus_add_match(bus, "type='signal',interface='org.kerneloops.submit.permission'", &error);
 	dbus_bus_add_match(bus, "type='signal',interface='org.kerneloops.submit.sent'", &error);
+	dbus_bus_add_match(bus, "type='signal',interface='org.kerneloops.submit.url'", &error);
 	dbus_connection_add_filter(bus, dbus_gotmessage, NULL, NULL);
 
 	/*

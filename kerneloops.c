@@ -106,11 +106,19 @@ void dbus_ask_permission(char * detail_file_name)
 	dbus_message_unref(message);
 }
 
-void dbus_say_thanks(void)
+void dbus_say_thanks(char *url)
 {
 	DBusMessage *message;
 	if (!bus)
 		return;
+	if (url && strlen(url)) {
+		message = dbus_message_new_signal("/org/kerneloops/submit/url",
+			"org.kerneloops.submit.url", "url");
+		dbus_message_append_args (message, DBUS_TYPE_STRING, &url, DBUS_TYPE_INVALID);
+		dbus_connection_send(bus, message, NULL);
+		dbus_message_unref(message);
+	}
+
 	message = dbus_message_new_signal("/org/kerneloops/submit/sent",
 			"org.kerneloops.submit.sent", "sent");
 	dbus_connection_send(bus, message, NULL);
@@ -169,9 +177,14 @@ int main(int argc, char**argv)
 	}
 
 
+
 	/* we scan dmesg before /var/log/messages; dmesg is a more accurate source normally */
 	scan_dmesg(NULL);
 	scan_filename("/var/log/messages", 1);
+
+	if (argc > 2 && strstr(argv[1], "--file"))
+		scan_filename(argv[2], 1);
+
 	if (testmode && argc > 2) {
 		int q;
 		for (q = 2; q < argc; q++) {

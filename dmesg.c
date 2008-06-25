@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 /*
  * Copyright 2007, Intel Corporation
  *
@@ -54,20 +55,25 @@ static void fill_linepointers(char *buffer, int remove_syslog)
 	linecount = 0;
 	c = buffer;
 	while (c) {
+		int len = 0;
+		char *c9;
+
+		c9 = strchr(c, '\n');
+		if (c9)
+			len = c9 - c;
+
 		/* in /var/log/messages, we need to strip the first part off, upto the 3rd ':' */
 		if (remove_syslog) {
 			char *c2;
-			char *c3;
 
-			c3 = strchr(c, '\n');
 			/* skip non-kernel lines */
-			c2 = strstr(c, "kernel:");
-			if (!c2 || (c2 > c3))
-				c2 = strstr(c, "kerneloops:");
-			if (!c2 || (c2 > c3)) {
-				c2 = strchr(c, '\n');
+			c2 = memmem(c, len, "kernel:", 7);
+			if (!c2)
+				c2 = memmem(c, len, "kerneloops:", 11);
+			if (!c2) {
+				c2 = c9;
 				if (c2) {
-					c = c2+1;
+					c = c2 + 1;
 					continue;
 				} else
 					break;
@@ -166,9 +172,13 @@ static void extract_oops(char *buffer, size_t buflen, int remove_syslog)
 				oopsstart = i;
 			if (strstr(c, "kernel BUG at"))
 				oopsstart = i;
+			if (strstr(c, "do_IRQ: stack overflow:"))
+				oopsstart = i;
 			if (strstr(c, "RTNL: assertion failed"))
 				oopsstart = i;
 			if (strstr(c, "Eeek! page_mapcount(page) went negative!"))
+				oopsstart = i;
+			if (strstr(c, "near stack overflow (cur:"))
 				oopsstart = i;
 			if (strstr(c, "double fault:"))
 				oopsstart = i;

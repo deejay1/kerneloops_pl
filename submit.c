@@ -182,12 +182,33 @@ static void write_logfile(int count)
 	closelog();
 }
 
+char result_url[4096];
+
+size_t writefunction( void *ptr, size_t size, size_t nmemb, void __attribute((unused)) *stream)
+{
+	char *c, *c1, *c2;
+	c = malloc(size*nmemb + 1);
+	memset(c, 0, size*nmemb + 1);
+	memcpy(c, ptr, size*nmemb);
+	printf("received %s \n", c);
+	c1 = strstr(c, "201 ");
+	if (c1) {
+		c1+=4;
+		c2 = strchr(c1, '\n');
+		if (c2) *c2 = 0;
+		strncpy(result_url, c1, 4095);
+	}
+	return size * nmemb;
+}
+
 void submit_queue(void)
 {
 	int result;
 	struct oops *oops;
 	struct oops *queue;
 	int count = 0;
+
+	memset(result_url, 0, 4096);
 
 	if (testmode) {
 		print_queue();
@@ -204,8 +225,9 @@ void submit_queue(void)
 		struct curl_httppost *last = NULL;
 		struct oops *next;
 
-
 		handle = curl_easy_init();
+
+		printf("DEBUG SUBMIT URL is %s \n", submit_url);
 		curl_easy_setopt(handle, CURLOPT_URL, submit_url);
 
 		/* set up the POST data */
@@ -220,6 +242,7 @@ void submit_queue(void)
 		}
 
 		curl_easy_setopt(handle, CURLOPT_HTTPPOST, post);
+		curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, writefunction);
 		result = curl_easy_perform(handle);
 
 		curl_formfree(post);
@@ -235,7 +258,7 @@ void submit_queue(void)
 		write_logfile(count);
 
 	if (count)
-		dbus_say_thanks();
+		dbus_say_thanks(result_url);
 	/*
 	 * If we've reached the maximum count, we'll exit the program,
 	 * the program won't do any useful work anymore going forward.

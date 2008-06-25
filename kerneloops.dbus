@@ -12,6 +12,7 @@
     <allow own="org.kerneloops.submit.ping"/>
     <allow own="org.kerneloops.submit.permission"/>
     <allow own="org.kerneloops.submit.sent"/>
+    <allow own="org.kerneloops.submit.url"/>
   </policy>
 
   <policy at_console="true">
@@ -20,6 +21,7 @@
     <allow receive_sender="org.kerneloops.submit"/>
     <allow receive_sender="org.kerneloops.submit.permission"/>
     <allow receive_sender="org.kerneloops.submit.sent"/>
+    <allow receive_sender="org.kerneloops.submit.url"/>
 
     <allow send_path="/org/kerneloops/submit"/>
 
