@@ -203,7 +203,6 @@ static void detail_action(NotifyNotification __unused *notify,
 	gtk_text_view_set_editable(GTK_TEXT_VIEW(view), FALSE);
 	button_send = gtk_button_new_with_label (_("Send"));
 	GTK_WIDGET_SET_FLAGS(button_send, GTK_CAN_DEFAULT);
-	gtk_widget_grab_default(button_send);
 	button_cancel = gtk_button_new_with_label (_("Cancel"));
 
 	g_signal_connect(G_OBJECT(dialog), "delete_event",
@@ -221,6 +220,7 @@ static void detail_action(NotifyNotification __unused *notify,
 		button_send, TRUE, TRUE, 0);
 	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->action_area),
 		button_cancel, TRUE, TRUE, 0);
+	gtk_widget_grab_default(button_send);
 
 	gtk_widget_show(view);
 	gtk_widget_show(button_send);
