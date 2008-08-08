@@ -150,6 +150,8 @@ static void detail_action(NotifyNotification __unused *notify,
 	GtkTextBuffer *buffer;
 	GtkWidget *button_cancel;
 	GtkWidget *button_send;
+	GtkTextTag *fixed;
+	GtkTextIter iter;
 	char *detail_data;
 	struct stat statb;
 	int detail_fd;
@@ -187,11 +189,14 @@ static void detail_action(NotifyNotification __unused *notify,
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW (scrollwindow),
 				       GTK_POLICY_AUTOMATIC,
 				       GTK_POLICY_AUTOMATIC);
-	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), scrollwindow, 
+	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), scrollwindow,
 			   TRUE, TRUE, 0);
 	view = gtk_text_view_new();
 	buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW (view));
-	gtk_text_buffer_set_text(buffer, detail_data, -1);
+	fixed = gtk_text_buffer_create_tag (buffer, "font", "font", "monospace", NULL);
+	gtk_text_buffer_get_iter_at_line_offset(buffer, &iter, 0, 0);
+	gtk_text_buffer_insert_with_tags(buffer, &iter, detail_data, -1,
+						fixed, NULL);
 	free(detail_data);
 	gtk_container_add (GTK_CONTAINER (scrollwindow), view);
 
