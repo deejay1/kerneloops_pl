@@ -172,12 +172,13 @@ static void detail_action(NotifyNotification __unused *notify,
 	detail_data = malloc(statb.st_size+1);
 	if (!detail_data)
 		return;
-	
+
 	if (read(detail_fd, detail_data, statb.st_size) != statb.st_size) {
 		free(detail_data);
 		return;
 	}
 	close(detail_fd);
+	detail_data[statb.st_size] = '\0';
 
 	dialog = gtk_dialog_new();
 	gtk_window_set_title(GTK_WINDOW(dialog), _("Kernel failure details"));
@@ -192,8 +193,8 @@ static void detail_action(NotifyNotification __unused *notify,
 	buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW (view));
 	gtk_text_buffer_set_text(buffer, detail_data, -1);
 	free(detail_data);
-	gtk_scrolled_window_add_with_viewport(
-		GTK_SCROLLED_WINDOW(scrollwindow), view);
+	gtk_container_add (GTK_CONTAINER (scrollwindow), view);
+
 	gtk_text_view_set_editable(GTK_TEXT_VIEW(view), FALSE);
 	button_send = gtk_button_new_with_label (_("Send"));
 	GTK_WIDGET_SET_FLAGS(button_send, GTK_CAN_DEFAULT);
@@ -210,7 +211,7 @@ static void detail_action(NotifyNotification __unused *notify,
 			 G_OBJECT(dialog));
 	g_signal_connect(G_OBJECT(button_send), "clicked",
 			 G_CALLBACK(send_action), NULL);
-  
+
 	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->action_area),
 		button_send, TRUE, TRUE, 0);
 	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->action_area),
@@ -288,7 +289,7 @@ static void sent_an_oops(void)
 		  "sent to <a href=\"http://www.kerneloops.org\">www.kerneloops.org</a> "
 		  "for the Linux kernel developers to work on. \n"
 		  "Thank you for contributing to improve the quality of the Linux kernel.\n"
-		"You can watch your submitted oops <a href=\"%s\">here</a>\n");
+		"You can view your submitted oops <a href=\"%s\">here</a>\n");
 	NotifyActionCallback callback = notify_action;
 
 	close_notification();
