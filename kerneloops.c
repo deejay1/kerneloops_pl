@@ -26,6 +26,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <sched.h>
 
 #include <asm/unistd.h>
 
@@ -142,7 +143,6 @@ int main(int argc, char**argv)
 		opted_in = 2;
 	}
 
-
 	if (!opted_in && !testmode) {
 		fprintf(stderr, " [Inactive by user preference]");
 		return EXIT_SUCCESS;
@@ -160,11 +160,11 @@ int main(int argc, char**argv)
 	curl_global_init(CURL_GLOBAL_ALL);
 */
 
-
 	if (godaemon && daemon(0, 0)) {
 		printf("kerneloops failed to daemonize.. exiting \n");
 		return EXIT_FAILURE;
 	}
+	sched_yield();
 
 	loop = g_main_loop_new(NULL, FALSE);
 	dbus_error_init(&error);
@@ -176,10 +176,11 @@ int main(int argc, char**argv)
 		dbus_connection_add_filter(bus, got_message, NULL, NULL);
 	}
 
-
-
 	/* we scan dmesg before /var/log/messages; dmesg is a more accurate source normally */
 	scan_dmesg(NULL);
+	/* during boot... don't go too fast and slow the system down */
+	if (!testmode)
+		sleep(10);
 	scan_filename("/var/log/messages", 1);
 
 	if (argc > 2 && strstr(argv[1], "--file"))
