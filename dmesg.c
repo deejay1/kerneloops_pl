@@ -184,6 +184,8 @@ static void extract_oops(char *buffer, size_t buflen, int remove_syslog)
 				oopsstart = i;
 			if (strstr(c, "Badness at"))
 				oopsstart = i;
+			if (strstr(c, "NETDEV WATCHDOG"))
+				oopsstart = i;
 			if (strstr(c, "WARNING:") &&
 			    !strstr(c, "appears to be on the same physical disk"))
 				oopsstart = i;
