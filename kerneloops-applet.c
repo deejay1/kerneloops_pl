@@ -133,12 +133,11 @@ static void notify_action(NotifyNotification __unused *notify,
 }
 
 /* Called only from the detail window */
-static void send_action(NotifyNotification __unused *notify,
-			gchar __unused *action, gpointer user_data)
+static void send_action(GtkWidget __unused *button, GtkWidget *dialog)
 {
 	send_permission("yes");
 
-	gtk_widget_destroy(user_data);
+	gtk_widget_destroy(dialog);
 }
 
 
@@ -213,7 +212,7 @@ static void detail_action(NotifyNotification __unused *notify,
 		         G_CALLBACK(gtk_widget_destroy),
 			 G_OBJECT(dialog));
 	g_signal_connect(G_OBJECT(button_send), "clicked",
-			 G_CALLBACK(send_action), G_OBJECT(dialog));
+			 G_CALLBACK(send_action), dialog);
 
 	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->action_area),
 		button_send, TRUE, TRUE, 0);
