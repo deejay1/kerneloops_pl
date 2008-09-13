@@ -134,9 +134,11 @@ static void notify_action(NotifyNotification __unused *notify,
 
 /* Called only from the detail window */
 static void send_action(NotifyNotification __unused *notify,
-			gchar __unused *action, gpointer __unused user_data)
+			gchar __unused *action, gpointer user_data)
 {
 	send_permission("yes");
+
+	gtk_widget_destroy(user_data);
 }
 
 
@@ -210,11 +212,8 @@ static void detail_action(NotifyNotification __unused *notify,
 	g_signal_connect_swapped(G_OBJECT(button_cancel), "clicked",
 		         G_CALLBACK(gtk_widget_destroy),
 			 G_OBJECT(dialog));
-	g_signal_connect(G_OBJECT(dialog), "destroy",
-			 G_CALLBACK(gtk_widget_destroy),
-			 G_OBJECT(dialog));
 	g_signal_connect(G_OBJECT(button_send), "clicked",
-			 G_CALLBACK(send_action), NULL);
+			 G_CALLBACK(send_action), G_OBJECT(dialog));
 
 	gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->action_area),
 		button_send, TRUE, TRUE, 0);
