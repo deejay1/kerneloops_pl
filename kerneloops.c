@@ -27,7 +27,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <sched.h>
-
+#include <sys/prctl.h>
 #include <asm/unistd.h>
 
 #include <curl/curl.h>
@@ -131,6 +131,13 @@ int main(int argc, char**argv)
 	GMainLoop *loop;
 	DBusError error;
 	int godaemon = 1;
+
+/*
+ * Signal the kernel that we're not timing critical
+ */
+#ifdef PR_SET_TIMERSLACK,1000
+	prctl(PR_SET_TIMERSLACK,1000*1000*1000, 0, 0, 0);
+#endif
 
 	read_config_file("/etc/kerneloops.conf");
 
