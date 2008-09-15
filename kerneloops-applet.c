@@ -280,7 +280,7 @@ char url_to_oops[4095];
 static void sent_an_oops(void)
 {
 	char *summary = _("Kernel bug diagnostic information sent");
-	char message[8200];
+	char *message = NULL;
 	char *message_1 =
 		_("Diagnostic information from your Linux kernel has been "
 		  "sent to <a href=\"http://www.kerneloops.org\">www.kerneloops.org</a> "
@@ -299,9 +299,9 @@ static void sent_an_oops(void)
 
 
 	if (strlen(url_to_oops)==0)
-		sprintf(message, message_1);
+		message = g_strdup_printf("%s", message_1);
 	else
-		sprintf(message, message_2, url_to_oops);
+		message = g_strdup_printf(message_2, url_to_oops);
 
 
 	url_to_oops[0] = 0;
@@ -323,6 +323,7 @@ static void sent_an_oops(void)
 						callback, "never", NULL);
 
 	notify_notification_show(notify, NULL);
+	g_free(message);
 }
 
 /*
