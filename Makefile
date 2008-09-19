@@ -10,7 +10,7 @@ LOCALESDIR=/usr/share/locale
 MANDIR=/usr/share/man/man8
 CC?=gcc
 
-CFLAGS := -O2 -g -fstack-protector -D_FORTIFY_SOURCE=2 -Wall -W -Wstrict-prototypes -Wundef -fno-common -Werror-implicit-function-declaration -Wdeclaration-after-statement
+CFLAGS := -O2 -g -fstack-protector -D_FORTIFY_SOURCE=2 -Wall -W -Wstrict-prototypes -Wundef -fno-common -Werror-implicit-function-declaration -Wdeclaration-after-statement -Wformat -Wformat-security -Werror=format-security
 
 MY_CFLAGS := `pkg-config --cflags libnotify gtk+-2.0`
 #
