@@ -23,8 +23,6 @@
     <allow receive_sender="org.kerneloops.submit.sent"/>
     <allow receive_sender="org.kerneloops.submit.url"/>
 
-    <allow send_path="/org/kerneloops/submit"/>
-
   </policy>
 
 </busconfig>
