@@ -23,19 +23,19 @@ msgstr "Toujours"
 #: kerneloops-applet.c:332
 #, c-format
 msgid "Connecting to system bus failed: %s\n"
-msgstr "Echec de la connexion à D-BUS: %s\n"
+msgstr "Échec de la connexion à D-BUS : %s\n"
 
 #: kerneloops-applet.c:190
 msgid ""
 "Diagnostic information from your Linux kernel has been sent to <a href=\"http://www.kerneloops.org\">www.kerneloops.org</a> for the Linux kernel developers to work on. \n"
 "Thank you for contributing to improve the quality of the Linux kernel.\n"
 msgstr ""
-"Les informations de diagnostic de votre noyau Linux ont été envoyés à <a href=\"http://www.kerneloops.org\">www.kerneloops.org</a> afin que les développeurs du noyau Linux travaillent dessus. \n"
+"Les informations de diagnostic de votre noyau Linux ont été envoyées à <a href=\"http://www.kerneloops.org\">www.kerneloops.org</a> afin que les développeurs du noyau Linux travaillent dessus. \n"
 "Merci d'avoir contribué à l'amélioration de la qualité du noyau Linux.\n"
 
 #: kerneloops-applet.c:188
 msgid "Kernel bug diagnostic information sent"
-msgstr "Information de diagnostic du bogue du noyau envoyé"
+msgstr "Informations de diagnostic du bogue du noyau envoyées"
 
 #: kerneloops-applet.c:176
 msgid "Never"
@@ -51,7 +51,7 @@ msgstr "Non"
 
 #: kerneloops-applet.c:143
 msgid "There is diagnostic information available for this failure. Do you want to submit this information to the <a href=\"http://www.kerneloops.org/\">www.kerneloops.org</a> website for use by the Linux kernel developers?\n"
-msgstr "Il y a des informations de diagnostic disponibles pour ce problème. Voulez-vous soumettre ces informations au site web <a href=\"http://www.kerneloops.org/\">www.kerneloops.org</a> pour l'usage des développeurs du noyau Linux?\n"
+msgstr "Il y a des informations de diagnostic disponibles pour ce problème. Voulez-vous soumettre ces informations au site web <a href=\"http://www.kerneloops.org/\">www.kerneloops.org</a> pour l'usage des développeurs du noyau Linux ?\n"
 
 #: kerneloops-applet.c:172
 msgid "Yes"
@@ -59,10 +59,12 @@ msgstr "Oui"
 
 #: kerneloops-applet.c:141
 msgid "Your system had a kernel failure"
-msgstr "Votre système a une erreur de noyau"
+msgstr "Votre système a subi un problème de noyau"
 
 #: kerneloops-applet.c:343
 msgid "kerneloops client"
 msgstr "Client kerneloops"
+
+
 
 
