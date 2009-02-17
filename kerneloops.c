@@ -190,7 +190,7 @@ int main(int argc, char**argv)
 	/* during boot... don't go too fast and slow the system down */
 	if (!testmode)
 		sleep(10);
-	scan_filename("/var/log/messages", 1);
+	scan_filename(log_file, 1);
 
 	if (argc > 2 && strstr(argv[1], "--file"))
 		scan_filename(argv[2], 1);

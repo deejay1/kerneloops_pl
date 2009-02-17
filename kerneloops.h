@@ -45,6 +45,7 @@ extern void dbus_say_thanks(char *url);
 extern int opted_in;
 extern int allow_distro_to_pass_on;
 extern char *submit_url;
+extern char *log_file;
 
 extern int testmode;
 extern int pinged;

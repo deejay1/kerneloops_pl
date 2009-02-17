@@ -37,6 +37,7 @@
 int opted_in;
 int allow_distro_to_pass_on;
 char *submit_url;
+char *log_file;
 
 
 void read_config_file(char *filename)
@@ -79,9 +80,22 @@ void read_config_file(char *filename)
 			if (c)
 				submit_url = strdup(c);
 		}
+		c = strstr(line, "log-file ");
+		if (c) {
+			c += 9;
+			while(*c) {
+				if ( !isspace(*c) && *c != '=')
+					break;
+				c++;
+			}
+			if (*c)
+				log_file = strdup(c);
+		}
 		free(line);
 	}
 	fclose(file);
 	if (!submit_url)
 		submit_url = strdup("http://submit.kerneloops.org/submitoops.php");
+	if (!log_file)
+		log_file = strdup("/var/log/messages");
 }
