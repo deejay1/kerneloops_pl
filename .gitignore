@@ -4,5 +4,5 @@ kerneloops-applet
 test/*dbg
 *.o
 DEADJOE
-kerneloops.1.gz
+kerneloops.8.gz
 po/*.mo
