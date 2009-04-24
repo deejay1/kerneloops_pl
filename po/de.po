@@ -1,0 +1,77 @@
+# translation of kerneloops to German
+# Copyright (C) Chris Leick <c.leick@vollbio.de>, 2009.
+# This file is distributed under the same license as the kerneloops package.
+# Chris Leick <c.leick@vollbio.de>, 2009.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: kerneloops-0.10.2\n"
+"Report-Msgid-Bugs-To: willy@debian.org\n"
+"POT-Creation-Date: 2009-02-22 11:49+0100\n"
+"PO-Revision-Date: 2009-03-16 13:05+0100\n"
+"Last-Translator: Chris Leick <c.leick@vollbio.de>\n"
+"Language-Team: German <debian-l10n-german@lists.debian.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: kerneloops-applet.c:170 kerneloops-applet.c:212
+msgid "Always"
+msgstr "Immer"
+
+#: kerneloops-applet.c:332
+#, c-format
+msgid "Connecting to system bus failed: %s\n"
+msgstr "Verbinden zum System-Bus fehlgeschlagen: %s\n"
+
+#: kerneloops-applet.c:190
+msgid ""
+"Diagnostic information from your Linux kernel has been sent to <a href="
+"\"http://www.kerneloops.org\">www.kerneloops.org</a> for the Linux kernel "
+"developers to work on. \n"
+"Thank you for contributing to improve the quality of the Linux kernel.\n"
+msgstr ""
+"Diagnose-Information von Ihrem Linux-Kernel wurde an <a href="
+"\"http://www.kerneloops.org\">www.kerneloops.org</a> gesandt, damit die "
+"Kernel-Entwickler daran arbeiten können.\n"
+"Vielen Dank, dass Sie zur Verbesserung des Linux-Kernels beitragen.\n"
+
+#: kerneloops-applet.c:188
+msgid "Kernel bug diagnostic information sent"
+msgstr "Gesendete Kernel-Fehler-Diagnose-Information"
+
+#: kerneloops-applet.c:176
+msgid "Never"
+msgstr "Niemals"
+
+#: kerneloops-applet.c:214
+msgid "Never again"
+msgstr "Niemals wieder"
+
+#: kerneloops-applet.c:174
+msgid "No"
+msgstr "Nein"
+
+#: kerneloops-applet.c:143
+msgid ""
+"There is diagnostic information available for this failure. Do you want to "
+"submit this information to the <a href=\"http://www.kerneloops.org/\">www."
+"kerneloops.org</a> website for use by the Linux kernel developers?\n"
+msgstr ""
+"Es sind dort Diagnose-Informationen für diesen Ausfall verfügbar. Möchten "
+"Sie diese Information zu der <a href=\"http://www.kerneloops.org/\">www."
+"kerneloops.org</a>-Website für die Benutzung durch die "
+"Linux-Kernel-Entwickler senden?\n"
+
+#: kerneloops-applet.c:172
+msgid "Yes"
+msgstr "Ja"
+
+#: kerneloops-applet.c:141
+msgid "Your system had a kernel failure"
+msgstr "Ihr System hatte einen Kernel-Ausfall"
+
+#: kerneloops-applet.c:343
+msgid "kerneloops client"
+msgstr "kerneloops-Client"
