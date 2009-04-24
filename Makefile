@@ -40,7 +40,7 @@ kerneloops.8.gz: kerneloops.8
 	gzip -9 -c $< > $@
 
 clean:
-	rm -f *~ *.o *.ko DEADJOE kerneloops kerneloops-applet *.out */*~ kerneloops.8.gz
+	rm -f *~ *.o *.ko DEADJOE kerneloops kerneloops-applet *.out */*~ kerneloops.8.gz test/*.dbg
 	@(cd po/ && $(MAKE) $@)
 
 dist: clean
