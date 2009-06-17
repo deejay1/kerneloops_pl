@@ -48,7 +48,6 @@ static int linecount;
 #define MIN(A,B) ((A) < (B) ? (A) : (B))
 
 #define REALLOC_CHUNK 1000
-
 static int set_line_info(int index, char *linepointer, char linelevel)
 {
 	if (index >= lines_info_alloc) {
@@ -70,86 +69,82 @@ static int set_line_info(int index, char *linepointer, char linelevel)
  * This function splits the dmesg buffer data into lines
  * (null terminated).
  */
-static int fill_lineinfo(char *buffer, int remove_syslog)
+static int fill_lineinfo(char *buffer, size_t buflen, int remove_syslog)
 {
 	char *c, *linepointer, linelevel;
 	linecount = 0;
+	if (!buflen)
+		return 0;
+	buffer[buflen - 1] = '\n';  /* the buffer usually ends with \n, but let's make sure */
 	c = buffer;
-	while (c) {
+	while (c < buffer + buflen) {
 		int len = 0;
 		char *c9;
 
-		c9 = strchr(c, '\n');
-		if (c9)
-			len = c9 - c;
+		c9 = memchr(c, '\n', buffer + buflen - c); /* a \n will always be found */
+		assert(c9);
+		len = c9 - c;
 
 		/* in /var/log/messages, we need to strip the first part off, upto the 3rd ':' */
 		if (remove_syslog) {
 			char *c2;
+			int i;
 
 			/* skip non-kernel lines */
 			c2 = memmem(c, len, "kernel:", 7);
 			if (!c2)
 				c2 = memmem(c, len, "kerneloops:", 11);
-			if (!c2) {
-				c2 = c9;
-				if (c2) {
-					c = c2 + 1;
-					continue;
-				} else
-					break;
-			}
-			c = strchr(c, ':');
-			if (!c)
-				break;
-			c++;
-			c = strchr(c, ':');
-			if (!c)
-				break;
-			c++;
-			c = strchr(c, ':');
-			if (!c)
-				break;
-			c++;
-			if (*c)
+			if (!c2)
+				goto next_line;
+
+			/* skip to message in "Jan 01 01:23:45 hostname kernel: message" */
+			for (i = 0; i < 3; i++) {
+				c = memchr(c, ':', len);
+				if (!c)
+					goto next_line;
 				c++;
+				len = c9 - c;
+			}
+			c++;
+			len--;
 		}
 
 		linepointer = c;
 		linelevel = 0;
 		/* store and remove kernel log level */
-		if (*c == '<' && *(c+2) == '>') {
+		if (len >= 3 && *c == '<' && *(c+2) == '>') {
 			linelevel = *(c+1);
-			c = c + 3;
+			c += 3;
+			len -= 3;
 			linepointer = c;
 		}
 		/* remove jiffies time stamp counter if present */
 		if (*c == '[') {
 			char *c2, *c3;
-			c2 = strchr(c, '.');
-			c3 = strchr(c, ']');
+			c2 = memchr(c, '.', len);
+			c3 = memchr(c, ']', len);
 			if (c2 && c3 && (c2 < c3) && (c3-c) < 14 && (c2-c) < 8) {
-				c = c3+1;
+				c = c3 + 1;
 				if (*c == ' ')
 					c++;
+				len = c9 - c;
 				linepointer = c;
 			}
 		}
 
-		c = strchr(c, '\n'); /* turn the \n into a string termination */
-		if (c) {
-			*c = 0;
-			c = c+1;
-		}
+		assert(c + len == c9);
+		*c9 = '\0'; /* turn the \n into a string termination */
 
 		/* if we see our own marker, we know we submitted everything upto here already */
-		if (strstr(linepointer, "www.kerneloops.org")) {
+		if (memmem(linepointer, len, "www.kerneloops.org", 18)) {
 			linecount = 0;
 			lines_info[0].ptr = NULL;
 		}
 		if (set_line_info(linecount, linepointer, linelevel) < 0)
 			return -1;
 		linecount++;
+next_line:
+		c = c9 + 1;
 	}
 	return 0;
 }
@@ -168,7 +163,7 @@ static void extract_oops(char *buffer, size_t buflen, int remove_syslog)
 	lines_info = NULL;
 	lines_info_alloc = 0;
 
-	if (fill_lineinfo(buffer, remove_syslog) < 0)
+	if (fill_lineinfo(buffer, buflen, remove_syslog) < 0)
 		goto fail;
 
 	oopsend = linecount;
@@ -382,7 +377,7 @@ void scan_filename(char *filename, int issyslog)
 	struct stat statb;
 	FILE *file;
 	int ret;
-	size_t buflen;
+	size_t buflen, nread;
 
 	memset(&statb, 0, sizeof(statb));
 
@@ -412,11 +407,11 @@ void scan_filename(char *filename, int issyslog)
 		return;
 	}
 	fseek(file, -buflen, SEEK_END);
-	ret = fread(buffer, 1, buflen-1, file);
+	nread = fread(buffer, 1, buflen, file);
 	fclose(file);
 
-	if (ret > 0)
-		extract_oops(buffer, buflen-1, issyslog);
+	if (nread > 0)
+		extract_oops(buffer, nread, issyslog);
 	free(buffer);
 	if (opted_in >= 2)
 		submit_queue();
