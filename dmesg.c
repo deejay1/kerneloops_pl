@@ -41,7 +41,7 @@ static char **linepointer;
 static char *linelevel;
 static int linecount;
 
-#define MAX(A,B) ((A) > (B) ? (A) : (B))
+#define MIN(A,B) ((A) < (B) ? (A) : (B))
 
 
 /*
@@ -380,13 +380,13 @@ void scan_filename(char *filename, int issyslog)
 	 * to /var/log/messages before we read it in... we try to
 	 * deal with it by reading at most 1023 bytes extra. If there's
 	 * more than that.. any oops will be in dmesg anyway.
-	 * Do not try to allocate an absurt amount of memory; ignore
+	 * Do not try to allocate an absurd amount of memory; ignore
 	 * older log messages because they are unlikely to have
 	 * sufficiently recent data to be useful.  32MB is more
 	 * than enough; it's not worth looping through more log
 	 * if the log is larger than that.
 	 */
-	buflen = MAX(statb.st_size+1024, 32*1024*1024);
+	buflen = MIN(statb.st_size+1024, 32*1024*1024);
 	buffer = calloc(buflen, 1);
 	assert(buffer != NULL);
 
