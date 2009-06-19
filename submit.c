@@ -176,10 +176,12 @@ static void print_queue(void)
 
 }
 
-static void write_logfile(int count)
+static void write_logfile(int count, char *result_url)
 {
 	openlog("kerneloops", 0, LOG_KERN);
 	syslog(LOG_WARNING, "Submitted %i kernel oopses to www.kerneloops.org", count);
+	if (result_url && result_url[0])
+		syslog(LOG_WARNING, "kerneloops.org: oops is posted as %s", result_url);
 	closelog();
 }
 
@@ -257,7 +259,7 @@ void submit_queue(void)
 	}
 
 	if (count && !testmode)
-		write_logfile(count);
+		write_logfile(count, result_url);
 
 	if (count)
 		dbus_say_thanks(result_url);
@@ -285,7 +287,7 @@ void clear_queue(void)
 		oops = next;
 	}
 	unlink_detail_file();
-	write_logfile(0);
+	write_logfile(0, NULL);
 }
 
 void ask_permission(void)

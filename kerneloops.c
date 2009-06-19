@@ -27,7 +27,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <sched.h>
-#include <syslog.h>
 #include <sys/prctl.h>
 #include <asm/unistd.h>
 
@@ -119,7 +118,6 @@ void dbus_say_thanks(char *url)
 		dbus_message_append_args (message, DBUS_TYPE_STRING, &url, DBUS_TYPE_INVALID);
 		dbus_connection_send(bus, message, NULL);
 		dbus_message_unref(message);
-		syslog(LOG_WARNING, "kerneloops.org: oops is posted as %s", url);
 	}
 
 	message = dbus_message_new_signal("/org/kerneloops/submit/sent",
