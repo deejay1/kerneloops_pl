@@ -148,6 +148,7 @@ void unlink_detail_file(void)
 	if (detail_filename) {
 		unlink(detail_filename);
 		free(detail_filename);
+		detail_filename = NULL;
 	}
 }
 
@@ -208,6 +209,7 @@ void submit_queue(void)
 	struct oops *queue;
 	int count = 0;
 
+	unlink_detail_file();
 	memset(result_url, 0, 4096);
 
 	if (testmode) {
@@ -263,10 +265,8 @@ void submit_queue(void)
 	 * If we've reached the maximum count, we'll exit the program,
 	 * the program won't do any useful work anymore going forward.
 	 */
-	if (submitted >= MAX_CHECKSUMS-1) {
-		unlink_detail_file();
+	if (submitted >= MAX_CHECKSUMS-1)
 		exit(EXIT_SUCCESS);
-	}
 }
 
 void clear_queue(void)
@@ -284,6 +284,7 @@ void clear_queue(void)
 		free(oops);
 		oops = next;
 	}
+	unlink_detail_file();
 	write_logfile(0);
 }
 
