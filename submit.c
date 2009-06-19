@@ -112,7 +112,7 @@ void queue_oops(char *oops)
 }
 
 
-void write_detail_file(void)
+static void write_detail_file(void)
 {
 	int temp_fileno;
 	FILE *tmpf;
@@ -143,7 +143,7 @@ void write_detail_file(void)
 	close(temp_fileno);
 }
 
-void unlink_detail_file(void)
+static void unlink_detail_file(void)
 {
 	if (detail_filename) {
 		unlink(detail_filename);
@@ -185,9 +185,9 @@ static void write_logfile(int count, char *result_url)
 	closelog();
 }
 
-char result_url[4096];
+static char result_url[4096];
 
-size_t writefunction( void *ptr, size_t size, size_t nmemb, void __attribute((unused)) *stream)
+static size_t writefunction( void *ptr, size_t size, size_t nmemb, void __attribute((unused)) *stream)
 {
 	char *c, *c1, *c2;
 	c = malloc(size*nmemb + 1);
