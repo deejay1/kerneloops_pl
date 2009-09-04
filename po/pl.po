@@ -1,0 +1,80 @@
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Łukasz Jernaś <deejay1@srem.org>, 2009.
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-01-01 06:36-0800\n"
+"PO-Revision-Date: 2009-09-04 18:19+0200\n"
+"Last-Translator: Łukasz Jernaś <deejay1@srem.org>\n"
+"Language-Team: Polish <gnomepl@aviary.pl>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.0\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<"
+"10 || n%100>=20) ? 1 : 2);\n"
+
+#: kerneloops-applet.c:170 kerneloops-applet.c:212
+msgid "Always"
+msgstr "Zawsze"
+
+#: kerneloops-applet.c:332
+#, c-format
+msgid "Connecting to system bus failed: %s\n"
+msgstr "Nawiązanie połączenia z szyną systemową się nie powiodło: %s\n"
+
+#: kerneloops-applet.c:190
+msgid ""
+"Diagnostic information from your Linux kernel has been sent to <a href="
+"\"http://www.kerneloops.org\">www.kerneloops.org</a> for the Linux kernel "
+"developers to work on. \n"
+"Thank you for contributing to improve the quality of the Linux kernel.\n"
+msgstr ""
+"Informacje diagnostyczne dotyczące jądra Linuksa zostały przesłane na "
+"adres <a href="
+"\"http://www.kerneloops.org\">www.kerneloops.org</a>, tak by mogli nim się "
+"zająć programiści jądra.\n"
+"Dziękujemy za pomoc w ulepszaniu jakości jądra Linuksa.\n"
+
+#: kerneloops-applet.c:188
+msgid "Kernel bug diagnostic information sent"
+msgstr "Przesłano informacje diagnostyczne dotyczące błędu jądra"
+
+#: kerneloops-applet.c:176
+msgid "Never"
+msgstr "Nigdy"
+
+#: kerneloops-applet.c:214
+msgid "Never again"
+msgstr "Nigdy więcej"
+
+#: kerneloops-applet.c:174
+msgid "No"
+msgstr "Nie"
+
+#: kerneloops-applet.c:143
+msgid ""
+"There is diagnostic information available for this failure. Do you want to "
+"submit this information to the <a href=\"http://www.kerneloops.org/\">www."
+"kerneloops.org</a> website for use by the Linux kernel developers?\n"
+msgstr ""
+"Istnieją informacje diagnostyczne dotyczące tej awarii. Przesłać te "
+"informacje na stronę internetową <a href=\"http://www.kerneloops.org/\">"
+"www.kerneloops.org</a>, aby mogły zostać wykorzystane przez programistów "
+"jądra Linuksa?\n"
+
+#: kerneloops-applet.c:172
+msgid "Yes"
+msgstr "Tak"
+
+#: kerneloops-applet.c:141
+msgid "Your system had a kernel failure"
+msgstr "Nastąpiła awaria jądra w tym komputerze"
+
+#: kerneloops-applet.c:343
+msgid "kerneloops client"
+msgstr "Klient programu kerneloops"
+
